@@ -92,15 +92,16 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 				MiRender miRender=new MiRender();		
 						
 				//el array con las cabeceras de la tabla
-				String[]cabecerasTablaObservaciones=new String[8];
+				String[]cabecerasTablaObservaciones=new String[9];
 				cabecerasTablaObservaciones[0]="Id.";
-				cabecerasTablaObservaciones[1]="Fecha observación";
+				cabecerasTablaObservaciones[1]="Fecha";
 				cabecerasTablaObservaciones[2]="Alimentación";
 				cabecerasTablaObservaciones[3]="Movilidad";
-				cabecerasTablaObservaciones[4]="Vestido";
-				cabecerasTablaObservaciones[5]="Inodoro";
-				cabecerasTablaObservaciones[6]="Esfínteres";
-				cabecerasTablaObservaciones[7]="Gr.dependencia";	
+				cabecerasTablaObservaciones[4]="Aseo";
+				cabecerasTablaObservaciones[5]="Vestido";
+				cabecerasTablaObservaciones[6]="Inodoro";
+				cabecerasTablaObservaciones[7]="Esfínteres";
+				cabecerasTablaObservaciones[8]="Gr.dep.";	
 						
 				ObservacionDao od=new ObservacionDao();		
 				List<Observacion> observaciones = od.listaObservaciones(id);
@@ -114,11 +115,13 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 						
 				TableColumn columna=jtObservaciones.getColumn("Id.");
 				columna.setPreferredWidth(30);
-				columna=jtObservaciones.getColumn("Fecha observación");
-				columna.setPreferredWidth(130);
+				columna=jtObservaciones.getColumn("Fecha");
+				columna.setPreferredWidth(76);
 				columna=jtObservaciones.getColumn("Alimentación");
 				columna.setPreferredWidth(105);
 				columna=jtObservaciones.getColumn("Movilidad");			
+				columna.setPreferredWidth(105);
+				columna=jtObservaciones.getColumn("Aseo");			
 				columna.setPreferredWidth(105);
 				columna=jtObservaciones.getColumn("Vestido");
 				columna.setPreferredWidth(105);
@@ -126,8 +129,8 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 				columna.setPreferredWidth(105);
 				columna=jtObservaciones.getColumn("Esfínteres");
 				columna.setPreferredWidth(105);
-				columna=jtObservaciones.getColumn("Gr.dependencia");
-				columna.setPreferredWidth(110);
+				columna=jtObservaciones.getColumn("Gr.dep.");
+				columna.setPreferredWidth(60);
 				
 				jtObservaciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 				jtObservaciones.doLayout();

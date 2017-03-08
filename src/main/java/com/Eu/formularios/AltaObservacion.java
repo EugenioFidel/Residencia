@@ -43,6 +43,7 @@ public class AltaObservacion extends JDialog implements ActionListener{
 	JLabel jlFechaObservacion=new JLabel("Fecha: ");
 	JLabel jlAlimentacion=new JLabel("Alimentacion: ");
 	JLabel jlMovilidad=new JLabel("Movilidad: ");
+	JLabel jlAseo=new JLabel("Aseo: ");
 	JLabel jlVestido=new JLabel("Vestido: ");
 	JLabel jlInodoro=new JLabel("Inodoro: ");
 	JLabel jlEsfinteres=new JLabel("Esfínteres: ");
@@ -54,6 +55,10 @@ public class AltaObservacion extends JDialog implements ActionListener{
 	JRadioButton jrMovilidadT = new JRadioButton("Independiente");
 	JRadioButton jrMovilidadF = new JRadioButton("Dependiente");
 	ButtonGroup bgMovilidad = new ButtonGroup();
+	
+	JRadioButton jrAseoT = new JRadioButton("Independiente");
+	JRadioButton jrAseoF = new JRadioButton("Dependiente");
+	ButtonGroup bgAseo = new ButtonGroup();
 	
 	JRadioButton jrVestidoT = new JRadioButton("Independiente");
 	JRadioButton jrVestidoF = new JRadioButton("Dependiente");
@@ -101,6 +106,10 @@ public class AltaObservacion extends JDialog implements ActionListener{
 		bgVestido.add(jrVestidoT);
 		bgVestido.add(jrVestidoF);
 		
+		jrAseoT.setSelected(true);
+		bgAseo.add(jrAseoT);
+		bgAseo.add(jrAseoF);
+		
 		jrInodoroT.setSelected(true);
 		bgInodoro.add(jrInodoroT);
 		bgInodoro.add(jrInodoroF);
@@ -117,7 +126,9 @@ public class AltaObservacion extends JDialog implements ActionListener{
 		this.getContentPane().add(jlNombre,col);
 		
 		//obtenemos el nombre y apellidos del fulano
-		jlNombreEdit.setText(this.getIn().getNombre()+" "+this.getIn().getPrimerApe()+" "+this.getIn().getSegundoApe());
+		jlNombreEdit.setText(this.getIn().getNombre()+" "+
+				this.getIn().getPrimerApe()+" "+
+				this.getIn().getSegundoApe());
 		col.gridx=1;
 		col.gridy=0;
 		col.fill=GridBagConstraints.BOTH;
@@ -172,52 +183,70 @@ public class AltaObservacion extends JDialog implements ActionListener{
 		col.gridy=4;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
-		this.getContentPane().add(jlVestido,col);
+		this.getContentPane().add(jlAseo,col);
 		
 		col.gridx=1;
 		col.gridy=4;
+		col.fill=GridBagConstraints.BOTH;
+		col.insets=new Insets(2,2,2,2);
+		this.getContentPane().add(jrAseoT,col);
+		
+		col.gridx=2;
+		col.gridy=4;
+		col.fill=GridBagConstraints.BOTH;
+		col.insets=new Insets(2,2,2,2);
+		this.getContentPane().add(jrAseoF,col);
+		
+		col.gridx=0;
+		col.gridy=5;
+		col.fill=GridBagConstraints.BOTH;
+		col.insets=new Insets(2,2,2,2);
+		this.getContentPane().add(jlVestido,col);
+		
+		col.gridx=1;
+		col.gridy=5;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrVestidoT,col);
 		
 		col.gridx=2;
-		col.gridy=4;
+		col.gridy=5;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrVestidoF,col);
 		
 		col.gridx=0;
-		col.gridy=5;
+		col.gridy=6;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jlInodoro,col);
 		
 		col.gridx=1;
-		col.gridy=5;
+		col.gridy=6;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrInodoroT,col);
 		
 		col.gridx=2;
-		col.gridy=5;
+		col.gridy=6;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrInodoroF,col);
 		
 		col.gridx=0;
-		col.gridy=6;
+		col.gridy=7;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jlEsfinteres,col);
 		
 		col.gridx=1;
-		col.gridy=6;
+		col.gridy=7;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrEsfinteresT,col);
 		
 		col.gridx=2;
-		col.gridy=6;
+		col.gridy=7;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrEsfinteresF,col);
@@ -225,13 +254,13 @@ public class AltaObservacion extends JDialog implements ActionListener{
 		//jbCancelar, configuraci�n y colocaci�n
 		jbCancelar.addActionListener(this);
 		col.gridx=1;
-		col.gridy=7;
+		col.gridy=8;
 		this.getContentPane().add(jbCancelar,col);
 				
 		//jbAceptar, configuraci�n y colocaci�n
 		jbGrabar.addActionListener(this);
 		col.gridx=2;
-		col.gridy=7;
+		col.gridy=8;
 		this.getContentPane().add(jbGrabar,col);
 		
 	}
@@ -259,6 +288,11 @@ public class AltaObservacion extends JDialog implements ActionListener{
 			o.setVestido("DEPENDIENTE");
 		}else{
 			o.setVestido("INDEPENDIENTE");
+		}
+		if(jrAseoF.isSelected()){
+			o.setAseo("DEPENDIENTE");
+		}else{
+			o.setAseo("INDEPENDIENTE");
 		}
 		if(jrMovilidadF.isSelected()){
 			o.setMovilidad("DEPENDIENTE");
@@ -291,7 +325,7 @@ public class AltaObservacion extends JDialog implements ActionListener{
 		Interno_observacionDao iod=new Interno_observacionDao();
 		try {
 			iod.addInterno_observacion(io);
-			Object[]fila={o.getIdObservacion(),dt.format(o.getFechaObservacion()),o.getAlimentacion(),o.getVestido(),o.getMovilidad(),o.getInodoro(),o.getEsfinteres(),o.getGradoDependencia()};
+			Object[]fila={o.getIdObservacion(),dt.format(o.getFechaObservacion()),o.getAlimentacion(),o.getVestido(),o.getAseo(),o.getMovilidad(),o.getInodoro(),o.getEsfinteres(),o.getGradoDependencia()};
 			dtm.addRow(fila);
 			this.dispose();
 		} catch (SQLException e) {

@@ -41,6 +41,7 @@ public class ObservacionDao {
 	        		"fechaObservacion=:fechaObservacion"+
 	        		", alimentacion=:alimentacion"+
 	        		", movilidad=:movilidad"+
+	        		", aseo=:aseo"+
 	        		", vestido=:vestido"+
 	        		", inodoro=:inodoro"+
 	        		", esfinteres=:esfinteres"+
@@ -49,6 +50,7 @@ public class ObservacionDao {
 	        query.setParameter("fechaObservacion", o.getFechaObservacion());
 	        query.setParameter("alimentacion", o.getAlimentacion());
 	        query.setParameter("movilidad", o.getMovilidad());
+	        query.setParameter("aseo", o.getAseo());
 	        query.setParameter("vestido", o.getVestido());
 	        query.setParameter("inodoro", o.getInodoro());
 	        query.setParameter("esfinteres",o.getInodoro());

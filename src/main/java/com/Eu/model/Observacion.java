@@ -14,11 +14,12 @@ import javax.persistence.Table;
  * Clase Observacion. Define cada una de las valoraciones de dependencia para un interno
  * 		idObservacion:		Clave primaria que identifica cada acto de observación de dependencias
  * 		fechaObservacion:	Fecha de realización de la observación
- * 		alimentacion:		Integer que marca si existe dependencia en este area
- * 		movilidad:			Integer que marca si existe dependencia en este area
- * 		vestido:			Integer que marca si existe dependencia en este area
- * 		inodoro				Integer que marca si existe dependencia en este area
- * 		esfinteres			Integer que marca si existe dependencia en este area
+ * 		alimentacion:		Varchar que marca si existe dependencia en este area
+ * 		movilidad:			Varchar que marca si existe dependencia en este area
+ * 		vestido:			Varchar que marca si existe dependencia en este area
+ * 	    aseo:			    Varchar que marca si existe dependencia en este area
+ * 		inodoro				Varchar que marca si existe dependencia en este area
+ * 		esfinteres			Varchar que marca si existe dependencia en este area
  * 		gradoDependencia	String que establece el grad de dependencia determinado por la observación (0 = válido,1= AG I, 2=AG II)
  */
 
@@ -34,6 +35,7 @@ public class Observacion implements Serializable{
 	private Date fechaObservacion;	
 	private String alimentacion;
 	private String movilidad;
+	private String aseo;
 	private String vestido;	
 	private String inodoro;	
 	private String esfinteres;
@@ -44,11 +46,12 @@ public class Observacion implements Serializable{
 	}
 	
 	public Observacion(Date fechaObservacion, String alimentacion, String movilidad,
-			String vestido, String inodoro, String esfinteres, String gradoDependencia) {
+			String aseo, String vestido, String inodoro, String esfinteres, String gradoDependencia) {
 		super();
 		this.fechaObservacion = fechaObservacion;
 		this.alimentacion = alimentacion;
 		this.movilidad = movilidad;
+		this.aseo=aseo;
 		this.vestido = vestido;
 		this.inodoro = inodoro;
 		this.esfinteres = esfinteres;
@@ -95,6 +98,16 @@ public class Observacion implements Serializable{
 
 	public void setMovilidad(String movilidad) {
 		this.movilidad = movilidad;
+	}	
+	
+	//@Column(name="aseo",columnDefinition = "TINYINT")
+	@Column(name="aseo")
+	public String getAseo() {
+		return aseo;
+	}
+
+	public void setAseo(String aseo) {
+		this.aseo = aseo;
 	}
 
 	//@Column(name="vestido",columnDefinition = "TINYINT")

@@ -184,7 +184,10 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		table.moveColumn(table.getColumnCount()-1, col_Index);
 	}
 	
-	public static void generarReporte(JasperReport reporte,Map<String, Object> params,java.sql.Connection conec,String nomFichero) {
+	public static void generarReporte(JasperReport reporte,
+			Map<String, Object> params,
+			java.sql.Connection conec,
+			String nomFichero) {
 		JasperPrint print;
 					
 			//un Calendar para la fecha del sistema
@@ -299,9 +302,19 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 	    }		
 		
 		public static void evaluarGradoDependencia(Observacion o) {
-			if(o.getAlimentacion().equals("INDEPENDIENTE") && o.getMovilidad().equals("INDEPENDIENTE") && o.getVestido().equals("INDEPENDIENTE") && o.getInodoro().equals("INDEPENDIENTE") && o.getEsfinteres().equals("INDEPENDIENTE")){
+			if(o.getAlimentacion().equals("INDEPENDIENTE") && 
+					o.getMovilidad().equals("INDEPENDIENTE") && 
+					o.getAseo().equals("INDEPENDIENTE") &&
+					o.getVestido().equals("INDEPENDIENTE") && 
+					o.getInodoro().equals("INDEPENDIENTE") && 
+					o.getEsfinteres().equals("INDEPENDIENTE")){
 				o.setGradoDependencia("VALIDO");
-			}else if(o.getAlimentacion().equals("INDEPENDIENTE") || o.getMovilidad().equals("INDEPENDIENTE") || o.getVestido().equals("INDEPENDIENTE") || o.getInodoro().equals("INDEPENDIENTE") || o.getEsfinteres().equals("INDEPENDIENTE")){
+			}else if(o.getAlimentacion().equals("INDEPENDIENTE") || 
+					o.getMovilidad().equals("INDEPENDIENTE")||
+					o.getAseo().equals("INDEPENDIENTE") || 
+					o.getVestido().equals("INDEPENDIENTE") || 
+					o.getInodoro().equals("INDEPENDIENTE") || 
+					o.getEsfinteres().equals("INDEPENDIENTE")){
 				o.setGradoDependencia("AG1");
 			}else{
 				o.setGradoDependencia("AG2");	
