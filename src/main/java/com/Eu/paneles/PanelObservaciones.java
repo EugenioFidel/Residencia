@@ -53,9 +53,11 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 
 	public PanelObservaciones(int id){
 		InternoDao i=new InternoDao();
-		this.setI(i.getInternoById(id));		
+		this.setI(i.getInternoById(id));
 		
-		this.setSize(800,730);
+		
+		
+		this.setSize(800,600);
 		this.setLayout(gbl);
 		this.RellenarTablaObservaciones(id);
 		
@@ -81,6 +83,7 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 		gbc.weighty=0.25;
 		gbc.anchor=GridBagConstraints.EAST;
 		this.add(jpBotonero,gbc);
+		
 		
 	}
 
@@ -179,9 +182,7 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 			ao.setVisible(true);
 		}else{
 			System.out.println("pulso borrar observación");
-		}
-		
-		
+		}		
 	}
 
 	public JTable getJtObservaciones() {
@@ -211,8 +212,6 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 	public void redibujar(){
 		jsp.setViewportView(jtObservaciones);		
 	}
-	
-	
 	
 }
 

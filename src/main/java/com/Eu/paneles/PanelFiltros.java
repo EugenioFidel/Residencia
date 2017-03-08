@@ -3,7 +3,6 @@ package com.Eu.paneles;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -87,7 +86,6 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		FrmPrincipal f=(FrmPrincipal) jrp.getParent();
 		Container c=jrp.getContentPane();
 		Component[] componentes=c.getComponents();
-		
 		JPanel jp=(JPanel) componentes[0];
 		JTabbedPane jtp=(JTabbedPane) jp.getComponent(0);
 		PanelFiltros pf=(PanelFiltros) jtp.getComponent(1);
@@ -573,11 +571,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		id.update(i);		
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
-	}	
-	
 	public JTable getJt() {
 		return jt;
 	}

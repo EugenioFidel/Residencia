@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
@@ -63,7 +65,8 @@ import com.Eu.model.Persona;
 		JSeparator jsSeparador1MenuListados=new JSeparator();
 		JMenuItem jmiListadoTelefonos=new JMenuItem("Teléfonos");
 		
-		public PanelObservaciones po=null;		
+		public PanelObservaciones po=null;	
+		public PanelEstancias pe =null;
 		
 		final static Logger loggeador = Logger.getLogger(FrmPrincipal.class);
 		
@@ -73,6 +76,7 @@ import com.Eu.model.Persona;
 		pfTodos=new PanelFiltros(0);
 		pfInternos=new PanelFiltros(2);
 		pfEmpleados=new PanelFiltros(1);
+		
 		
 		//características del formulario principal
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -114,10 +118,13 @@ import com.Eu.model.Persona;
         this.getContentPane().add(jpb,col);
         col.anchor=GridBagConstraints.CENTER;
         
-        po=new PanelObservaciones(16);
-		PanelEstancias pe =new PanelEstancias();
-		jlpFuncionalidades.add(pe,new Integer(0));
-		jlpFuncionalidades.add(po,new Integer(1));
+        po=new PanelObservaciones(1000000);
+		pe=new PanelEstancias();
+		jlpFuncionalidades.add(pe,JLayeredPane.DEFAULT_LAYER);
+		jlpFuncionalidades.add(po,JLayeredPane.DEFAULT_LAYER);
+		jlpFuncionalidades.moveToFront(pe);
+		jlpFuncionalidades.moveToBack(po);
+		
 				        
         col.gridx=1;
         col.gridy=0;
@@ -148,11 +155,21 @@ import com.Eu.model.Persona;
 		jmiListadoEmpleados.addActionListener(this);
 		jmiListadoTelefonos.addActionListener(this);
 		
-		this.setJMenuBar(jmbMenu);
+		this.setJMenuBar(jmbMenu);		
 		
-
-		
-	}
+		tp.addMouseListener(new MouseAdapter(){
+			   public void mouseClicked(MouseEvent e){
+				   if(e.getSource().equals(pfInternos)){
+					   jlpFuncionalidades.moveToFront(po);
+				   }else{
+					   jlpFuncionalidades.moveToFront(pe);
+				   }
+			   }
+			});	
+		}
+	
+	
+	
 	public void actionPerformed(ActionEvent e) {		
 		//comprobamos el objeto que ha producido el evento
 		if(e.getSource().equals(jmiListadoPersonas)){
@@ -202,6 +219,8 @@ import com.Eu.model.Persona;
 							System.out.println(r);		
 						}
 					}
+	
+	
 	
 	public JPanel getJpTablas() {
 		return jpTablas;
