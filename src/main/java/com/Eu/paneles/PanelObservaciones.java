@@ -161,9 +161,10 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 			}			
 			o.setAlimentacion(v.elementAt(2).toString());
 			o.setMovilidad(v.elementAt(3).toString());
-			o.setVestido(v.elementAt(4).toString());
-			o.setInodoro( v.elementAt(5).toString());
-			o.setEsfinteres(v.elementAt(6).toString());
+			o.setAseo(v.elementAt(4).toString());
+			o.setVestido(v.elementAt(5).toString());
+			o.setInodoro( v.elementAt(6).toString());
+			o.setEsfinteres(v.elementAt(7).toString());
 			FuncionesDiversas.evaluarGradoDependencia(o);
 			
 			ObservacionDao od=new ObservacionDao();			
