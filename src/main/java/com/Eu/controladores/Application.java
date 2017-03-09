@@ -11,5 +11,4 @@ public class Application {
 		FrmPrincipal fPrincipal=new FrmPrincipal();
 		fPrincipal.setVisible(true);
 	}
-
 }

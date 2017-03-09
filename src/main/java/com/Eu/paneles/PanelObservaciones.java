@@ -158,7 +158,8 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 			} catch (ParseException e2) {
 				// TODO Auto-generated catch block
 				loggeador.info(e2);
-			}			
+			}
+			
 			o.setAlimentacion(v.elementAt(2).toString());
 			o.setMovilidad(v.elementAt(3).toString());
 			o.setAseo(v.elementAt(4).toString());

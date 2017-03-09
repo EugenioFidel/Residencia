@@ -119,7 +119,7 @@ import com.Eu.model.Persona;
         col.anchor=GridBagConstraints.CENTER;
         
         po=new PanelObservaciones(1000000);
-		pe=new PanelEstancias();
+		pe=new PanelEstancias(20);
 		jlpFuncionalidades.add(pe,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.add(po,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.moveToFront(pe);

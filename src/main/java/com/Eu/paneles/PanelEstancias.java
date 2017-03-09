@@ -1,187 +1,214 @@
 package com.Eu.paneles;
 
-import java.awt.Color;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
-public class PanelEstancias extends JPanel { 	
+import org.apache.log4j.Logger;
+
+import com.Eu.controladores.FuncionesDiversas;
+import com.Eu.controladores.MiRender;
+import com.Eu.dao.EstanciaDao;
+import com.Eu.dao.InternoDao;
+import com.Eu.dao.ObservacionDao;
+import com.Eu.model.Estancia;
+import com.Eu.model.Interno;
+import com.Eu.model.Observacion;
+
+public class PanelEstancias extends JPanel implements ActionListener,TableModelListener { 	
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 693008077445915091L;
 
-	public PanelEstancias(){
-		this.setSize(900,900);
+	public JTable jtEstancias =new JTable();
+	//botonero
+	JPanel jpBotonero=new JPanel();
+	JButton jbAnhadir =new JButton("Añadir");
+	JButton jbBorrar=new JButton("Borrar");
+	//Un JScrollPane para alojar la tabla 
+	public JScrollPane jsp = new JScrollPane();	
+	GridBagLayout gbl=new GridBagLayout();
+	GridBagConstraints gbc=new GridBagConstraints();
+	
+	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
+	
+	Interno i=new Interno();
+	
+	
+	private static final long serialVersionUID = 1L;
+
+	public PanelEstancias(int id){
+		InternoDao i=new InternoDao();
+		this.setI(i.getInternoById(id));
 		
-		this.setBackground(Color.green);
+		
+		
+		this.setSize(800,600);
+		this.setLayout(gbl);
+		this.RellenarTablaEstancias(id);
+		
+		
+		
+		
+		gbc.gridx=0;
+		gbc.gridy=0;
+		gbc.weightx=1.0;
+		gbc.weighty=1.0;
+		gbc.fill=GridBagConstraints.BOTH;
+		this.add(jsp,gbc);
+		
+		jbAnhadir.addActionListener(this);
+		jbBorrar.addActionListener(this);
+		
+		jpBotonero.add(jbAnhadir);
+		jpBotonero.add(jbBorrar);
+		
+		gbc.gridx=0;
+		gbc.gridy=1;
+		gbc.weightx=0.25;
+		gbc.weighty=0.25;
+		gbc.anchor=GridBagConstraints.EAST;
+		this.add(jpBotonero,gbc);
+		
+		
 	}
-//	public JTabbedPane jtp=new JTabbedPane();
-//	public JPanel jpObservaciones=new JPanel();
-//	public JPanel jpEstancias=new JPanel();
-//	public JTable jtObservaciones =new JTable();
-//	//botonero
-//	JPanel jpBotonero=new JPanel();
-//	JButton jbAnhadir =new JButton("Añadir");
-//	JButton jbBorrar=new JButton("Borrar");
-//	//Un JScrollPane para alojar la tabla 
-//	public JScrollPane jsp = new JScrollPane();	
-//	GridBagLayout gbl=new GridBagLayout();
-//	GridBagConstraints gbc=new GridBagConstraints();
-//	
-//	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
-//	
-//	
-//	private static final long serialVersionUID = 1L;
-//
-//	public PanelObservaciones(int id){
-//		
-//		this.setLayout(gbl);
-////		this.setBackground(Color.BLUE);
-//		RellenarTablaObservaciones(id);
-//		
-//		jsp.setViewportView(jtObservaciones);
-//		
-//		jtp.add(jsp, "Observaciones");
-//		jtp.add(jpEstancias,"Estancias");
-//		gbc.gridx=0;
-//		gbc.gridy=0;
-//		gbc.weightx=1.0;
-//		gbc.weighty=1.0;
-//		gbc.fill=GridBagConstraints.BOTH;
-//		this.add(jtp,gbc);
-//		
-//		jbAnhadir.addActionListener(this);
-//		jbBorrar.addActionListener(this);
-//		
-//		jpBotonero.add(jbAnhadir);
-//		jpBotonero.add(jbBorrar);
-//		
-//		gbc.gridx=0;
-//		gbc.gridy=1;
-//		gbc.weightx=0.25;
-//		gbc.weighty=0.25;
-//		gbc.anchor=GridBagConstraints.EAST;
-//		this.add(jpBotonero,gbc);
-//		
-//	}
-//
-//	private void RellenarTablaObservaciones(int id) {
-//		//renders
-//				MiRender miRender=new MiRender();		
-//						
-//				//el array con las cabeceras de la tabla
-//				String[]cabecerasTablaObservaciones=new String[8];
-//				cabecerasTablaObservaciones[0]="Id.";
-//				cabecerasTablaObservaciones[1]="Fecha observación";
-//				cabecerasTablaObservaciones[2]="Alimentación";
-//				cabecerasTablaObservaciones[3]="Movilidad";
-//				cabecerasTablaObservaciones[4]="Vestido";
-//				cabecerasTablaObservaciones[5]="Inodoro";
-//				cabecerasTablaObservaciones[6]="Esfínteres";
-//				cabecerasTablaObservaciones[7]="Gr.dependencia";	
-//						
-//				ObservacionDao od=new ObservacionDao();		
-//				List<Observacion> observaciones = od.listaObservaciones(id);
-//				jtObservaciones=FuncionesDiversas.cargaDatosEnTablaObservaciones(observaciones, cabecerasTablaObservaciones);
-//				System.out.println("filas en tabla observaciones"+jtObservaciones.getRowCount());	
-//						
-//				TableColumnModel conjuntoColumnas=jtObservaciones.getColumnModel();
-//				for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
-//					conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
-//				}
-//						
-//				TableColumn columna=jtObservaciones.getColumn("Id.");
-//				columna.setPreferredWidth(30);
-//				columna=jtObservaciones.getColumn("Fecha observación");
-//				columna.setPreferredWidth(130);
-//				columna=jtObservaciones.getColumn("Alimentación");
-//				columna.setPreferredWidth(105);
-//				columna=jtObservaciones.getColumn("Movilidad");			
-//				columna.setPreferredWidth(105);
-//				columna=jtObservaciones.getColumn("Vestido");
-//				columna.setPreferredWidth(105);
-//				columna=jtObservaciones.getColumn("Inodoro");
-//				columna.setPreferredWidth(105);
-//				columna=jtObservaciones.getColumn("Esfínteres");
-//				columna.setPreferredWidth(105);
-//				columna=jtObservaciones.getColumn("Gr.dependencia");
-//				columna.setPreferredWidth(110);
-//				
-//				jtObservaciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-//				jtObservaciones.doLayout();
-//				this.setJtObservaciones(jtObservaciones);
-//						
-//				TableModel dtm=jtObservaciones.getModel();
-//				dtm.addTableModelListener(this);
-//						
-//				
-//		
-//	}
-//
-//	public JTable getJtObservaciones() {
-//		return jtObservaciones;
-//	}
-//
-//	public void setJtObservaciones(JTable jt) {
-//		this.jtObservaciones = jt;
-//	}
-//
-//	@SuppressWarnings("deprecation")
-//	public void tableChanged(TableModelEvent e) {
+
+	public void RellenarTablaEstancias(int id) {
+		//renders
+				MiRender miRender=new MiRender();		
+						
+				//el array con las cabeceras de la tabla
+				String[]cabecerasTablaEstancias=new String[6];
+				cabecerasTablaEstancias[0]="Id.Est.";
+				cabecerasTablaEstancias[1]="Id.Int.";
+				cabecerasTablaEstancias[2]="Fecha de alta";
+				cabecerasTablaEstancias[3]="Tipo de estancia";
+				cabecerasTablaEstancias[4]="Fecha de baja";
+				cabecerasTablaEstancias[5]="Motivo de la baja";
+						
+				EstanciaDao ed=new EstanciaDao();		
+				List<Estancia> estancias = ed.listaEstancias(id);
+				jtEstancias=FuncionesDiversas.cargaDatosEnTablaEstancias(estancias, cabecerasTablaEstancias);
+				System.out.println("filas en tabla estancias"+jtEstancias.getRowCount());	
+						
+				TableColumnModel conjuntoColumnas=jtEstancias.getColumnModel();
+				for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
+					conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
+				}
+						
+				TableColumn columna=jtEstancias.getColumn("Id.Est.");
+				columna.setPreferredWidth(30);
+				columna=jtEstancias.getColumn("Id.Int.");
+				columna.setPreferredWidth(30);
+				columna=jtEstancias.getColumn("Fecha de alta");
+				columna.setPreferredWidth(105);
+				columna=jtEstancias.getColumn("Tipo de estancia");			
+				columna.setPreferredWidth(105);
+				columna=jtEstancias.getColumn("Fecha de baja");			
+				columna.setPreferredWidth(105);
+				columna=jtEstancias.getColumn("Motivo de la baja");
+				columna.setPreferredWidth(105);
+				
+				jtEstancias.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+				jtEstancias.doLayout();
+				this.setJtEstancias(jtEstancias);
+					
+				TableModel dtm=jtEstancias.getModel();
+				dtm.addTableModelListener(this);		
+				
+				jsp.setViewportView(jtEstancias);
+	}
+
+	public void tableChanged(TableModelEvent e) {
 //		// TODO Auto-generated method stub
 //		if(e.getType()==TableModelEvent.UPDATE){
 //			//Editando la tabla
-//			loggeador.info("editando una observacion");
+//			loggeador.info("editando una estancia");
 //			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-//			Observacion o=new Observacion();
+//			Estancia es=new Estancia();
 //			DefaultTableModel modelo=(DefaultTableModel) e.getSource();
 //			@SuppressWarnings("unchecked")
 //			Vector<Object> v=(Vector<Object>) modelo.getDataVector().elementAt(e.getFirstRow());
-//			o.setIdObservacion((Integer) v.elementAt(0));
+//			es.setIdEstancia((Integer) v.elementAt(0));
 //			try {
-//				o.setFechaObservacion(formatter.parse((String)v.elementAt(1)));
+//				es.setFechaAlta(formatter.parse((String)v.elementAt(1)));
 //			} catch (ParseException e2) {
 //				// TODO Auto-generated catch block
 //				loggeador.info(e2);
-//			}			
-//			o.setAlimentacion(v.elementAt(2).toString());
-//			o.setMovilidad(v.elementAt(3).toString());
-//			o.setVestido(v.elementAt(4).toString());
-//			o.setInodoro( v.elementAt(5).toString());
-//			o.setEsfinteres(v.elementAt(6).toString());
-//			if(o.getAlimentacion().equals("INDEPENDIENTE") && o.getMovilidad().equals("INDEPENDIENTE") && o.getVestido().equals("INDEPENDIENTE") && o.getInodoro().equals("INDEPENDIENTE") && o.getEsfinteres().equals("INDEPENDIENTE")){
-//				o.setGradoDependencia("AG2");
-//			}else if(o.getAlimentacion().equals("INDEPENDIENTE") || o.getMovilidad().equals("INDEPENDIENTE") || o.getVestido().equals("INDEPENDIENTE") || o.getInodoro().equals("INDEPENDIENTE") || o.getEsfinteres().equals("INDEPENDIENTE")){
-//				o.setGradoDependencia("AG1");
-//			}else{
-//				o.setGradoDependencia("VALIDO");	
 //			}
 //			
-//			ObservacionDao od=new ObservacionDao();
+//			es.setTipoEstancia(v.elementAt(2).toString());
+//			es.setMovilidad(v.elementAt(3).toString());
+//			es.setAseo(v.elementAt(4).toString());
+//			es.setVestido(v.elementAt(5).toString());
+//			es.setInodoro( v.elementAt(6).toString());
+//			es.setEsfinteres(v.elementAt(7).toString());
 //			
-//			od.updateObservacion(o);
-//			
-//
+//			EstanciaDao ed=new EstanciaDao();			
+//			ed.updateEstancia(es);
+			
+
 //		}else if(e.getType()==TableModelEvent.DELETE){
 //			//Borrando una observación
 //			System.out.println("Borrando una observación");
 //		}
-//	}
-//
-//	public void actionPerformed(ActionEvent e) {
+	}
+
+	public void actionPerformed(ActionEvent e) {
 //		// TODO Auto-generated method stub
-//		DefaultTableModel dtm=(DefaultTableModel)this.getJtObservaciones().getModel();
+//		DefaultTableModel dtm=(DefaultTableModel)this.getJtEstancias().getModel();
 //		if(e.getSource().equals(jbAnhadir)){
-//			System.out.println("pulso añadir observación");
-//			Object[]fila={"","","","","","",""};
-//			dtm.addRow(fila);
+//			System.out.println("pulso añadir Estancia");
+//			AltaEstancia ao=new AltaEstancia(this.getI(),dtm);
+//			ao.setVisible(true);
 //		}else{
-//			System.out.println("pulso borrar observación");
-//		}
-//		
-//		
-//	}	
+//			System.out.println("pulso borrar estancia");
+//		}		
+	}
+
+	public JTable getJtEstancias() {
+		return jtEstancias;
+	}
+
+	public void setJtEstancias(JTable jtEstancias) {
+		this.jtEstancias = jtEstancias;
+	}
+
+	public JScrollPane getJsp() {
+		return jsp;
+	}
+
+	public void setJsp(JScrollPane jsp) {
+		this.jsp = jsp;
+	}	
+	
+	public Interno getI() {
+		return i;
+	}
+
+	public void setI(Interno i) {
+		this.i = i;
+	}
+	
+	public void redibujar(){
+		jsp.setViewportView(jtEstancias);		
+	}
 	
 }
+
 

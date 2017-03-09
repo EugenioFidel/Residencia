@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import com.Eu.model.Empleado;
+import com.Eu.model.Estancia;
 import com.Eu.model.Interno;
 import com.Eu.model.Observacion;
 import com.Eu.model.Persona;
@@ -58,15 +59,14 @@ public class FuncionesDiversas {
 	
 		//Un TableRowSorter para ordenar y filtrar la tabla
 		elQueOrdena=new TableRowSorter<TableModel>(dtm);
-//		dtm.addColumn("");
 		JTable tb =new JTable(dtm);
-//		positionColumn(tb, 0);
 		
 		tb.setRowSorter(elQueOrdena);
 			
 			return tb;
 			
 	}	
+	
 	public static JTable cargaDatosEnTablaEmpleados(List<Object> lista,String[] cabeceras){		
 		
 		
@@ -99,12 +99,10 @@ public class FuncionesDiversas {
 		
 		tb.setRowSorter(elQueOrdena);
 			
-			return tb;
-			
+			return tb;			
 	}	
 	
-public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabeceras){		
-		
+public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabeceras){			
 		
 		DefaultTableModel dtm=new DefaultTableModel();	
 			for (int i = 0; i < cabeceras.length; i++) 
@@ -140,8 +138,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		
 		tb.setRowSorter(elQueOrdena);
 			
-			return tb;
-			
+			return tb;			
 	}	
 	
 	public static JTable cargaDatosEnTablaObservaciones(List<Observacion> lista,String[] cabeceras){
@@ -171,9 +168,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 	
 		//Un TableRowSorter para ordenar y filtrar la tabla
 		elQueOrdena=new TableRowSorter<TableModel>(dtm);
-//		dtm.addColumn("");
 		JTable tb =new JTable(dtm);
-//		positionColumn(tb, 0);
 		
 		tb.setRowSorter(elQueOrdena);
 			
@@ -188,7 +183,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			Map<String, Object> params,
 			java.sql.Connection conec,
 			String nomFichero) {
-		JasperPrint print;
+			JasperPrint print;
 					
 			//un Calendar para la fecha del sistema
 			Calendar fechaActual=Calendar.getInstance();			
@@ -218,7 +213,8 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				ex.printStackTrace();
 			}
 		}
-		public static void GenerarListadoPersonas() {
+		
+		public static void GenerarListadoPersonas(){
 			try {
 				//conexion para el reporte
 				dbConexion con=new dbConexion();
@@ -233,10 +229,10 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
+			}			
 		}
-		public static void GenerarListadoTelefonos() {
+		
+		public static void GenerarListadoTelefonos(){
 			try {
 				//conexion para el reporte
 				dbConexion con=new dbConexion();
@@ -251,9 +247,9 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
+			}			
 		}
+		
 		public static void GenerarListadoInternos() {
 			try {
 				//conexion para el reporte
@@ -269,9 +265,9 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
+			}			
 		}
+		
 		public static void GenerarListadoEmpleados() {
 			try {
 				//conexion para el reporte
@@ -287,12 +283,10 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
+			}			
 		}		
 		
-		public static void LimpiarDtm(DefaultTableModel modelo)
-	    {
+		public static void LimpiarDtm(DefaultTableModel modelo){
 	        int filas = modelo.getRowCount();
 	        if (filas > 0) {
 	            for (int i = 0; i < filas; i++) {
@@ -303,11 +297,11 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		
 		public static void evaluarGradoDependencia(Observacion o) {
 			if(o.getAlimentacion().equals("INDEPENDIENTE") && 
-					o.getMovilidad().equals("INDEPENDIENTE") && 
-					o.getAseo().equals("INDEPENDIENTE") &&
-					o.getVestido().equals("INDEPENDIENTE") && 
-					o.getInodoro().equals("INDEPENDIENTE") && 
-					o.getEsfinteres().equals("INDEPENDIENTE")){
+				o.getMovilidad().equals("INDEPENDIENTE") && 
+				o.getAseo().equals("INDEPENDIENTE") &&
+				o.getVestido().equals("INDEPENDIENTE") && 
+				o.getInodoro().equals("INDEPENDIENTE") && 
+				o.getEsfinteres().equals("INDEPENDIENTE")){
 				o.setGradoDependencia("VALIDO");
 			}else if(o.getAlimentacion().equals("INDEPENDIENTE") || 
 					o.getMovilidad().equals("INDEPENDIENTE")||
@@ -315,12 +309,45 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 					o.getVestido().equals("INDEPENDIENTE") || 
 					o.getInodoro().equals("INDEPENDIENTE") || 
 					o.getEsfinteres().equals("INDEPENDIENTE")){
-				o.setGradoDependencia("AG1");
-			}else{
-				o.setGradoDependencia("AG2");	
-			}			
-		}	
+					o.setGradoDependencia("AG1");
+				}else{
+					o.setGradoDependencia("AG2");	
+				}			
+			}
+
+		public static JTable cargaDatosEnTablaEstancias(List<Estancia> lista, String[] cabeceras) {
+			/*
+			 * creamos un DefaultTableModel dft y con el una JTable jt.
+			 */
+			SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy"); 	
+			
+			DefaultTableModel dtm=new DefaultTableModel();	
+				for (int i = 0; i < cabeceras.length; i++) 
+					dtm.addColumn(cabeceras[i]);		
+					
+			for (@SuppressWarnings("rawtypes")
+			Iterator iterator = lista.iterator(); iterator.hasNext();){
+				Object[] fila = (Object[]) iterator.next();
+				Object filaB[]=new Object[fila.length];
+				filaB[0]=fila[0];
+				for(int i=1;i<fila.length;i++){
+					if(i==2 || i==4){
+						filaB[i]=dt.format(fila[i]);
+					}else{
+						filaB[i]=fila[i];	
+					}
+				}
+				dtm.addRow(filaB);
+			}
 		
+			//Un TableRowSorter para ordenar y filtrar la tabla
+			elQueOrdena=new TableRowSorter<TableModel>(dtm);
+			JTable tb =new JTable(dtm);
+			
+			tb.setRowSorter(elQueOrdena);
+				
+			return tb;
+		}		
 }
 	
 	
