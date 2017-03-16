@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -69,8 +70,20 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 						loggeador.info("pulsado panel personas");						
 						break;
 					case 12:
-						loggeador.info("pulsado panel internos");	
-						ActualizarTablaObservaciones(tabla);						
+						loggeador.info("pulsado panel internos");
+						//Comprobamos Si tenemos seleccionado observaciones o estancias
+						JRootPane jrp=tabla.getRootPane();
+						FrmPrincipal f=(FrmPrincipal) jrp.getParent();
+						JRadioButton jreObservaciones=f.getJrbObservaciones();
+						PanelObservaciones po=f.getPo();
+						if(jreObservaciones.isSelected()){
+							f.getJlpFuncionalidades().moveToFront(po);
+						}else{
+							f.getJlpFuncionalidades().moveToBack(po);;
+						}
+						
+						ActualizarTablaObservaciones(tabla);
+						ActualizarTablaEstancias(tabla);
 						break;
 					default:
 						loggeador.debug("pulsado panel empleados");
@@ -101,6 +114,38 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		p.RellenarTablaObservaciones(i.getIdpersona());
 		f.setPo(p);
 	}
+	
+	protected void ActualizarTablaEstancias(JTable tabla) {
+		//estamos en panelFiltros, por lo que sacamos su JRootPane
+		JRootPane jrp=tabla.getRootPane();
+		//el formularioPrincipal es el padre del rootpane de la tabla estancias
+		FrmPrincipal f=(FrmPrincipal) jrp.getParent();
+		//El contenedor c es el contentpane del JRootPane
+		Container c=jrp.getContentPane();
+		//Sacamos los componentes que hay en ese contenedor
+		Component[] componentes=c.getComponents();
+		//el componente situado en la posición cero es panel que contiene el JTabbedPane que contiene los panelesFiltros
+		JPanel jp=(JPanel) componentes[0];
+		//sacamos el JTabbedPane
+		JTabbedPane jtp=(JTabbedPane) jp.getComponent(0);
+		//En la posición 1 del JTabbedPane está el panelFiltros con los internos
+		PanelFiltros pf=(PanelFiltros) jtp.getComponent(1);
+		//obtenemos la tabla de los internos y su dtm
+		JTable jt=pf.getJt();
+		DefaultTableModel dtm=(DefaultTableModel)jt.getModel();
+		//obtenemos el dni del interno que se ha pulsado
+		String[]identificacion=dtm.getValueAt(jt.getSelectedRow(), 0).toString().split("-");
+		String dni=identificacion[1];
+		InternoDao id=new InternoDao();
+		//obtenemos el interno que tiene el dni obtenido
+		List<Object>lista=id.listaInternosPorDni(dni);
+		Interno i=(Interno)lista.get(0);
+		
+		PanelEstancias p=f.getPe();
+		p.setI(i);
+		p.RellenarTablaEstancias(i.getIdpersona());
+		f.setPe(p);
+	}
 
 	private void RellenarTablaEmpleados() {
 		//decimos que el panel es de Personas
@@ -126,7 +171,6 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		EmpleadoDao em=new EmpleadoDao();		
 		List<Object> empleados = em.listaEmpleados();	
 		jt=FuncionesDiversas.cargaDatosEnTablaEmpleados(empleados, cabecerasTablaEmpleados);
-		System.out.println("filas en tabla empleados"+jt.getRowCount());	
 				
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
@@ -196,9 +240,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 				
 		InternoDao in=new InternoDao();		
 		List<Object> internos = in.listaInternos();	
-		jt=FuncionesDiversas.cargaDatosEnTablaInternos(internos, cabecerasTablaInternos);
-		System.out.println("filas en tabla internos"+jt.getRowCount());		
-		
+		jt=FuncionesDiversas.cargaDatosEnTablaInternos(internos, cabecerasTablaInternos);		
 				
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
@@ -267,7 +309,6 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		PersonaDao pd=new PersonaDao();		
 		List<Object> personas = pd.listaPersonas();	
 		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);
-		System.out.println("filas en tabla Personas"+jt.getRowCount());
 		
 		
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
@@ -328,9 +369,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		
 		PersonaDao pd=new PersonaDao();		
 		List<Object> personas = pd.listaPersonasSinEmpleados();
-		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);
-		System.out.println("filas en tabla Personas"+jt.getRowCount());
-		
+		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);		
 		
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
@@ -397,7 +436,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 			}
 			break;
 		default:
-			System.out.println("Error en la selección de panel");
+			loggeador.debug("Error en la selección de panel");
 		}			
 	}
 

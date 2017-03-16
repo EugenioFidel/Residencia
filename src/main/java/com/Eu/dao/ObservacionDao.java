@@ -80,5 +80,35 @@ public class ObservacionDao {
 	    }
 	}
 	
+	public void deleteObservacion(Observacion o)  {
+        Session sesion = null;
+        try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        sesion.delete(o);
+	        sesion.getTransaction().commit();
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }
+	}
+	
+	public Observacion getObservacionById(int i) {
+	    Session sesion = null;
+	    Observacion o = null;
+	    try {
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        o = (Observacion)sesion.get(Observacion.class, i);
+	        //Hibernate.initialize(interno);
+	    } catch (Exception e) {
+	       e.printStackTrace();
+	    } finally {
+	        if (sesion != null && sesion.isOpen()) {
+	            sesion.close();
+	        }
+	    }
+	    return o;
+	}
+	
 	
 }

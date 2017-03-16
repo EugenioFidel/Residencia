@@ -1,16 +1,14 @@
 package com.Eu.paneles;
 
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,20 +23,18 @@ import org.apache.log4j.Logger;
 
 import com.Eu.controladores.FuncionesDiversas;
 import com.Eu.controladores.MiRender;
+
 import com.Eu.dao.InternoDao;
 import com.Eu.dao.ObservacionDao;
-import com.Eu.formularios.AltaObservacion;
+
 import com.Eu.model.Interno;
 import com.Eu.model.Observacion;
 
-public class PanelObservaciones extends JPanel implements ActionListener,TableModelListener { 	
+public class PanelObservaciones extends JPanel implements TableModelListener { 	
 	
 
 	public JTable jtObservaciones =new JTable();
-	//botonero
-	JPanel jpBotonero=new JPanel();
-	JButton jbAnhadir =new JButton("Añadir");
-	JButton jbBorrar=new JButton("Borrar");
+	
 	//Un JScrollPane para alojar la tabla 
 	public JScrollPane jsp = new JScrollPane();	
 	GridBagLayout gbl=new GridBagLayout();
@@ -46,23 +42,17 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 	
 	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
 	
-	Interno i=new Interno();
-	
+	Interno i=new Interno();	
 	
 	private static final long serialVersionUID = 1L;
 
 	public PanelObservaciones(int id){
 		InternoDao i=new InternoDao();
-		this.setI(i.getInternoById(id));
-		
-		
+		this.setI(i.getInternoById(id));		
 		
 		this.setSize(800,600);
 		this.setLayout(gbl);
 		this.RellenarTablaObservaciones(id);
-		
-		
-		
 		
 		gbc.gridx=0;
 		gbc.gridy=0;
@@ -70,20 +60,6 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 		gbc.weighty=1.0;
 		gbc.fill=GridBagConstraints.BOTH;
 		this.add(jsp,gbc);
-		
-		jbAnhadir.addActionListener(this);
-		jbBorrar.addActionListener(this);
-		
-		jpBotonero.add(jbAnhadir);
-		jpBotonero.add(jbBorrar);
-		
-		gbc.gridx=0;
-		gbc.gridy=1;
-		gbc.weightx=0.25;
-		gbc.weighty=0.25;
-		gbc.anchor=GridBagConstraints.EAST;
-		this.add(jpBotonero,gbc);
-		
 		
 	}
 
@@ -178,18 +154,6 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 		}
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		DefaultTableModel dtm=(DefaultTableModel)this.getJtObservaciones().getModel();
-		if(e.getSource().equals(jbAnhadir)){
-			System.out.println("pulso añadir observación");
-			AltaObservacion ao=new AltaObservacion(this.getI(),dtm);
-			ao.setVisible(true);
-		}else{
-			System.out.println("pulso borrar observación");
-		}		
-	}
-
 	public JTable getJtObservaciones() {
 		return jtObservaciones;
 	}
@@ -216,7 +180,6 @@ public class PanelObservaciones extends JPanel implements ActionListener,TableMo
 	
 	public void redibujar(){
 		jsp.setViewportView(jtObservaciones);		
-	}
-	
+	}	
 }
 

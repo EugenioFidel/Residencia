@@ -175,6 +175,44 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		return tb;
 	}
 	
+	public static JTable cargaDatosEnTablaEstancias(List<Estancia> lista, String[] cabeceras) {
+		/*
+		 * creamos un DefaultTableModel dft y con el una JTable jt.
+		 */
+		SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy"); 	
+		
+		DefaultTableModel dtm=new DefaultTableModel();	
+			for (int i = 0; i < cabeceras.length; i++) 
+				dtm.addColumn(cabeceras[i]);		
+				
+		for (@SuppressWarnings("rawtypes")
+		Iterator iterator = lista.iterator(); iterator.hasNext();){
+			Object[] fila = (Object[]) iterator.next();
+			Object filaB[]=new Object[fila.length];
+			filaB[0]=fila[0];
+			for(int i=1;i<fila.length;i++){
+				if(i==1 || i==3){
+					if(!(fila[i] == null)){
+						filaB[i]=dt.format(fila[i]);
+					}else{
+						filaB[i]=null;
+					}
+				}else{
+					filaB[i]=fila[i];	
+				}
+			}
+			dtm.addRow(filaB);
+		}
+	
+		//Un TableRowSorter para ordenar y filtrar la tabla
+		elQueOrdena=new TableRowSorter<TableModel>(dtm);
+		JTable tb =new JTable(dtm);
+		
+		tb.setRowSorter(elQueOrdena);
+			
+		return tb;
+	}		
+	
 	public static void positionColumn(JTable table,int col_Index) {
 		table.moveColumn(table.getColumnCount()-1, col_Index);
 	}
@@ -315,39 +353,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				}			
 			}
 
-		public static JTable cargaDatosEnTablaEstancias(List<Estancia> lista, String[] cabeceras) {
-			/*
-			 * creamos un DefaultTableModel dft y con el una JTable jt.
-			 */
-			SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy"); 	
-			
-			DefaultTableModel dtm=new DefaultTableModel();	
-				for (int i = 0; i < cabeceras.length; i++) 
-					dtm.addColumn(cabeceras[i]);		
-					
-			for (@SuppressWarnings("rawtypes")
-			Iterator iterator = lista.iterator(); iterator.hasNext();){
-				Object[] fila = (Object[]) iterator.next();
-				Object filaB[]=new Object[fila.length];
-				filaB[0]=fila[0];
-				for(int i=1;i<fila.length;i++){
-					if(i==2 || i==4){
-						filaB[i]=dt.format(fila[i]);
-					}else{
-						filaB[i]=fila[i];	
-					}
-				}
-				dtm.addRow(filaB);
-			}
 		
-			//Un TableRowSorter para ordenar y filtrar la tabla
-			elQueOrdena=new TableRowSorter<TableModel>(dtm);
-			JTable tb =new JTable(dtm);
-			
-			tb.setRowSorter(elQueOrdena);
-				
-			return tb;
-		}		
 }
 	
 	

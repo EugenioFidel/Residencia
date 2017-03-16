@@ -4,9 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /*
@@ -27,10 +26,9 @@ import javax.persistence.Table;
 @Table(name="estancia")
 public class Estancia {
 	@Id
+	@GeneratedValue
 	@Column(name="idEstancia")
 	private int idEstancia;
-	@Column(name="idPersona")
-	private int idPersona;
 	@Column(name="fechaAlta")
 	private Date fechaAlta;
 	@Column(name="fechaBaja")
@@ -40,17 +38,14 @@ public class Estancia {
 	@Column(name="tipoEstancia")
 	private int tipoEstancia;
 	
-	@ManyToOne
-	@JoinColumn(name="idPersona")
-	private Interno interno;
+
 	
 	public Estancia(){		
 	}
 
-	public Estancia(int idEstancia, int idPersona, Date fechaAlta, Date fechaBaja, int motivoBaja, int tipoEstancia) {
+	public Estancia(int idEstancia, Date fechaAlta, Date fechaBaja, int motivoBaja, int tipoEstancia) {
 		super();
 		this.idEstancia = idEstancia;
-		this.idPersona = idPersona;
 		this.fechaAlta = fechaAlta;
 		this.fechaBaja = fechaBaja;
 		this.motivoBaja = motivoBaja;
@@ -63,14 +58,6 @@ public class Estancia {
 
 	public void setIdEstancia(int idEstancia) {
 		this.idEstancia = idEstancia;
-	}
-
-	public int getIdPersona() {
-		return idPersona;
-	}
-
-	public void setIdPersona(int idPersona) {
-		this.idPersona = idPersona;
 	}
 
 	public Date getFechaAlta() {
@@ -103,7 +90,5 @@ public class Estancia {
 
 	public void setTipoEstancia(int tipoEstancia) {
 		this.tipoEstancia = tipoEstancia;
-	}
-
-	
+	}	
 }

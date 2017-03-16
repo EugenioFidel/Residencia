@@ -15,7 +15,7 @@ public class EstanciaDao {
 		try{
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
-	        String sqlQuery="select estancia.idEstancia, interno.idPersona,estancia.fechaAlta,"+
+	        String sqlQuery="select estancia.idEstancia,estancia.fechaAlta,"+
 	        				"tipoEstancia.tipoEstancia,estancia.fechaBaja,motivoBaja.motivoBaja "+
 	        				"from interno,interno_estancia,estancia,tipoEstancia,motivoBaja "+
 	        				"where interno.idPersona='"+idPersona+"' "+
@@ -29,6 +29,19 @@ public class EstanciaDao {
 			List<Estancia> lista = (List<Estancia>)query.list();
 	        sesion.getTransaction().commit();
 	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }
+	}
+	
+	public void addEstancia(Estancia e)  {
+        Session sesion = null;
+        try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        sesion.save(e);
+	        sesion.getTransaction().commit();
 	    } finally {
 	        if ((sesion != null) && (sesion.isOpen()))
 	        sesion.close();

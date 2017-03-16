@@ -3,20 +3,13 @@ package com.Eu.paneles;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Vector;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -27,19 +20,13 @@ import com.Eu.controladores.FuncionesDiversas;
 import com.Eu.controladores.MiRender;
 import com.Eu.dao.EstanciaDao;
 import com.Eu.dao.InternoDao;
-import com.Eu.dao.ObservacionDao;
 import com.Eu.model.Estancia;
 import com.Eu.model.Interno;
-import com.Eu.model.Observacion;
 
-public class PanelEstancias extends JPanel implements ActionListener,TableModelListener { 	
-	
+public class PanelEstancias extends JPanel implements TableModelListener { 		
 
 	public JTable jtEstancias =new JTable();
-	//botonero
-	JPanel jpBotonero=new JPanel();
-	JButton jbAnhadir =new JButton("Añadir");
-	JButton jbBorrar=new JButton("Borrar");
+	
 	//Un JScrollPane para alojar la tabla 
 	public JScrollPane jsp = new JScrollPane();	
 	GridBagLayout gbl=new GridBagLayout();
@@ -47,23 +34,17 @@ public class PanelEstancias extends JPanel implements ActionListener,TableModelL
 	
 	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
 	
-	Interno i=new Interno();
-	
+	Interno i=new Interno();	
 	
 	private static final long serialVersionUID = 1L;
 
 	public PanelEstancias(int id){
 		InternoDao i=new InternoDao();
-		this.setI(i.getInternoById(id));
-		
-		
+		this.setI(i.getInternoById(id));		
 		
 		this.setSize(800,600);
 		this.setLayout(gbl);
-		this.RellenarTablaEstancias(id);
-		
-		
-		
+		this.RellenarTablaEstancias(id);		
 		
 		gbc.gridx=0;
 		gbc.gridy=0;
@@ -72,20 +53,6 @@ public class PanelEstancias extends JPanel implements ActionListener,TableModelL
 		gbc.fill=GridBagConstraints.BOTH;
 		this.add(jsp,gbc);
 		
-		jbAnhadir.addActionListener(this);
-		jbBorrar.addActionListener(this);
-		
-		jpBotonero.add(jbAnhadir);
-		jpBotonero.add(jbBorrar);
-		
-		gbc.gridx=0;
-		gbc.gridy=1;
-		gbc.weightx=0.25;
-		gbc.weighty=0.25;
-		gbc.anchor=GridBagConstraints.EAST;
-		this.add(jpBotonero,gbc);
-		
-		
 	}
 
 	public void RellenarTablaEstancias(int id) {
@@ -93,13 +60,12 @@ public class PanelEstancias extends JPanel implements ActionListener,TableModelL
 				MiRender miRender=new MiRender();		
 						
 				//el array con las cabeceras de la tabla
-				String[]cabecerasTablaEstancias=new String[6];
+				String[]cabecerasTablaEstancias=new String[5];
 				cabecerasTablaEstancias[0]="Id.Est.";
-				cabecerasTablaEstancias[1]="Id.Int.";
-				cabecerasTablaEstancias[2]="Fecha de alta";
-				cabecerasTablaEstancias[3]="Tipo de estancia";
-				cabecerasTablaEstancias[4]="Fecha de baja";
-				cabecerasTablaEstancias[5]="Motivo de la baja";
+				cabecerasTablaEstancias[1]="Fecha de alta";
+				cabecerasTablaEstancias[2]="Tipo de estancia";
+				cabecerasTablaEstancias[3]="Fecha de baja";
+				cabecerasTablaEstancias[4]="Motivo de la baja";
 						
 				EstanciaDao ed=new EstanciaDao();		
 				List<Estancia> estancias = ed.listaEstancias(id);
@@ -112,8 +78,6 @@ public class PanelEstancias extends JPanel implements ActionListener,TableModelL
 				}
 						
 				TableColumn columna=jtEstancias.getColumn("Id.Est.");
-				columna.setPreferredWidth(30);
-				columna=jtEstancias.getColumn("Id.Int.");
 				columna.setPreferredWidth(30);
 				columna=jtEstancias.getColumn("Fecha de alta");
 				columna.setPreferredWidth(105);
@@ -169,17 +133,7 @@ public class PanelEstancias extends JPanel implements ActionListener,TableModelL
 //		}
 	}
 
-	public void actionPerformed(ActionEvent e) {
-//		// TODO Auto-generated method stub
-//		DefaultTableModel dtm=(DefaultTableModel)this.getJtEstancias().getModel();
-//		if(e.getSource().equals(jbAnhadir)){
-//			System.out.println("pulso añadir Estancia");
-//			AltaEstancia ao=new AltaEstancia(this.getI(),dtm);
-//			ao.setVisible(true);
-//		}else{
-//			System.out.println("pulso borrar estancia");
-//		}		
-	}
+
 
 	public JTable getJtEstancias() {
 		return jtEstancias;

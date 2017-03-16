@@ -16,6 +16,8 @@
    		<mapping class="com.Eu.model.Empleado"/>
    		<mapping class="com.Eu.model.Interno"/>
    		<mapping class="com.Eu.model.Observacion"/>
+   		<mapping class="com.Eu.model.Estancia"/>
    		<mapping class="com.Eu.model.Interno_observacion"/>
+   		<mapping class="com.Eu.model.Interno_estancia"/>
 	</session-factory>
 </hibernate-configuration>
