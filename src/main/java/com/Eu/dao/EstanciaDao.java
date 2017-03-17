@@ -7,6 +7,7 @@ import org.hibernate.Session;
 
 import com.Eu.controladores.HibernateUtil;
 import com.Eu.model.Estancia;
+import com.Eu.model.Persona;
 
 public class EstanciaDao {
 	public List<Estancia> listaEstancias(int idPersona){
@@ -41,6 +42,19 @@ public class EstanciaDao {
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
 	        sesion.save(e);
+	        sesion.getTransaction().commit();
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }
+	}
+	
+	public void updateEstancia(Estancia e)  {
+        Session sesion = null;
+        try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        sesion.saveOrUpdate(e);
 	        sesion.getTransaction().commit();
 	    } finally {
 	        if ((sesion != null) && (sesion.isOpen()))

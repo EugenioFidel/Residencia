@@ -34,7 +34,9 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 	
 
 	public JTable jtObservaciones =new JTable();
+	public DefaultTableModel dtm=new DefaultTableModel();
 	
+
 	//Un JScrollPane para alojar la tabla 
 	public JScrollPane jsp = new JScrollPane();	
 	GridBagLayout gbl=new GridBagLayout();
@@ -116,6 +118,8 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 				dtm.addTableModelListener(this);		
 				
 				jsp.setViewportView(jtObservaciones);
+				
+				this.setDtm((DefaultTableModel)jtObservaciones.getModel());
 	}
 
 	public void tableChanged(TableModelEvent e) {
@@ -180,6 +184,15 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 	
 	public void redibujar(){
 		jsp.setViewportView(jtObservaciones);		
-	}	
+	}
+	
+
+	public DefaultTableModel getDtm() {
+		return dtm;
+	}
+
+	public void setDtm(DefaultTableModel dtm) {
+		this.dtm = dtm;
+	}
 }
 
