@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-03-18T08:23:15 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT residentor.persona.`letraCif`,
+	residentor.persona.dni,
+	residentor.persona.`letraNif`,
+	residentor.persona.nombre,
+	residentor.persona.`primerApe`,
+	residentor.persona.`segundoApe`,
+	interno.cc,
+	residentor.observacion.`gradoDependencia`,
+	residentor.importes.importe
+FROM 
+	residentor.persona,
+	residentor.interno,
+	residentor.observacion,
+	residentor.interno_observacion,
+	residentor.importes
+where
+	 residentor.persona.`idPersona` = residentor.interno.`idPersona` 
+and
+	residentor.interno.`idPersona`=residentor.interno_observacion.`idPersona`
+and
+	  residentor.interno_observacion.`idObservacion` = residentor.observacion.`idObservacion` 
+and
+		 residentor.observacion.`gradoDependencia` = residentor.importes.`gradoDependencia`
+group by 
+		residentor.persona.idPersona
+order by
+ residentor.persona.`primerApe` , residentor.persona.`segundoApe` , residentor.persona.nombre]]>
+	</queryString>
+	<field name="letraCif" class="java.lang.String"/>
+	<field name="dni" class="java.lang.String"/>
+	<field name="letraNif" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="primerApe" class="java.lang.String"/>
+	<field name="segundoApe" class="java.lang.String"/>
+	<field name="cc" class="java.lang.String"/>
+	<field name="gradoDependencia" class="java.lang.String"/>
+	<field name="importe" class="java.lang.Float"/>
+	<group name="Group4">
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="80">
+			<frame>
+				<reportElement mode="Opaque" x="3" y="1" width="797" height="79" backcolor="#006699" uuid="49b15b4d-aba3-4712-bcb1-05bd0f6c8c9d"/>
+				<staticText>
+					<reportElement x="160" y="20" width="616" height="43" forecolor="#FFFFFF" uuid="5e362e32-c703-4a01-87c1-b6b8fae7bdb9"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Informe de cuotas]]></text>
+				</staticText>
+				<image>
+					<reportElement x="13" y="8" width="87" height="62" uuid="e841039a-e2aa-4e7d-bf74-9dd67c501f42"/>
+					<imageExpression><![CDATA["./src/main/resources/gttsLogo.gif"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="31">
+			<staticText>
+				<reportElement x="75" y="9" width="279" height="22" uuid="0f2cabed-444d-4640-9624-68112c781652"/>
+				<textElement>
+					<font fontName="SansSerif" size="14" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[APELLIDOS Y NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="4" y="9" width="70" height="20" backcolor="#FFFFFF" uuid="b8da2365-7d22-4bd1-a82a-58689154e71d"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[DNI/NIE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="618" y="5" width="98" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="a1528941-1674-46d5-bd6a-275b056081c4"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Grado dep.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="723" y="9" width="75" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad43178-f202-46f2-8031-7aa86a1d6c65"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="430" y="8" width="170" height="20" uuid="1c8d2206-3ff6-4598-b097-1417c121e131"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[IBAN]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="16">
+			<line>
+				<reportElement x="4" y="15" width="788" height="1" uuid="e80e9263-9401-4de1-8208-b88d52a92b50"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="0" width="82" height="15" uuid="5e395071-ea76-4371-8e80-6e593d66c674"/>
+				<textElement>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{letraCif}+"-"+$F{dni}+"-"+$F{letraNif}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="1" width="318" height="13" uuid="5c9a0edd-510c-44cd-9ac8-242814759d15"/>
+				<textElement>
+					<font isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{primerApe}+" "+$F{segundoApe}+", "+$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="1" width="194" height="14" uuid="0922ff03-115d-4c18-886c-220b22e3797f"/>
+				<textElement>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="617" y="2" width="100" height="12" uuid="0b020e68-84fa-4da4-865c-d2e99480513a"/>
+				<textFieldExpression><![CDATA[$F{gradoDependencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="726" y="3" width="72" height="12" uuid="e8ab1803-e558-453b-8af9-bde9b471d2a2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="171a4671-ec07-426c-9f21-9edcaf63bc1a"/>
+				<textElement textAlignment="Right">
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="602b8b6f-0660-4aab-a035-0a60c2c03abb"/>
+				<textElement>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="263415fd-c537-46bf-9bc0-ac9caf8e753f"/>
+				<textElement>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

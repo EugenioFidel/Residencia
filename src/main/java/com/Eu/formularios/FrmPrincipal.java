@@ -65,11 +65,14 @@ import com.Eu.model.Observacion;
 		JMenu menuArchivo = new JMenu("Archivo");
 		JMenu menuEditar = new JMenu("Editar");
 		JMenu menuListados= new JMenu("Listados");
+		JMenu menuInformes=new JMenu("Informes");
 		JMenuItem jmiListadoPersonas=new JMenuItem("Personas");
 		JMenuItem jmiListadoInternos=new JMenuItem("Internos");
 		JMenuItem jmiListadoEmpleados=new JMenuItem("Empleados");
 		JSeparator jsSeparador1MenuListados=new JSeparator();
 		JMenuItem jmiListadoTelefonos=new JMenuItem("Teléfonos");
+		
+		JMenuItem jmiInformeCuotas= new JMenuItem("Cuotas");
 		
 		public PanelObservaciones po=null;	
 		public PanelEstancias pe =null;
@@ -174,12 +177,15 @@ import com.Eu.model.Observacion;
 		menuListados.add(jmiListadoEmpleados);
 		menuListados.add(jsSeparador1MenuListados);
 		menuListados.add(jmiListadoTelefonos);
+		menuInformes.add(jmiInformeCuotas);
 		jmbMenu.add(menuListados);
+		jmbMenu.add(menuInformes);
 		
 		jmiListadoPersonas.addActionListener(this);
 		jmiListadoInternos.addActionListener(this);
 		jmiListadoEmpleados.addActionListener(this);
 		jmiListadoTelefonos.addActionListener(this);
+		jmiInformeCuotas.addActionListener(this);
 		
 		this.setJMenuBar(jmbMenu);		
 		
@@ -194,12 +200,6 @@ import com.Eu.model.Observacion;
 			});	
 		}
 	
-	
-	
-	
-
-
-
 	public void actionPerformed(ActionEvent e) {		
 		//comprobamos el objeto que ha producido el evento
 		if(e.getSource().equals(jrbObservaciones)){
@@ -225,54 +225,56 @@ import com.Eu.model.Observacion;
 						loggeador.debug("Borramos una Estancia");
 					}
 					loggeador.debug("Ha pulsado borrar observación o estancia");
-					}else if(e.getSource().equals(jmiListadoPersonas)){
-								FuncionesDiversas.GenerarListadoPersonas();
-								}else if(e.getSource().equals(jmiListadoInternos)){
-									FuncionesDiversas.GenerarListadoInternos();
-									}else if(e.getSource().equals(jmiListadoEmpleados)){
-										FuncionesDiversas.GenerarListadoEmpleados();
-										}else if(e.getSource().equals(jmiListadoTelefonos)){
-											FuncionesDiversas.GenerarListadoTelefonos();
-											}else{
-												String resultado=((JButton)e.getSource()).getText();
-												JTabbedPane jtp=(JTabbedPane)jpTablas.getComponent(0);
-												int indiceTablaSeleccionada=jtp.getSelectedIndex();
-												PanelFiltros pf=(PanelFiltros)jtp.getComponent(indiceTablaSeleccionada);
-												JTable t=pf.getJt();
-												@SuppressWarnings("unused")
-												boolean r=true;						
-													
-												//toca ver que queremos añadir o borrar
-												if(resultado.equals("Añadir")){
-													//toca ver que es o que queremos añadir
-													switch(indiceTablaSeleccionada){
-														//añadimos una persona
-														case 0:
-															r=Persona.AltaNuevaPersona(t);
-															break;
-														//añadimos un interno
-														case 1:
-															r=Interno.AltaNuevoInterno();
-															break;
-														//añadimos un empleado
-														case 2:
-															r=Empleado.AltaNuevoEmpleado();														
-													}
+					}else if(e.getSource().equals(jmiInformeCuotas)){
+						FuncionesDiversas.GenerarInformeCuotas();
+						}else if(e.getSource().equals(jmiListadoPersonas)){
+									FuncionesDiversas.GenerarListadoPersonas();
+									}else if(e.getSource().equals(jmiListadoInternos)){
+										FuncionesDiversas.GenerarListadoInternos();
+										}else if(e.getSource().equals(jmiListadoEmpleados)){
+											FuncionesDiversas.GenerarListadoEmpleados();
+											}else if(e.getSource().equals(jmiListadoTelefonos)){
+												FuncionesDiversas.GenerarListadoTelefonos();
 												}else{
-													switch(indiceTablaSeleccionada){
-														case 0:
-															r=Persona.BorrarPersona(t);
-															break;
-														case 1:
-															r=Interno.BorrarInterno(t);
-															break;
-														default:
-															r=Empleado.BorrarEmpleado(t);
-													}
-												}
+													String resultado=((JButton)e.getSource()).getText();
+													JTabbedPane jtp=(JTabbedPane)jpTablas.getComponent(0);
+													int indiceTablaSeleccionada=jtp.getSelectedIndex();
+													PanelFiltros pf=(PanelFiltros)jtp.getComponent(indiceTablaSeleccionada);
+													JTable t=pf.getJt();
+													@SuppressWarnings("unused")
+													boolean r=true;						
 														
+													//toca ver que queremos añadir o borrar
+													if(resultado.equals("Añadir")){
+														//toca ver que es o que queremos añadir
+														switch(indiceTablaSeleccionada){
+															//añadimos una persona
+															case 0:
+																r=Persona.AltaNuevaPersona(t);
+																break;
+															//añadimos un interno
+															case 1:
+																r=Interno.AltaNuevoInterno();
+																break;
+															//añadimos un empleado
+															case 2:
+																r=Empleado.AltaNuevoEmpleado();														
+														}
+													}else{
+														switch(indiceTablaSeleccionada){
+															case 0:
+																r=Persona.BorrarPersona(t);
+																break;
+															case 1:
+																r=Interno.BorrarInterno(t);
+																break;
+															default:
+																r=Empleado.BorrarEmpleado(t);
+														}
+													}
+															
+												}
 											}
-										}
 				
 		
 	

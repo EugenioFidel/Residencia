@@ -258,7 +258,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				dbConexion con=new dbConexion();
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfPersonas.jrxml");
-				generarReporte(reportListado,null,conec,"./informes/ListadoPersonas_");
+				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoPersonas_");
 				conec.close();
 				con.desconectar();
 			} catch (JRException e1) {
@@ -276,7 +276,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				dbConexion con=new dbConexion();
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfTelefonos.jrxml");
-				generarReporte(reportListado,null,conec,"./informes/ListadoTelefonos_");
+				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoTelefonos_");
 				conec.close();
 				con.desconectar();
 			} catch (JRException e1) {
@@ -294,7 +294,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				dbConexion con=new dbConexion();
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfResidentes.jrxml");
-				generarReporte(reportListado,null,conec,"./informes/ListadoResidentes_");
+				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoResidentes_");
 				conec.close();
 				con.desconectar();
 			} catch (JRException e1) {
@@ -312,7 +312,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				dbConexion con=new dbConexion();
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfEmpleados.jrxml");
-				generarReporte(reportListado,null,conec,"./informes/ListadoEmpleados_");
+				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoEmpleados_");
 				conec.close();
 				con.desconectar();
 			} catch (JRException e1) {
@@ -322,7 +322,26 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
-		}		
+		}	 
+		
+		public static void GenerarInformeCuotas() {
+			// TODO Auto-generated method stub
+			try {
+				//conexion para el reporte
+				dbConexion con=new dbConexion();
+				java.sql.Connection conec=con.getConexion();
+				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfCuotas.jrxml");
+				generarReporte(reportListado,null,conec,"./src/main/resources/informes/cuotas/InformeCuotas_");
+				conec.close();
+				con.desconectar();
+			} catch (JRException e1) {
+				System.out.println("Error en la generación del listado");
+				e1.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
 		
 		public static void LimpiarDtm(DefaultTableModel modelo){
 	        int filas = modelo.getRowCount();
@@ -352,6 +371,8 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 					o.setGradoDependencia("AG2");	
 				}			
 			}
+
+		
 
 		
 }
