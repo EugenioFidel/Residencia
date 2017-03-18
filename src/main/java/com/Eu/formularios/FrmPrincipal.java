@@ -9,12 +9,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
@@ -33,7 +37,7 @@ import com.Eu.paneles.PanelBotoneroPersonas;
 import com.Eu.paneles.PanelEstancias;
 import com.Eu.paneles.PanelFiltros;
 import com.Eu.paneles.PanelObservaciones;
-
+import com.toedter.calendar.JDateChooser;
 import com.Eu.model.Empleado;
 import com.Eu.model.Interno;
 import com.Eu.model.Persona;
@@ -226,7 +230,22 @@ import com.Eu.model.Observacion;
 					}
 					loggeador.debug("Ha pulsado borrar observación o estancia");
 					}else if(e.getSource().equals(jmiInformeCuotas)){
-						FuncionesDiversas.GenerarInformeCuotas();
+						JDateChooser jd = new JDateChooser();
+						String message ="Introduce la fecha del informe:\n";
+						Object[] params = {message,jd};
+						JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
+						String s="";
+						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+						s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+						Date fecha;
+						try {
+							fecha = sdf.parse(s);
+							FuncionesDiversas.GenerarInformeCuotas(fecha);
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
 						}else if(e.getSource().equals(jmiListadoPersonas)){
 									FuncionesDiversas.GenerarListadoPersonas();
 									}else if(e.getSource().equals(jmiListadoInternos)){

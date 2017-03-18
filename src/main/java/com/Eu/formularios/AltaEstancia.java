@@ -55,7 +55,7 @@ public class AltaEstancia extends JDialog implements ActionListener{
 		
 		//propiedades del formulario
 		setModal(true);
-		setBounds(300, 300, 350,150);
+		setBounds(300, 300, 350,200);
 		isDefaultLookAndFeelDecorated();
 		setTitle("Residenciator - Alta de nueva estancia");
 		
@@ -66,10 +66,7 @@ public class AltaEstancia extends JDialog implements ActionListener{
 		
 		jrbResidencial.setSelected(true);
 		bgTipoEstancia.add(jrbResidencial);
-		bgTipoEstancia.add(jrbCentroDia);
-		
-		
-		
+		bgTipoEstancia.add(jrbCentroDia);	
 		
 		
 		//obtenemos el nombre y apellidos del fulano
@@ -79,6 +76,7 @@ public class AltaEstancia extends JDialog implements ActionListener{
 		col.gridx=0;
 		col.gridy=0;
 		col.gridwidth=2;
+		col.weightx=1;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jlNombreEdit,col);
@@ -86,14 +84,12 @@ public class AltaEstancia extends JDialog implements ActionListener{
 		
 		col.gridx=0;
 		col.gridy=1;
-		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jlFechaAlta,col);
 		
 		//colocamos los controles
 		col.gridx=1;
 		col.gridy=1;
-		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		jdcFecha.setToolTipText("Introducir fecha de alta");
 		this.getContentPane().add(jdcFecha,col);
@@ -101,13 +97,11 @@ public class AltaEstancia extends JDialog implements ActionListener{
 		//colocamos los controles
 		col.gridx=0;
 		col.gridy=2;
-		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrbResidencial,col);
 		
 		col.gridx=0;
 		col.gridy=3;
-		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(2,2,2,2);
 		this.getContentPane().add(jrbCentroDia,col);		
 		

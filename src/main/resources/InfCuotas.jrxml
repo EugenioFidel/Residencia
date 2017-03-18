@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-18T08:23:15 -->
+<!-- 2017-03-18T21:06:29 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="fechaInforme" class="java.util.Date">
+		<parameterDescription><![CDATA[FechaReferenciaInforme]]></parameterDescription>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT DISTINCT residentor.persona.`letraCif`,
+		<![CDATA[SELECT DISTINCT 
+	residentor.persona.`letraCif`,
 	residentor.persona.dni,
 	residentor.persona.`letraNif`,
 	residentor.persona.nombre,
@@ -16,7 +20,8 @@
 	residentor.persona.`segundoApe`,
 	interno.cc,
 	residentor.observacion.`gradoDependencia`,
-	residentor.importes.importe
+	residentor.importes.importe,
+	max(residentor.observacion.`fechaObservacion`) 
 FROM 
 	residentor.persona,
 	residentor.interno,
@@ -31,6 +36,8 @@ and
 	  residentor.interno_observacion.`idObservacion` = residentor.observacion.`idObservacion` 
 and
 		 residentor.observacion.`gradoDependencia` = residentor.importes.`gradoDependencia`
+and
+ 	residentor.observacion.`fechaObservacion` <= $P{fechaInforme}
 group by 
 		residentor.persona.idPersona
 order by
@@ -57,18 +64,17 @@ order by
 		<band height="80">
 			<frame>
 				<reportElement mode="Opaque" x="3" y="1" width="797" height="79" backcolor="#006699" uuid="49b15b4d-aba3-4712-bcb1-05bd0f6c8c9d"/>
-				<staticText>
-					<reportElement x="160" y="20" width="616" height="43" forecolor="#FFFFFF" uuid="5e362e32-c703-4a01-87c1-b6b8fae7bdb9"/>
-					<textElement>
-						<font size="34" isBold="true"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<text><![CDATA[Informe de cuotas]]></text>
-				</staticText>
 				<image>
 					<reportElement x="13" y="8" width="87" height="62" uuid="e841039a-e2aa-4e7d-bf74-9dd67c501f42"/>
 					<imageExpression><![CDATA["./src/main/resources/gttsLogo.gif"]]></imageExpression>
 				</image>
+				<textField>
+					<reportElement stretchType="RelativeToTallestObject" x="100" y="28" width="689" height="30" forecolor="#FFFFFF" uuid="eb98fe8f-6a95-4efb-9627-abedb9b16928"/>
+					<textElement textAlignment="Center">
+						<font size="22" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Estadillo de cobros, "+new SimpleDateFormat("MMMM, yyyy").format($P{fechaInforme})]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
@@ -117,7 +123,7 @@ order by
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="16">
+		<band height="17">
 			<line>
 				<reportElement x="4" y="15" width="788" height="1" uuid="e80e9263-9401-4de1-8208-b88d52a92b50"/>
 			</line>
@@ -144,11 +150,15 @@ order by
 				<textFieldExpression><![CDATA[$F{cc}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="617" y="2" width="100" height="12" uuid="0b020e68-84fa-4da4-865c-d2e99480513a"/>
+				<reportElement x="617" y="2" width="100" height="14" uuid="0b020e68-84fa-4da4-865c-d2e99480513a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{gradoDependencia}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="726" y="3" width="72" height="12" uuid="e8ab1803-e558-453b-8af9-bde9b471d2a2"/>
+				<reportElement x="726" y="3" width="72" height="14" uuid="e8ab1803-e558-453b-8af9-bde9b471d2a2">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
 			</textField>
