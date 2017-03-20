@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-18T21:06:29 -->
+<!-- 2017-03-20T17:47:04 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -11,37 +11,39 @@
 		<parameterDescription><![CDATA[FechaReferenciaInforme]]></parameterDescription>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT DISTINCT 
-	residentor.persona.`letraCif`,
+		<![CDATA[SELECT DISTINCT residentor.persona.`letraCif`,
 	residentor.persona.dni,
 	residentor.persona.`letraNif`,
 	residentor.persona.nombre,
 	residentor.persona.`primerApe`,
 	residentor.persona.`segundoApe`,
-	interno.cc,
+	residentor.interno.cc,
 	residentor.observacion.`gradoDependencia`,
 	residentor.importes.importe,
-	max(residentor.observacion.`fechaObservacion`) 
-FROM 
-	residentor.persona,
+	max( residentor.observacion.`fechaObservacion`)
+FROM residentor.persona,
 	residentor.interno,
 	residentor.observacion,
 	residentor.interno_observacion,
-	residentor.importes
-where
+	residentor.importes,
+	residentor.estancia,
+	residentor.interno_estancia
+WHERE 
 	 residentor.persona.`idPersona` = residentor.interno.`idPersona` 
-and
-	residentor.interno.`idPersona`=residentor.interno_observacion.`idPersona`
-and
-	  residentor.interno_observacion.`idObservacion` = residentor.observacion.`idObservacion` 
-and
-		 residentor.observacion.`gradoDependencia` = residentor.importes.`gradoDependencia`
-and
- 	residentor.observacion.`fechaObservacion` <= $P{fechaInforme}
-group by 
-		residentor.persona.idPersona
-order by
- residentor.persona.`primerApe` , residentor.persona.`segundoApe` , residentor.persona.nombre]]>
+	 AND residentor.interno.`idPersona` = residentor.interno_estancia.`idPersona` 
+	 AND residentor.interno_estancia.`idEstancia` = residentor.estancia.`idEstancia` 
+	 AND residentor.estancia.`motivoBaja` IN () (SELECT estancia.`idEstancia`
+FROM estancia
+WHERE 
+	 estancia.`motivoBaja` = {1} )
+	 AND residentor.interno.`idPersona` = residentor.interno_observacion.`idPersona` 
+	 AND residentor.interno_observacion.`idObservacion` = residentor.observacion.`idObservacion` 
+	 AND residentor.observacion.`gradoDependencia` = residentor.importes.`gradoDependencia` 
+	 AND residentor.observacion.`fechaObservacion` <= $P{fechaInforme} 
+GROUP BY residentor.persona.`idPersona`
+ORDER BY residentor.persona.`primerApe` DESC,
+	residentor.persona.`segundoApe` DESC,
+	residentor.persona.nombre DESC]]>
 	</queryString>
 	<field name="letraCif" class="java.lang.String"/>
 	<field name="dni" class="java.lang.String"/>

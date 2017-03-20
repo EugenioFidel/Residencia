@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-03-20T17:32:26 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="66ff9437-871c-4ca2-843c-130e0cbdd8fc">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="fechaInforme" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT
+	residentor.persona.nombre,
+	residentor.persona.`primerApe`,
+	residentor.persona.`segundoApe`,
+	residentor.observacion.alimentacion,
+	residentor.observacion.movilidad,
+	residentor.observacion.aseo,
+	residentor.observacion.vestido,
+	residentor.observacion.inodoro,
+	residentor.observacion.esfinteres,
+	residentor.observacion.`gradoDependencia`,
+	max( residentor.observacion.`fechaObservacion`)
+FROM residentor.persona,
+	residentor.interno,
+	residentor.observacion,
+	residentor.interno_observacion,
+	residentor.estancia,
+	residentor.interno_estancia
+WHERE 
+	 residentor.persona.`idPersona` = residentor.interno.`idPersona` 
+	 AND residentor.interno.`idPersona` = residentor.interno_estancia.`idPersona` 
+	 AND residentor.interno_estancia.`idEstancia` = residentor.estancia.`idEstancia` 
+	 AND residentor.estancia.`motivoBaja` IN (SELECT estancia.`idEstancia`FROM estancia WHERE 
+	 estancia.`motivoBaja` = 0 )
+	 AND residentor.interno.`idPersona` = residentor.interno_observacion.`idPersona` 
+	 AND residentor.interno_observacion.`idObservacion` = residentor.observacion.`idObservacion` 
+	 AND residentor.observacion.`fechaObservacion` <= $P{fechaInforme} 
+GROUP BY residentor.persona.`idPersona`
+ORDER BY residentor.persona.`primerApe` DESC,
+	residentor.persona.`segundoApe` DESC,
+	residentor.persona.nombre DESC]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="primerApe" class="java.lang.String"/>
+	<field name="segundoApe" class="java.lang.String"/>
+	<field name="alimentacion" class="java.lang.String"/>
+	<field name="movilidad" class="java.lang.String"/>
+	<field name="aseo" class="java.lang.String"/>
+	<field name="vestido" class="java.lang.String"/>
+	<field name="inodoro" class="java.lang.String"/>
+	<field name="esfinteres" class="java.lang.String"/>
+	<field name="gradoDependencia" class="java.lang.String"/>
+	<field name="max( residentor.observacion.`fechaObservacion`)" class="java.sql.Date"/>
+	<group name="Group4">
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="93">
+			<frame>
+				<reportElement mode="Opaque" x="3" y="1" width="797" height="92" backcolor="#006699" uuid="686b8ae8-c6e3-4a42-89a4-8ff186be284d"/>
+				<staticText>
+					<reportElement x="160" y="20" width="616" height="43" forecolor="#FFFFFF" uuid="b578516b-e0ce-4c00-93d1-e535acdc8eb3"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Informe de dependencias]]></text>
+				</staticText>
+				<image>
+					<reportElement x="13" y="8" width="87" height="84" uuid="6f9f4af1-8722-44ed-b894-d19063c46192"/>
+					<imageExpression><![CDATA["./src/main/resources/gttsLogo.gif"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="37">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<staticText>
+				<reportElement x="0" y="0" width="102" height="37" uuid="50847f46-1b1b-4aa5-a729-57b8fc56c508"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Apellidos y nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="102" y="0" width="100" height="37" uuid="f2d80cb5-5590-4392-a5c1-00862e9d83ec"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Alimentación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="0" width="100" height="37" uuid="524df229-7eb7-45b0-a214-365620b69398"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Movilidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="302" y="0" width="100" height="37" uuid="07b642ba-15ab-4c04-b694-59a94e11631e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Vestido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="0" width="100" height="37" uuid="92900dc2-abf2-43df-8afd-15b665c9611a"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Aseo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="0" width="100" height="37" uuid="c7a3892c-d443-49f0-883a-d8a136a174ea"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Inodoro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="0" width="100" height="37" uuid="6c00d855-c8d7-4b0e-83c0-f3bb3370ffa6"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Esfínteres]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="0" width="100" height="37" uuid="a7defe22-7c8e-461d-8236-b99a262e00d6"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Grado]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="39">
+			<line>
+				<reportElement x="5" y="38" width="788" height="1" uuid="756df595-28cd-48f0-866c-52709c795784"/>
+			</line>
+			<textField>
+				<reportElement x="1" y="1" width="94" height="37" uuid="35d6cbc6-06bd-4c7c-8cc8-d567d48e8728"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{primerApe}+" "+$F{segundoApe}+"\n"+$F{nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="20aeca67-589f-4b3b-891b-2e2c0a5e00a0"/>
+				<textElement textAlignment="Right">
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="a49bbb35-5a3c-4a57-8092-aab6bc686284"/>
+				<textElement>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="22e47908-1904-40ca-aead-0561a705572b"/>
+				<textElement>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

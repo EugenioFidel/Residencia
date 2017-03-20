@@ -77,6 +77,7 @@ import com.Eu.model.Observacion;
 		JMenuItem jmiListadoTelefonos=new JMenuItem("Teléfonos");
 		
 		JMenuItem jmiInformeCuotas= new JMenuItem("Cuotas");
+		JMenuItem jmiInformeDependencias=new JMenuItem("Dependencias");
 		
 		public PanelObservaciones po=null;	
 		public PanelEstancias pe =null;
@@ -182,6 +183,7 @@ import com.Eu.model.Observacion;
 		menuListados.add(jsSeparador1MenuListados);
 		menuListados.add(jmiListadoTelefonos);
 		menuInformes.add(jmiInformeCuotas);
+		menuInformes.add(jmiInformeDependencias);
 		jmbMenu.add(menuListados);
 		jmbMenu.add(menuInformes);
 		
@@ -190,6 +192,7 @@ import com.Eu.model.Observacion;
 		jmiListadoEmpleados.addActionListener(this);
 		jmiListadoTelefonos.addActionListener(this);
 		jmiInformeCuotas.addActionListener(this);
+		jmiInformeDependencias.addActionListener(this);
 		
 		this.setJMenuBar(jmbMenu);		
 		
@@ -246,7 +249,24 @@ import com.Eu.model.Observacion;
 							e1.printStackTrace();
 						}
 						
-						}else if(e.getSource().equals(jmiListadoPersonas)){
+						}else if(e.getSource().equals(jmiInformeDependencias)){
+							JDateChooser jd = new JDateChooser();
+							String message ="Introduce la fecha del informe:\n";
+							Object[] params = {message,jd};
+							JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
+							String s="";
+							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+							s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+							Date fecha;
+							try {
+								fecha = sdf.parse(s);
+								FuncionesDiversas.GenerarInformeDependencias(fecha);
+							} catch (ParseException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							}else if(e.getSource().equals(jmiListadoPersonas)){
 									FuncionesDiversas.GenerarListadoPersonas();
 									}else if(e.getSource().equals(jmiListadoInternos)){
 										FuncionesDiversas.GenerarListadoInternos();

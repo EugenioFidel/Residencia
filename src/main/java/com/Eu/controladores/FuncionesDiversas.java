@@ -380,9 +380,28 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				}			
 			}
 
-		
-
-		
+		public static void GenerarInformeDependencias(Date fecha) {
+			// TODO Auto-generated method stub
+						//vaciamos los parametros
+						parametros.clear();
+						//metemos en parametros la fecha
+						parametros.put("fechaInforme", fecha);
+						try {
+							//conexion para el reporte
+							dbConexion con=new dbConexion();
+							java.sql.Connection conec=con.getConexion();
+							JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfDependencias.jrxml");
+							generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/cuotas/InformeDependencias_");
+							conec.close();
+							con.desconectar();
+						} catch (JRException e1) {
+							System.out.println("Error en la generación del listado");
+							e1.printStackTrace();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}	
+		}		
 }
 	
 	
