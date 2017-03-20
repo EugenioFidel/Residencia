@@ -395,7 +395,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 							conec.close();
 							con.desconectar();
 						} catch (JRException e1) {
-							System.out.println("Error en la generación del listado");
+							System.out.println("Error en la generación de listado");
 							e1.printStackTrace();
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
