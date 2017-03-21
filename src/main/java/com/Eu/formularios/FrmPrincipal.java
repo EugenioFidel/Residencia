@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,11 +33,13 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 
 import com.Eu.controladores.FuncionesDiversas;
+import com.Eu.controladores.dbConexion;
 import com.Eu.dao.ObservacionDao;
 import com.Eu.paneles.PanelBotoneroPersonas;
 import com.Eu.paneles.PanelEstancias;
 import com.Eu.paneles.PanelFiltros;
 import com.Eu.paneles.PanelObservaciones;
+import com.mysql.jdbc.Connection;
 import com.toedter.calendar.JDateChooser;
 import com.Eu.model.Empleado;
 import com.Eu.model.Interno;
@@ -78,6 +81,7 @@ import com.Eu.model.Observacion;
 		
 		JMenuItem jmiInformeCuotas= new JMenuItem("Cuotas");
 		JMenuItem jmiInformeDependencias=new JMenuItem("Dependencias");
+		JMenuItem jmiNumClientes=new JMenuItem("Internos por día");
 		
 		public PanelObservaciones po=null;	
 		public PanelEstancias pe =null;
@@ -184,6 +188,7 @@ import com.Eu.model.Observacion;
 		menuListados.add(jmiListadoTelefonos);
 		menuInformes.add(jmiInformeCuotas);
 		menuInformes.add(jmiInformeDependencias);
+		menuInformes.add(jmiNumClientes);
 		jmbMenu.add(menuListados);
 		jmbMenu.add(menuInformes);
 		
@@ -193,6 +198,7 @@ import com.Eu.model.Observacion;
 		jmiListadoTelefonos.addActionListener(this);
 		jmiInformeCuotas.addActionListener(this);
 		jmiInformeDependencias.addActionListener(this);
+		jmiNumClientes.addActionListener(this);
 		
 		this.setJMenuBar(jmbMenu);		
 		
@@ -265,56 +271,96 @@ import com.Eu.model.Observacion;
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							
-							}else if(e.getSource().equals(jmiListadoPersonas)){
-									FuncionesDiversas.GenerarListadoPersonas();
-									}else if(e.getSource().equals(jmiListadoInternos)){
-										FuncionesDiversas.GenerarListadoInternos();
-										}else if(e.getSource().equals(jmiListadoEmpleados)){
-											FuncionesDiversas.GenerarListadoEmpleados();
-											}else if(e.getSource().equals(jmiListadoTelefonos)){
-												FuncionesDiversas.GenerarListadoTelefonos();
-												}else{
-													String resultado=((JButton)e.getSource()).getText();
-													JTabbedPane jtp=(JTabbedPane)jpTablas.getComponent(0);
-													int indiceTablaSeleccionada=jtp.getSelectedIndex();
-													PanelFiltros pf=(PanelFiltros)jtp.getComponent(indiceTablaSeleccionada);
-													JTable t=pf.getJt();
-													@SuppressWarnings("unused")
-													boolean r=true;						
-														
-													//toca ver que queremos añadir o borrar
-													if(resultado.equals("Añadir")){
-														//toca ver que es o que queremos añadir
-														switch(indiceTablaSeleccionada){
-															//añadimos una persona
-															case 0:
-																r=Persona.AltaNuevaPersona(t);
-																break;
-															//añadimos un interno
-															case 1:
-																r=Interno.AltaNuevoInterno();
-																break;
-															//añadimos un empleado
-															case 2:
-																r=Empleado.AltaNuevoEmpleado();														
-														}
-													}else{
-														switch(indiceTablaSeleccionada){
-															case 0:
-																r=Persona.BorrarPersona(t);
-																break;
-															case 1:
-																r=Interno.BorrarInterno(t);
-																break;
-															default:
-																r=Empleado.BorrarEmpleado(t);
+								}else if(e.getSource().equals(jmiInformeDependencias)){
+									JDateChooser jd = new JDateChooser();
+									String message ="Introduce la fecha del informe:\n";
+									Object[] params = {message,jd};
+									JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
+									String s="";
+									SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+									s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+									Date fecha;
+									try {
+										fecha = sdf.parse(s);
+										FuncionesDiversas.GenerarInformeDependencias(fecha);
+									} catch (ParseException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+										}else if(e.getSource().equals(jmiNumClientes)){
+											//llamamos al procedure que crea la tabla
+											dbConexion con=new dbConexion();
+											java.sql.Connection conec=con.getConexion();
+											try {
+												CallableStatement cs=conec.prepareCall("call numClientes");
+												cs.execute();
+											} catch (SQLException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+											JDateChooser jd = new JDateChooser();
+											String message ="Introduce la fecha del informe:\n";
+											Object[] params = {message,jd};
+											JOptionPane.showConfirmDialog(null,params,"Día del informe", JOptionPane.PLAIN_MESSAGE);
+											String s="";
+											SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+											s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+											Date fecha;
+											try {
+												fecha = sdf.parse(s);
+												FuncionesDiversas.GenerarListadoNumClientes(fecha);
+											} catch (ParseException e1) {
+												// TODO Auto-generated catch block
+												loggeador.debug(e1);
+											}
+											
+											}else if(e.getSource().equals(jmiListadoInternos)){
+												FuncionesDiversas.GenerarListadoInternos();
+												}else if(e.getSource().equals(jmiListadoEmpleados)){
+													FuncionesDiversas.GenerarListadoEmpleados();
+													}else if(e.getSource().equals(jmiListadoTelefonos)){
+														FuncionesDiversas.GenerarListadoTelefonos();
+														}else{
+															String resultado=((JButton)e.getSource()).getText();
+															JTabbedPane jtp=(JTabbedPane)jpTablas.getComponent(0);
+															int indiceTablaSeleccionada=jtp.getSelectedIndex();
+															PanelFiltros pf=(PanelFiltros)jtp.getComponent(indiceTablaSeleccionada);
+															JTable t=pf.getJt();
+															@SuppressWarnings("unused")
+															boolean r=true;						
+																
+															//toca ver que queremos añadir o borrar
+															if(resultado.equals("Añadir")){
+																//toca ver que es o que queremos añadir
+																switch(indiceTablaSeleccionada){
+																	//añadimos una persona
+																	case 0:
+																		r=Persona.AltaNuevaPersona(t);
+																		break;
+																	//añadimos un interno
+																	case 1:
+																		r=Interno.AltaNuevoInterno();
+																		break;
+																	//añadimos un empleado
+																	case 2:
+																		r=Empleado.AltaNuevoEmpleado();														
+																}
+															}else{
+																switch(indiceTablaSeleccionada){
+																	case 0:
+																		r=Persona.BorrarPersona(t);
+																		break;
+																	case 1:
+																		r=Interno.BorrarInterno(t);
+																		break;
+																	default:
+																		r=Empleado.BorrarEmpleado(t);
+																}
+															}
+																	
 														}
 													}
-															
-												}
-											}
-				
+					
 		
 	
 	private void AnhadirEstancia() {
