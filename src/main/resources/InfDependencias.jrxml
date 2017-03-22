@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-20T21:12:11 -->
+<!-- 2017-03-21T20:06:44 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -86,20 +86,11 @@ order by
 	</title>
 	<pageHeader>
 		<band height="24">
-			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<staticText>
-				<reportElement mode="Transparent" x="0" y="0" width="90" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="b8da2365-7d22-4bd1-a82a-58689154e71d"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[DNI/NIE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="90" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="04d20185-1ec5-4af0-9a6c-f40e7c2510b9"/>
+				<reportElement mode="Transparent" x="0" y="0" width="251" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="04d20185-1ec5-4af0-9a6c-f40e7c2510b9">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -110,7 +101,9 @@ order by
 				<text><![CDATA[Apellidos y nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="179" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="6d87452f-375e-45ad-8d34-644b3827a46f"/>
+				<reportElement mode="Transparent" x="251" y="0" width="80" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="6d87452f-375e-45ad-8d34-644b3827a46f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -121,7 +114,7 @@ order by
 				<text><![CDATA[Alimentación]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="268" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="7303b319-6005-41ed-83ec-e03ce25b8464"/>
+				<reportElement mode="Transparent" x="331" y="0" width="80" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="7303b319-6005-41ed-83ec-e03ce25b8464"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -132,7 +125,9 @@ order by
 				<text><![CDATA[Movilidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="357" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="ba596008-7520-45fe-a041-9cb9bd24b20b"/>
+				<reportElement mode="Transparent" x="412" y="0" width="80" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="ba596008-7520-45fe-a041-9cb9bd24b20b">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -143,7 +138,7 @@ order by
 				<text><![CDATA[Aseo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="446" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="035bea11-1d0c-4f83-aa8d-7f7b2b109ae7"/>
+				<reportElement mode="Transparent" x="492" y="0" width="80" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="035bea11-1d0c-4f83-aa8d-7f7b2b109ae7"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -154,7 +149,7 @@ order by
 				<text><![CDATA[Vestido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="535" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="a04b4019-5b89-49c6-b2cd-9b20071520fd"/>
+				<reportElement mode="Transparent" x="572" y="0" width="80" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="a04b4019-5b89-49c6-b2cd-9b20071520fd"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#501CEB"/>
 				</box>
@@ -165,7 +160,9 @@ order by
 				<text><![CDATA[Inodoro]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="624" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="31d4c7dd-55bd-4bc4-9ac3-41db6440f41f"/>
+				<reportElement mode="Transparent" x="652" y="0" width="80" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="31d4c7dd-55bd-4bc4-9ac3-41db6440f41f">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -176,7 +173,9 @@ order by
 				<text><![CDATA[Esfínteres]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="713" y="0" width="89" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="1cf7e0d0-e785-4384-a46c-3c9f04d9ff88"/>
+				<reportElement mode="Transparent" x="732" y="0" width="68" height="24" forecolor="#0A3DF5" backcolor="#FAF769" uuid="1cf7e0d0-e785-4384-a46c-3c9f04d9ff88">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
@@ -189,20 +188,10 @@ order by
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="33">
-			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+		<band height="16">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<textField>
-				<reportElement x="0" y="0" width="90" height="33" uuid="5e395071-ea76-4371-8e80-6e593d66c674"/>
-				<box>
-					<pen lineWidth="0.4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{letraCif}+"-"+$F{dni}+"-"+$F{letraNif}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="90" y="0" width="89" height="33" uuid="5c9a0edd-510c-44cd-9ac8-242814759d15"/>
+				<reportElement x="0" y="0" width="251" height="16" uuid="5c9a0edd-510c-44cd-9ac8-242814759d15"/>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
@@ -213,59 +202,76 @@ order by
 				<textFieldExpression><![CDATA[$F{primerApe}+" "+$F{segundoApe}+", "+$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="179" y="0" width="89" height="33" uuid="11d3437b-8b77-43de-84f5-53aa18440f3d"/>
+				<reportElement x="251" y="0" width="80" height="16" uuid="11d3437b-8b77-43de-84f5-53aa18440f3d">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{alimentacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="268" y="0" width="89" height="33" uuid="d1b49d79-a2b1-43a4-98fd-9997aeb8443c"/>
+				<reportElement x="331" y="0" width="80" height="16" uuid="d1b49d79-a2b1-43a4-98fd-9997aeb8443c"/>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{movilidad}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="357" y="0" width="89" height="33" uuid="cbd1be05-a6c6-46e3-8a5e-0b65ca516958"/>
+				<reportElement x="412" y="0" width="80" height="16" uuid="cbd1be05-a6c6-46e3-8a5e-0b65ca516958"/>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{aseo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="446" y="0" width="89" height="33" uuid="ddf5f7a9-e391-48aa-bd65-9e6c1903a839"/>
+				<reportElement x="492" y="0" width="80" height="16" uuid="ddf5f7a9-e391-48aa-bd65-9e6c1903a839"/>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{vestido}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="535" y="0" width="89" height="33" uuid="73eddcb9-a3c7-4afa-a6a3-b36f9b2fce0e"/>
+				<reportElement x="572" y="0" width="80" height="16" uuid="73eddcb9-a3c7-4afa-a6a3-b36f9b2fce0e"/>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{inodoro}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="624" y="0" width="89" height="33" uuid="8e694832-8b45-4fa5-ba29-4f72b7538c5c"/>
+				<reportElement x="652" y="0" width="80" height="16" uuid="8e694832-8b45-4fa5-ba29-4f72b7538c5c"/>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{esfinteres}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="713" y="0" width="89" height="33" uuid="29ffec1b-385f-4ba6-8ee7-463dd8249585"/>
+				<reportElement x="732" y="0" width="68" height="16" uuid="29ffec1b-385f-4ba6-8ee7-463dd8249585"/>
 				<box>
 					<pen lineWidth="0.4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{gradoDependencia}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -276,14 +282,14 @@ order by
 	<pageFooter>
 		<band height="17">
 			<textField>
-				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="171a4671-ec07-426c-9f21-9edcaf63bc1a"/>
+				<reportElement mode="Opaque" x="0" y="4" width="680" height="13" backcolor="#E6E6E6" uuid="171a4671-ec07-426c-9f21-9edcaf63bc1a"/>
 				<textElement textAlignment="Right">
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="602b8b6f-0660-4aab-a035-0a60c2c03abb"/>
+				<reportElement mode="Opaque" x="680" y="4" width="120" height="13" backcolor="#E6E6E6" uuid="602b8b6f-0660-4aab-a035-0a60c2c03abb"/>
 				<textElement>
 					<paragraph lineSpacing="Single"/>
 				</textElement>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-21T10:36:58 -->
+<!-- 2017-03-21T19:38:41 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -99,7 +99,7 @@ ORDER BY residentor.persona.`primerApe` DESC,
 				<text><![CDATA[DNI/NIE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="618" y="5" width="98" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="a1528941-1674-46d5-bd6a-275b056081c4"/>
+				<reportElement mode="Transparent" x="613" y="5" width="97" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="a1528941-1674-46d5-bd6a-275b056081c4"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -107,7 +107,7 @@ ORDER BY residentor.persona.`primerApe` DESC,
 				<text><![CDATA[Grado dep.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="723" y="9" width="75" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad43178-f202-46f2-8031-7aa86a1d6c65"/>
+				<reportElement mode="Transparent" x="717" y="6" width="75" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="8ad43178-f202-46f2-8031-7aa86a1d6c65"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -152,17 +152,18 @@ ORDER BY residentor.persona.`primerApe` DESC,
 				<textFieldExpression><![CDATA[$F{cc}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="617" y="2" width="100" height="14" uuid="0b020e68-84fa-4da4-865c-d2e99480513a">
+				<reportElement x="617" y="2" width="83" height="14" uuid="0b020e68-84fa-4da4-865c-d2e99480513a">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{gradoDependencia}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="726" y="3" width="72" height="14" uuid="e8ab1803-e558-453b-8af9-bde9b471d2a2">
+				<reportElement x="719" y="3" width="72" height="14" uuid="e8ab1803-e558-453b-8af9-bde9b471d2a2">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{importe}+" €"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -170,16 +171,16 @@ ORDER BY residentor.persona.`primerApe` DESC,
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="17">
+		<band height="21">
 			<textField>
-				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="171a4671-ec07-426c-9f21-9edcaf63bc1a"/>
+				<reportElement mode="Opaque" x="0" y="4" width="630" height="13" backcolor="#E6E6E6" uuid="171a4671-ec07-426c-9f21-9edcaf63bc1a"/>
 				<textElement textAlignment="Right">
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="602b8b6f-0660-4aab-a035-0a60c2c03abb"/>
+				<reportElement mode="Opaque" x="630" y="4" width="161" height="13" backcolor="#E6E6E6" uuid="602b8b6f-0660-4aab-a035-0a60c2c03abb"/>
 				<textElement>
 					<paragraph lineSpacing="Single"/>
 				</textElement>

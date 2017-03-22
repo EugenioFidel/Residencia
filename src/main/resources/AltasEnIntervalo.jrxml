@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-03-22T12:23:01 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="550" pageHeight="150" orientation="Landscape" columnWidth="500" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="d879a8de-11dd-4d98-a61e-63a6895cb744">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="fechaInforme" class="java.sql.Date">
+		<defaultValueExpression><![CDATA[$P{fechaInforme}]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT distinct
+	residentor.persona.nombre,
+	residentor.persona.`primerApe`,
+ 	residentor.persona.`segundoApe` ,
+	residentor.estancia.`fechaAlta`
+FROM 
+	persona, 
+	interno, 
+	interno_estancia, 
+	estancia
+WHERE 
+	persona.idPersona = interno.idPersona
+AND
+	interno.idPersona = interno_estancia.idPersona
+AND
+	interno_estancia.idEstancia = estancia.idEstancia
+AND 
+	estancia.fechaBaja IS NULL
+AND estancia.fechaAlta >= (SELECT now( ) - interval( day( now( ) ) -1 )DAY )]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="primerApe" class="java.lang.String"/>
+	<field name="segundoApe" class="java.lang.String"/>
+	<field name="fechaAlta" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="39" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField>
+				<reportElement x="0" y="20" width="280" height="19" uuid="5a7b14a7-5afd-47a1-8dfa-6da5795c593e"/>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nombre y apellidos"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="20" width="100" height="19" uuid="5f6a3d45-a615-45ec-9fb5-33d353ae9138"/>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha de alta"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="60" height="19" uuid="af021228-9e58-4698-b2aa-59f6f678d964"/>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ALTAS"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="280" height="20" uuid="7e9241ec-2067-4b7f-ab6d-ef84f3d384ac"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombre}+" "+$F{segundoApe}+" "+$F{segundoApe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="102" height="20" uuid="25850449-68fa-4913-bd9e-df40c8b064d4"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{fechaAlta})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
