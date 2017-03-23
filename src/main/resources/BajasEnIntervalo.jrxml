@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-22T10:44:13 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="550" pageHeight="150" orientation="Landscape" columnWidth="500" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="d879a8de-11dd-4d98-a61e-63a6895cb744">
+<!-- 2017-03-23T12:27:21 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="550" pageHeight="150" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="500" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="d879a8de-11dd-4d98-a61e-63a6895cb744">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -31,7 +31,7 @@ AND
 	estancia.motivoBaja=motivoBaja.idMotivoBaja
 AND 
 	estancia.fechaBaja IS NOT NULL
-AND estancia.fechaBaja >= (SELECT now( ) - interval( day( now( ) ) -1 )DAY )]]>
+AND estancia.fechaBaja >= (SELECT $P{fechaInforme} - interval( DAY( $P{fechaInforme} ) -1 )DAY )]]>
 	</queryString>
 	<field name="nombre" class="java.lang.String"/>
 	<field name="primerApe" class="java.lang.String"/>
@@ -121,4 +121,12 @@ AND estancia.fechaBaja >= (SELECT now( ) - interval( day( now( ) ) -1 )DAY )]]>
 			</textField>
 		</band>
 	</detail>
+	<noData>
+		<band height="32">
+			<staticText>
+				<reportElement x="0" y="2" width="492" height="30" uuid="8d6413c3-4f7c-4a98-8495-8a5df10741cd"/>
+				<text><![CDATA[Sin bajas en el periodo establecido]]></text>
+			</staticText>
+		</band>
+	</noData>
 </jasperReport>
