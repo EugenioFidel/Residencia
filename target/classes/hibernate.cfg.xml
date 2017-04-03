@@ -19,5 +19,9 @@
    		<mapping class="com.Eu.model.Estancia"/>
    		<mapping class="com.Eu.model.Interno_observacion"/>
    		<mapping class="com.Eu.model.Interno_estancia"/>
+   		<mapping class="com.Eu.model.Contrato"/>
+   		<mapping class="com.Eu.model.Empleado_contrato"/>
+   		<mapping class="com.Eu.model.Tipo_contrato"/>
+   		<mapping class="com.Eu.model.Categoria"/>
 	</session-factory>
 </hibernate-configuration>

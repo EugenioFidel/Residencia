@@ -1,4 +1,5 @@
 package com.Eu.dao;
+
 import java.util.List;
 
 import org.hibernate.Query;
@@ -133,6 +134,22 @@ public class PersonaDao {
 	        sesion.close();
 	    }
 		
+	}
+	
+	public Persona getPersonaById(int i) {
+	    Session sesion = null;
+	    Persona p = null;
+	    try {
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        p = (Persona)sesion.get(Persona.class, i);
+	    } catch (Exception e) {
+	       e.printStackTrace();
+	    } finally {
+	        if (sesion != null && sesion.isOpen()) {
+	            sesion.close();
+	        }
+	    }
+	    return p;
 	}
 		
 }

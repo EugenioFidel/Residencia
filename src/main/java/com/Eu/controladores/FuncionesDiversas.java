@@ -19,6 +19,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.apache.log4j.Logger;
 
+import com.Eu.dao.EmpleadoDao;
 import com.Eu.dao.PersonaDao;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -71,7 +72,7 @@ public class FuncionesDiversas {
 			
 	}	
 	
-	public static JTable cargaDatosEnTablaEmpleados(List<Object> lista,String[] cabeceras){		
+	public static JTable cargaDatosEnTablaEmpleados(List<Empleado> lista,String[] cabeceras){		
 		
 		
 		DefaultTableModel dtm=new DefaultTableModel();	
@@ -216,6 +217,54 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			
 		return tb;
 	}		
+	
+	public static JTable cargaDatosEnTablaContratos(List<Object> contratos, String[] cabeceras) {
+		/*
+		 * creamos un DefaultTableModel dft y con el una JTable jt.
+		 */
+		SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy"); 	
+		
+		DefaultTableModel dtm=new DefaultTableModel();	
+			for (int i = 0; i < cabeceras.length; i++) 
+				dtm.addColumn(cabeceras[i]);		
+				
+		for (@SuppressWarnings("rawtypes")
+		Iterator iterator = contratos.iterator(); iterator.hasNext();){
+			Object[] fila = (Object[]) iterator.next();
+			Object filaB[]=new Object[fila.length];
+			filaB[0]=fila[0];
+			for(int i=1;i<fila.length;i++){
+				if(i==1 || i==2){
+					if(!(fila[i] == null)){
+						filaB[i]=dt.format(fila[i]);
+					}else{
+						filaB[i]=null;
+					}
+				}else if(i==6){
+					if(!(fila[i].equals(0))){
+						EmpleadoDao ed=new EmpleadoDao();
+						Empleado e=ed.getEmpleadoById(Integer.parseInt(fila[i].toString()));
+						filaB[i]=e.getPrimerApe()+" "+e.getSegundoApe()+", "+e.getNombre();
+					}else{
+						filaB[i]="";
+					}
+					
+					
+				}else{
+					filaB[i]=fila[i];	
+				}
+			}
+			dtm.addRow(filaB);
+		}
+	
+		//Un TableRowSorter para ordenar y filtrar la tabla
+		elQueOrdena=new TableRowSorter<TableModel>(dtm);
+		JTable tb =new JTable(dtm);
+		
+		tb.setRowSorter(elQueOrdena);
+			
+		return tb;
+	}	
 	
 	public static void positionColumn(JTable table,int col_Index) {
 		table.moveColumn(table.getColumnCount()-1, col_Index);
@@ -424,7 +473,9 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}		
+		}
+
+			
 }
 	
 	

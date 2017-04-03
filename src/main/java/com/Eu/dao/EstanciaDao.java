@@ -7,7 +7,6 @@ import org.hibernate.Session;
 
 import com.Eu.controladores.HibernateUtil;
 import com.Eu.model.Estancia;
-import com.Eu.model.Persona;
 
 public class EstanciaDao {
 	public List<Estancia> listaEstancias(int idPersona){

@@ -63,6 +63,9 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				JTable tabla=(JTable) e.getSource();
 				int numColumnas=tabla.getColumnCount();
+				//Comprobamos Si tenemos seleccionado observaciones o estancias
+				JRootPane jrp=tabla.getRootPane();
+				FrmPrincipal f=(FrmPrincipal) jrp.getParent();
 								
 				switch(numColumnas){
 					//panel personas
@@ -71,9 +74,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 						break;
 					case 12:
 						loggeador.info("pulsado panel internos");
-						//Comprobamos Si tenemos seleccionado observaciones o estancias
-						JRootPane jrp=tabla.getRootPane();
-						FrmPrincipal f=(FrmPrincipal) jrp.getParent();
+						
 						JRadioButton jreObservaciones=f.getJrbObservaciones();
 						PanelObservaciones po=f.getPo();
 						if(jreObservaciones.isSelected()){
@@ -87,9 +88,12 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 						break;
 					default:
 						loggeador.debug("pulsado panel empleados");
+						PanelContratos pc=f.getPc();
+						f.getJlpFuncionalidades().moveToFront(pc);					
+						ActualizarTablaContratos(tabla);
 				}
 				
-			}
+			}			
 		});
 		
 	}	
@@ -146,6 +150,39 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		p.RellenarTablaEstancias(i.getIdpersona());
 		f.setPe(p);
 	}
+	
+	private void ActualizarTablaContratos(JTable tabla) {
+		// TODO Auto-generated method stub
+		//estamos en panelFiltros, por lo que sacamos su JRootPane
+		JRootPane jrp=tabla.getRootPane();
+		//el formularioPrincipal es el padre del rootpane de la tabla estancias
+		FrmPrincipal f=(FrmPrincipal) jrp.getParent();
+		//El contenedor c es el contentpane del JRootPane
+		Container c=jrp.getContentPane();
+		//Sacamos los componentes que hay en ese contenedor
+		Component[] componentes=c.getComponents();
+		//el componente situado en la posición cero es panel que contiene el JTabbedPane que contiene los panelesFiltros
+		JPanel jp=(JPanel) componentes[0];
+		//sacamos el JTabbedPane
+		JTabbedPane jtp=(JTabbedPane) jp.getComponent(0);
+		//En la posición 2 del JTabbedPane está el panelFiltros con los Empleados
+		PanelFiltros pf=(PanelFiltros) jtp.getComponent(2);
+		//obtenemos la tabla de los internos y su dtm
+		JTable jt=pf.getJt();
+		DefaultTableModel dtm=(DefaultTableModel)jt.getModel();
+		//obtenemos el dni del interno que se ha pulsado
+		String[]identificacion=dtm.getValueAt(jt.getSelectedRow(), 0).toString().split("-");
+		String dni=identificacion[1];
+		EmpleadoDao ed=new EmpleadoDao();
+		//obtenemos el interno que tiene el dni obtenido
+		List<Empleado>lista=ed.listaEmpleadoPorDni(dni);
+		Empleado e=lista.get(0);
+		
+		PanelContratos p=f.getPc();
+		p.setE(e);
+		p.RellenarTablaContratos(e.getIdpersona());
+		f.setPc(p);
+	}
 
 	private void RellenarTablaEmpleados() {
 		//decimos que el panel es de Personas
@@ -169,7 +206,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		cabecerasTablaEmpleados[10]="Número afiliac.";
 				
 		EmpleadoDao em=new EmpleadoDao();		
-		List<Object> empleados = em.listaEmpleados();	
+		List<Empleado> empleados = em.listaEmpleados();	
 		jt=FuncionesDiversas.cargaDatosEnTablaEmpleados(empleados, cabecerasTablaEmpleados);
 				
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();

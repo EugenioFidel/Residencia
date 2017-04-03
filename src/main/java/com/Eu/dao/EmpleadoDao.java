@@ -1,10 +1,12 @@
 package com.Eu.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.Eu.controladores.HibernateUtil;
 import com.Eu.model.Empleado;
@@ -25,14 +27,14 @@ public class EmpleadoDao {
 	    }
 	}
 	
-	public List<Object> listaEmpleados(){
+	public List<Empleado> listaEmpleados(){
 		Session sesion=null;
 		
 		try{
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
 	        @SuppressWarnings("unchecked")
-			List<Object>lista=sesion.createQuery("From Empleado order by primerApe, segundoApe, nombre").list();
+			List<Empleado>lista=sesion.createQuery("From Empleado order by primerApe, segundoApe, nombre").list();
 	        sesion.getTransaction().commit();
 	        return lista;
 	    } finally {
@@ -125,5 +127,42 @@ public class EmpleadoDao {
 	        if ((sesion != null) && (sesion.isOpen()))
 	        sesion.close();
 	    }
+	}
+	
+	public Empleado getEmpleadoById(int i) {
+	    Session sesion = null;
+	    Empleado e = null;
+	    try {
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        e = (Empleado)sesion.get(Empleado.class, i);
+	        
+	    } catch (Exception e1) {
+	       e1.printStackTrace();
+	    } finally {
+	        if (sesion != null && sesion.isOpen()) {
+	            sesion.close();
+	        }
+	    }
+	    return e;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Empleado> listaEmpleadoPorDni(String dni){
+		Session sesion=null;
+		List<Empleado> lista=new ArrayList<Empleado>();
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        lista = sesion.createCriteria(Empleado.class)
+	        	    .add( Restrictions.like("dni", dni) ) 
+	        	    .list();
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }
+		
 	}
 }

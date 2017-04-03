@@ -36,10 +36,10 @@ import com.Eu.controladores.FuncionesDiversas;
 import com.Eu.controladores.dbConexion;
 import com.Eu.dao.ObservacionDao;
 import com.Eu.paneles.PanelBotoneroPersonas;
+import com.Eu.paneles.PanelContratos;
 import com.Eu.paneles.PanelEstancias;
 import com.Eu.paneles.PanelFiltros;
 import com.Eu.paneles.PanelObservaciones;
-import com.mysql.jdbc.Connection;
 import com.toedter.calendar.JDateChooser;
 import com.Eu.model.Empleado;
 import com.Eu.model.Interno;
@@ -85,6 +85,7 @@ import com.Eu.model.Observacion;
 		
 		public PanelObservaciones po=null;	
 		public PanelEstancias pe =null;
+		public PanelContratos pc=null;
 		
 		JPanel jpBotoneroInternos=new JPanel();
 		JButton jbAnhadir =new JButton("Añadir");
@@ -146,11 +147,14 @@ import com.Eu.model.Observacion;
         
         po=new PanelObservaciones(1000000);
 		pe=new PanelEstancias(1000000);	
+		pc=new PanelContratos(1000000);
 		
 		jlpFuncionalidades.add(pe,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.add(po,JLayeredPane.DEFAULT_LAYER);
+		jlpFuncionalidades.add(pc,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.moveToFront(po);
 		jlpFuncionalidades.moveToBack(pe);		
+		jlpFuncionalidades.moveToBack(pc);
 				        
         col.gridx=1;
         col.gridy=0;
@@ -213,7 +217,8 @@ import com.Eu.model.Observacion;
 			});	
 		}
 	
-	public void actionPerformed(ActionEvent e) {		
+	public void actionPerformed(ActionEvent e) {	
+		
 		//comprobamos el objeto que ha producido el evento
 		if(e.getSource().equals(jrbObservaciones)){
 			loggeador.debug("pulso en jrbObservaciones");
@@ -226,9 +231,12 @@ import com.Eu.model.Observacion;
 					if(jlpFuncionalidades.getPosition(po)==0){
 						loggeador.debug("Añadimos una observacion");
 						AnhadirObservacion();
-					}else{
+					}else if(jlpFuncionalidades.getPosition(pe)==0){
 						loggeador.debug("Añadimos una Estancia");
-						AnhadirEstancia();
+						AnhadirEstancia();						
+					}else{
+						loggeador.debug("añadir un contrato");
+						AnhadirContrato();
 					}
 				}else if (e.getSource().equals(jbBorrar)){
 					if(jlpFuncionalidades.getPosition(po)==0){
@@ -362,6 +370,7 @@ import com.Eu.model.Observacion;
 													}
 					
 		
+		
 	
 	private void AnhadirEstancia() {
 		// TODO Auto-generated method stub
@@ -370,7 +379,12 @@ import com.Eu.model.Observacion;
 		ae.setVisible(true);	
 	}
 
-
+	private void AnhadirContrato(){
+		// TODO Auto-generated method stub
+		DefaultTableModel dtm=(DefaultTableModel)pc.getJtContratos().getModel();
+		AltaContrato ac=new AltaContrato(pc.getE(),dtm);
+		ac.setVisible(true);	
+	}
 
 	private void BorrarObservacion() {
 		// TODO Auto-generated method stub
@@ -419,6 +433,14 @@ import com.Eu.model.Observacion;
 		this.pe = pe;
 	}
 	
+	public PanelContratos getPc() {
+		return pc;
+	}
+
+	public void setPc(PanelContratos pc) {
+		this.pc = pc;
+	}
+
 	public JRadioButton getJrbObservaciones() {
 		return jrbObservaciones;
 	}

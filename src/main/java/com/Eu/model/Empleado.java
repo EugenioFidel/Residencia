@@ -24,11 +24,7 @@ public class Empleado extends Persona{
 	@Column (name="ss")
 	private String ss;
 	
-	public Empleado(){}
-
-
-
-	
+	public Empleado(){}	
 
 	public Empleado(String cc, String ss) {
 		super();
@@ -84,5 +80,6 @@ public class Empleado extends Persona{
 		ae.setVisible(true);
 		return resultado;
 	}	
+	
 }
 
