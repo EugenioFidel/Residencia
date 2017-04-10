@@ -11,7 +11,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -400,6 +413,29 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			}	
 		}
 		
+		public static void GenerarInformeNuevoContrato(int idContrato) {
+			// TODO Auto-generated method stub
+			//vaciamos los parametros
+			parametros.clear();
+			//metemos en parametros la fecha
+			parametros.put("idContrato", idContrato);
+			try {
+				//conexion para el reporte
+				dbConexion con=new dbConexion();
+				java.sql.Connection conec=con.getConexion();
+				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
+				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeNuevoContrato_");
+				conec.close();
+				con.desconectar();
+			} catch (JRException e1) {
+				System.out.println("Error en la generación del listado");
+				e1.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
+		
 		public static void LimpiarDtm(DefaultTableModel modelo){
 	        int filas = modelo.getRowCount();
 	        if (filas > 0) {
@@ -474,6 +510,112 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				e.printStackTrace();
 			}
 		}
+
+		public static void GenerarInformeContratoSustitucion(Map<String, Object> parametros) {
+			// TODO Auto-generated method stub
+			Calendar fechaActual=Calendar.getInstance();
+			String nomFichero="./src/main/resources/informes/contratos/InformeContrato_";
+					
+			nomFichero=nomFichero+
+					Integer.toString(fechaActual.get(Calendar.DATE))
+					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			try {
+				//conexion para el reporte
+				dbConexion con=new dbConexion();
+				java.sql.Connection conec=con.getConexion();
+				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
+				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeContrato_");
+				conec.close();
+				con.desconectar();
+				//generamos el mail
+				if(JOptionPane.showConfirmDialog(null, "Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION);
+					FuncionesDiversas.EnviarMail(nomFichero);
+				
+			} catch (JRException e1) {
+				System.out.println("Error en la generación de listado");
+				e1.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public static void EnviarMail(String adj) {
+			String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
+			Calendar fechaActual=Calendar.getInstance();
+			String nomFichero="InformeNewContrato_"+
+					Integer.toString(fechaActual.get(Calendar.DATE))
+					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			
+			Properties props = new Properties();
+			props.setProperty("mail.smtp.host", "smtp.gmail.com");
+			props.setProperty("mail.smtp.starttls.enable", "true");
+			props.setProperty("mail.smtp.port","587");
+			props.setProperty("mail.smtp.user", "raquel.smtp@gmail.com");
+			props.setProperty("mail.smtp.auth", "true");
+
+			Session session = Session.getDefaultInstance(props, null);
+			session.setDebug(true);
+			// TODO Auto-generated method stub
+			BodyPart texto = new MimeBodyPart();
+			try {
+				texto.setText("Adjunto a la presente te remito una comunicación de nueva contratación\n"+
+								"cualquier cosa, ya sabes.\n"+
+								"\t\tUn saludo\n\t\t\tRaquel");
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			BodyPart adjunto = new MimeBodyPart();
+			try {
+				adjunto.setDataHandler(new DataHandler(new FileDataSource(adj)));
+				adjunto.setFileName(nomFichero);
+				MimeMultipart multiParte = new MimeMultipart();
+				multiParte.addBodyPart(texto);
+				multiParte.addBodyPart(adjunto);
+				MimeMessage message = new MimeMessage(session);
+				// Se rellena el From
+				message.setFrom(new InternetAddress("raquel.smtp@gmail.com"));
+				// Se rellenan los destinatarios
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(direccion));
+				// Se rellena el subject
+				message.setSubject("Propuesta de contratación");
+				// Se mete el texto y la foto adjunta.
+				message.setContent(multiParte);
+				Transport t = session.getTransport("smtp");
+				t.connect("raquel.smtp@gmail.com","cueva valiente");
+				t.sendMessage(message,message.getAllRecipients());
+				t.close();
+				JOptionPane.showConfirmDialog(null, "Mensaje enviado");
+			} catch (MessagingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();	
+			}	
+			
+		}
+		
+		public static String getCifrado(String texto, String hashType) {
+		      try {
+		         java.security.MessageDigest md = java.security.MessageDigest.getInstance(hashType);
+		         byte[] array = md.digest(texto.getBytes());
+		         StringBuilder sb = new StringBuilder();
+		         
+		         for (int i = 0; i < array.length; ++i) {
+		            sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+		         }
+		         return sb.toString();
+		      } catch (java.security.NoSuchAlgorithmException e) {
+		         System.err.println("Error "+e.getMessage());
+		      }
+		      return "";
+		}
+
 
 			
 }

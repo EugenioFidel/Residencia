@@ -3,13 +3,24 @@ package com.Eu.paneles;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -28,9 +39,11 @@ import com.Eu.model.Categoria;
 import com.Eu.model.Contrato;
 import com.Eu.model.Empleado;
 import com.Eu.model.Tipo_contrato;
+import com.toedter.calendar.JDateChooser;
 
 
-public class PanelContratos extends JPanel implements TableModelListener { 		
+
+public class PanelContratos extends JPanel implements ActionListener,TableModelListener { 		
 
 	public JTable jtContratos =new JTable();
 	public DefaultTableModel dtm=new DefaultTableModel();
@@ -46,15 +59,31 @@ public class PanelContratos extends JPanel implements TableModelListener {
 	
 	private static final long serialVersionUID = 1L;
 	
+	 //Popup sobre titulares
+	JPopupMenu jpuMenuContextual=new JPopupMenu();	
+	JSeparator jsSeparador1=new JSeparator();
+	JSeparator jsSeparador2=new JSeparator();
+	JMenuItem jmiInfContrato=new JMenuItem("Informe nuevo contrato");
+	
 	
 
-	public PanelContratos(int id){
+	public PanelContratos (int id){
 		EmpleadoDao ed=new EmpleadoDao();
 		this.setE(ed.getEmpleadoById(id));		
 		
 		this.setSize(800,600);
 		this.setLayout(gbl);
-		this.RellenarTablaContratos(id);		
+		this.RellenarTablaContratos(id);	
+		
+		jpuMenuContextual.add(jsSeparador1);
+		jpuMenuContextual.add(jmiInfContrato);
+		jpuMenuContextual.add(jsSeparador2);
+		
+		jmiInfContrato.addActionListener(this);
+		
+		MouseListener popupListener=new PopupListener();
+		jtContratos.addMouseListener(popupListener);
+		
 		
 		gbc.gridx=0;
 		gbc.gridy=0;
@@ -104,6 +133,9 @@ public class PanelContratos extends JPanel implements TableModelListener {
 		columna=jtContratos.getColumn("Empleado sustituido");
 		columna.setPreferredWidth(237);
 		
+		MouseListener popupListener=new PopupListener();
+		jtContratos.addMouseListener(popupListener);
+		
 		jtContratos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jtContratos.doLayout();
 		this.setJtContratos(jtContratos);
@@ -151,6 +183,26 @@ public class PanelContratos extends JPanel implements TableModelListener {
 		}
 	
 	}
+	
+	
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource().equals(jmiInfContrato))
+			loggeador.debug("evento en el menu contextual");
+			Map<String, Object> parametros=new HashMap<String, Object>();			
+			parametros.put("idContrato",dtm.getValueAt(jtContratos.getSelectedRow(), 0));
+			JDateChooser jd = new JDateChooser();
+			String message ="Selecciona la fecha prevista\nde fin de contrato:";
+			Object[] params = {message,jd};
+			JOptionPane.showConfirmDialog(null,params,"Fecha final prevista", JOptionPane.PLAIN_MESSAGE);
+			String fechaF="";
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			fechaF=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+			parametros.put("fechaFinPrevista", fechaF);
+			parametros.put("empSustituido", dtm.getValueAt(jtContratos.getSelectedRow(), 6));
+			FuncionesDiversas.GenerarInformeContratoSustitucion(parametros);
+			
+	}
 
 
 	public JScrollPane getJsp() {
@@ -189,5 +241,25 @@ public class PanelContratos extends JPanel implements TableModelListener {
 	public void setJtContratos(JTable jtContratos) {
 		this.jtContratos = jtContratos;
 	}
+	
+	
+
+	class PopupListener extends MouseAdapter {
+		public void mousePressed(MouseEvent e) {
+		showPopup(e);
+			    }
+			    public void mouseReleased(MouseEvent e) {
+			        showPopup(e);
+			      }	
+			    private void showPopup(MouseEvent e) {
+			        if (e.isPopupTrigger()) {
+			        	
+			        	if(e.getSource().equals(jtContratos)){
+			        		jpuMenuContextual.show(e.getComponent(), e.getX(), e.getY());
+			        	}		        	
+			        }
+			      }	  	     
+	}
+	
 	
 }

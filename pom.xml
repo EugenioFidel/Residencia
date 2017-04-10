@@ -73,18 +73,11 @@
 		    <artifactId>javassist</artifactId>
 		    <version>3.12.1.GA</version>
 		</dependency>
-		 <dependency>
-		<groupId>net.sf.jasperreports</groupId>
-		<artifactId>jasperreports</artifactId>
-		<version>5.6.0</version>
-	</dependency>
-		<!--  
 		<dependency>
-			<groupId>hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>1.8.0.10</version>
-		</dependency>
- 		-->
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>5.6.0</version>
+		</dependency>		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -95,6 +88,12 @@
     		<groupId>com.toedter</groupId>
     		<artifactId>jcalendar</artifactId>
     		<version>1.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+		<dependency>
+    		<groupId>javax.mail</groupId>
+    		<artifactId>mail</artifactId>
+    		<version>1.4.7</version>
 		</dependency>
 	</dependencies>
 

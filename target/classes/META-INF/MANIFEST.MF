@@ -23,7 +23,8 @@ Class-Path: lib/hibernate-core-4.3.6.Final.jar lib/jboss-logging-3.1.3
  4.jar lib/lucene-core-4.5.1.jar lib/lucene-analyzers-common-4.5.1.jar
   lib/lucene-queryparser-4.5.1.jar lib/lucene-queries-4.5.1.jar lib/lu
  cene-sandbox-4.5.1.jar lib/jakarta-regexp-1.4.jar lib/olap4j-0.9.7.30
- 9-JS-3.jar lib/log4j-1.2.16.jar lib/jcalendar-1.4.jar
+ 9-JS-3.jar lib/log4j-1.2.16.jar lib/jcalendar-1.4.jar lib/mail-1.4.7.
+ jar lib/activation-1.1.jar
 Build-Jdk: 1.8.0_111
 Created-By: Maven Integration for Eclipse
 Main-Class: com.Eu.controladores.Application
