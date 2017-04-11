@@ -196,7 +196,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 			Object[] params = {message,jd};
 			JOptionPane.showConfirmDialog(null,params,"Fecha final prevista", JOptionPane.PLAIN_MESSAGE);
 			String fechaF="";
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			fechaF=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
 			parametros.put("fechaFinPrevista", fechaF);
 			parametros.put("empSustituido", dtm.getValueAt(jtContratos.getSelectedRow(), 6));

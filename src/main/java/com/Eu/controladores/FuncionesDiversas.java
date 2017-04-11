@@ -45,6 +45,7 @@ import com.Eu.model.Estancia;
 import com.Eu.model.Interno;
 import com.Eu.model.Observacion;
 import com.Eu.model.Persona;
+import com.mysql.jdbc.Connection;
 
 public class FuncionesDiversas {	
 	//Un TableRowSorter para ordenar y filtrar la tabla
@@ -531,72 +532,84 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				conec.close();
 				con.desconectar();
 				//generamos el mail
-				if(JOptionPane.showConfirmDialog(null, "Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION);
+				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION);
 					FuncionesDiversas.EnviarMail(nomFichero);
 				
 			} catch (JRException e1) {
 				System.out.println("Error en la generación de listado");
-				e1.printStackTrace();
+				loggeador.debug(e1);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error en la generación de listado");
+				loggeador.debug(e);
 			}
 		}
 		
 		public static void EnviarMail(String adj) {
 			String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
-			Calendar fechaActual=Calendar.getInstance();
-			String nomFichero="InformeNewContrato_"+
-					Integer.toString(fechaActual.get(Calendar.DATE))
-					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
-			
-			Properties props = new Properties();
-			props.setProperty("mail.smtp.host", "smtp.gmail.com");
-			props.setProperty("mail.smtp.starttls.enable", "true");
-			props.setProperty("mail.smtp.port","587");
-			props.setProperty("mail.smtp.user", "raquel.smtp@gmail.com");
-			props.setProperty("mail.smtp.auth", "true");
+			String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
+			String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros");
+			if(!password.equals(FuncionesDiversas.getCifrado(pss, "MD5"))){
+				JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Atención", JOptionPane.ERROR_MESSAGE);
+				loggeador.debug("error de contraseña");
+			}else{
+				Calendar fechaActual=Calendar.getInstance();
+				String nomFichero="InformeNewContrato_"+
+						Integer.toString(fechaActual.get(Calendar.DATE))
+						+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+						+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+						" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+						"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+				
+				String originMail=FuncionesDiversas.obtenerStringBase("select mailDir from parametros");
+				
+				Properties props = new Properties();
+				props.setProperty("mail.smtp.host", "smtp.gmail.com");
+				props.setProperty("mail.smtp.starttls.enable", "true");
+				props.setProperty("mail.smtp.port","587");
+				props.setProperty("mail.smtp.user", originMail);
+				props.setProperty("mail.smtp.auth", "true");
 
-			Session session = Session.getDefaultInstance(props, null);
-			session.setDebug(true);
-			// TODO Auto-generated method stub
-			BodyPart texto = new MimeBodyPart();
-			try {
-				texto.setText("Adjunto a la presente te remito una comunicación de nueva contratación\n"+
-								"cualquier cosa, ya sabes.\n"+
-								"\t\tUn saludo\n\t\t\tRaquel");
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Session session = Session.getDefaultInstance(props, null);
+				session.setDebug(true);
+				// TODO Auto-generated method stub
+				BodyPart texto = new MimeBodyPart();
+				try {
+					texto.setText("Adjunto a la presente te remito una comunicación de nueva contratación\n"+
+									"cualquier cosa, ya sabes.\n"+
+									"\t\tUn saludo\n\t\t\tRaquel");
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				BodyPart adjunto = new MimeBodyPart();
+				try {
+					adjunto.setDataHandler(new DataHandler(new FileDataSource(adj)));
+					adjunto.setFileName(nomFichero);
+					MimeMultipart multiParte = new MimeMultipart();
+					multiParte.addBodyPart(texto);
+					multiParte.addBodyPart(adjunto);
+					MimeMessage message = new MimeMessage(session);
+					// Se rellena el From
+					message.setFrom(new InternetAddress(originMail));
+					// Se rellenan los destinatarios
+					message.addRecipient(Message.RecipientType.TO, new InternetAddress(direccion));
+					// Se rellena el subject
+					message.setSubject("Propuesta de contratación");
+					// Se mete el texto y la foto adjunta.
+					message.setContent(multiParte);
+					Transport t = session.getTransport("smtp");
+					t.connect(originMail,"cueva valiente");
+					t.sendMessage(message,message.getAllRecipients());
+					t.close();
+					JOptionPane.showMessageDialog(null, "Mensaje enviado", "Atención", JOptionPane.OK_OPTION);
+					loggeador.debug("error de contraseña");
+				} catch (MessagingException e1) {
+					// TODO Auto-generated catch block
+					loggeador.debug(e1);	
+				}	
 			}
-			BodyPart adjunto = new MimeBodyPart();
-			try {
-				adjunto.setDataHandler(new DataHandler(new FileDataSource(adj)));
-				adjunto.setFileName(nomFichero);
-				MimeMultipart multiParte = new MimeMultipart();
-				multiParte.addBodyPart(texto);
-				multiParte.addBodyPart(adjunto);
-				MimeMessage message = new MimeMessage(session);
-				// Se rellena el From
-				message.setFrom(new InternetAddress("raquel.smtp@gmail.com"));
-				// Se rellenan los destinatarios
-				message.addRecipient(Message.RecipientType.TO, new InternetAddress(direccion));
-				// Se rellena el subject
-				message.setSubject("Propuesta de contratación");
-				// Se mete el texto y la foto adjunta.
-				message.setContent(multiParte);
-				Transport t = session.getTransport("smtp");
-				t.connect("raquel.smtp@gmail.com","cueva valiente");
-				t.sendMessage(message,message.getAllRecipients());
-				t.close();
-				JOptionPane.showConfirmDialog(null, "Mensaje enviado");
-			} catch (MessagingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();	
-			}	
+			
 			
 		}
 		
@@ -614,10 +627,28 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		         System.err.println("Error "+e.getMessage());
 		      }
 		      return "";
+		}	
+		
+		public static String obtenerStringBase(String consulta){
+			String valor="";	
+			try{
+					dbConexion con=new dbConexion();
+					Connection conec=(Connection) con.getConexion();
+					java.sql.Statement st=conec.createStatement();
+					
+					java.sql.ResultSet rs=st.executeQuery(consulta);
+					rs.next();
+					valor=rs.getString(1);				
+					
+					rs.close();
+					st.close();
+					conec.close();
+				
+				} catch (SQLException e) {
+					e.printStackTrace();				
+				}
+				return valor;
 		}
-
-
-			
 }
 	
 	
