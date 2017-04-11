@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-04T18:39:42 -->
+<!-- 2017-04-11T20:15:51 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -133,10 +133,10 @@ residentor.contrato.idCategoria=residentor.categoria.idCategoria]]>
 				</image>
 				<textField>
 					<reportElement stretchType="RelativeToTallestObject" x="100" y="8" width="440" height="62" forecolor="#FFFFFF" uuid="eb98fe8f-6a95-4efb-9627-abedb9b16928"/>
-					<textElement textAlignment="Center">
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="22" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Informe de realización de nuevo contrato de sustitución"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Comunicación de\ncontrato laboral"]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
