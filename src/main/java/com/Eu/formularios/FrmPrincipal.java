@@ -296,30 +296,31 @@ import com.Eu.model.Observacion;
 										e1.printStackTrace();
 									}
 										}else if(e.getSource().equals(jmiNumClientes)){
-											//llamamos al procedure que crea la tabla
-											dbConexion con=new dbConexion();
-											java.sql.Connection conec=con.getConexion();
-											try {
-												CallableStatement cs=conec.prepareCall("call numClientes");
-												cs.execute();
-											} catch (SQLException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
-											}
 											JDateChooser jd = new JDateChooser();
 											String message ="Introduce la fecha del informe:\n";
 											Object[] params = {message,jd};
 											JOptionPane.showConfirmDialog(null,params,"Día del informe", JOptionPane.PLAIN_MESSAGE);
 											String s="";
+											String sMySQL="";
 											SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+											SimpleDateFormat sdfMysql=new SimpleDateFormat("yyyy-MM-dd");
 											s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+											sMySQL=sdfMysql.format(((JDateChooser)params[1]).getDate());
 											Date fecha;
 											try {
 												fecha = sdf.parse(s);
+												//llamamos al procedure que crea la tabla
+												dbConexion con=new dbConexion();
+												java.sql.Connection conec=con.getConexion();
+												CallableStatement cs=conec.prepareCall("call numClientes(\""+sMySQL+"\");");
+												cs.execute();
 												FuncionesDiversas.GenerarListadoNumClientes(fecha);
-											} catch (ParseException e1) {
+											} catch (ParseException e2) {
 												// TODO Auto-generated catch block
-												loggeador.debug(e1);
+												e2.printStackTrace();
+											} catch (SQLException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
 											}
 											
 											}else if(e.getSource().equals(jmiListadoInternos)){
