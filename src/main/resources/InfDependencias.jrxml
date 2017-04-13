@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-21T20:06:44 -->
+<!-- 2017-04-13T19:17:22 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -11,38 +11,12 @@
 		<parameterDescription><![CDATA[FechaReferenciaInforme]]></parameterDescription>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT DISTINCT 
-	residentor.persona.`letraCif`,
-	residentor.persona.dni,
-	residentor.persona.`letraNif`,
-	residentor.persona.nombre,
-	residentor.persona.`primerApe`,
-	residentor.persona.`segundoApe`, 
-	residentor.observacion.alimentacion,
-	residentor.observacion.movilidad,
-	residentor.observacion.aseo,
-	residentor.observacion.vestido,
-	residentor.observacion.inodoro,
-	residentor.observacion.esfinteres,    
-	residentor.observacion.`gradoDependencia`,
-	max(residentor.observacion.`fechaObservacion`) 
-FROM 
-	residentor.persona,
-	residentor.interno,
-	residentor.observacion,
-	residentor.interno_observacion
-where
-	 residentor.persona.`idPersona` = residentor.interno.`idPersona` 
-and
-	residentor.interno.`idPersona`=residentor.interno_observacion.`idPersona`
-and
-	  residentor.interno_observacion.`idObservacion` = residentor.observacion.`idObservacion` 
-and
- 	residentor.observacion.`fechaObservacion` <= $P{fechaInforme}
-group by 
-		residentor.persona.idPersona
-order by
- residentor.persona.`primerApe` , residentor.persona.`segundoApe` , residentor.persona.nombre]]>
+		<![CDATA[SELECT DISTINCT * 
+FROM dependencias d1
+WHERE fechaObservacion = ( 
+SELECT MAX( fechaObservacion ) 
+FROM dependencias d2
+WHERE d1.dni = d2.dni ) ]]>
 	</queryString>
 	<field name="letraCif" class="java.lang.String"/>
 	<field name="dni" class="java.lang.String"/>
@@ -50,6 +24,7 @@ order by
 	<field name="nombre" class="java.lang.String"/>
 	<field name="primerApe" class="java.lang.String"/>
 	<field name="segundoApe" class="java.lang.String"/>
+	<field name="fechaObservacion" class="java.sql.Date"/>
 	<field name="alimentacion" class="java.lang.String"/>
 	<field name="movilidad" class="java.lang.String"/>
 	<field name="aseo" class="java.lang.String"/>
@@ -57,7 +32,6 @@ order by
 	<field name="inodoro" class="java.lang.String"/>
 	<field name="esfinteres" class="java.lang.String"/>
 	<field name="gradoDependencia" class="java.lang.String"/>
-	<field name="max(residentor.observacion.`fechaObservacion`)" class="java.sql.Date"/>
 	<group name="Group4">
 		<groupFooter>
 			<band/>

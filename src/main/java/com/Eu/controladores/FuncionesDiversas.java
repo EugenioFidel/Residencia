@@ -393,6 +393,29 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		
 		public static void GenerarInformeCuotas(Date fecha) {
 			// TODO Auto-generated method stub
+						SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd)");
+						String dia=sdt.format(fecha);
+						//actualizamos en la base la vista obs
+						String cadenaCrearVistaCuotas="create or replace view cuotas "+
+								"AS select distinct `persona`.`letraCif` AS `letraCif`,"+
+								"`persona`.`dni` AS `dni`,`persona`.`letraNif` AS `letraNif`,"+
+								"`persona`.`nombre` AS `nombre`,`persona`.`primerApe` AS `primerApe`,"+
+								"`persona`.`segundoApe` AS `segundoApe`,`interno`.`cc` AS `cc`,"+
+								"`observacion`.`gradoDependencia` AS `gradoDependencia`,"+
+								"`importes`.`importe` AS `importe`,`observacion`."+
+								"`fechaObservacion` AS `fechaObservacion` from "+
+								"((((((`persona` join `interno`) join `observacion`) join "+
+								"`interno_observacion`) join `importes`) join `estancia`) join "+
+								"`interno_estancia`) where ((`persona`.`idPersona` = `interno`.`idPersona`)"+
+								" and (`interno`.`idPersona` = `interno_estancia`.`idPersona`)"+
+								" and (`interno_estancia`.`idEstancia` = `estancia`.`idEstancia`)"+
+								" and (`estancia`.`motivoBaja` = 0)"+
+								" and (`interno`.`idPersona` = `interno_observacion`.`idPersona`)"+
+								" and (`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`)"+
+								" and (`observacion`.`gradoDependencia` = `importes`.`gradoDependencia`)"+
+								" and (`observacion`.`fechaObservacion` <= \""+dia+"\"))"+
+								" order by `persona`.`primerApe`,`persona`.`segundoApe`,`persona`.`nombre`";
+						Updatear(cadenaCrearVistaCuotas);
 			//vaciamos los parametros
 			parametros.clear();
 			//metemos en parametros la fecha
@@ -468,6 +491,27 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 
 		public static void GenerarInformeDependencias(Date fecha) {
 			// TODO Auto-generated method stub
+			SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd");
+			String dia=sdt.format(fecha);
+			//actualizamos en la base la vista obs
+			String cadenaCrearVistaDep="create or replace VIEW `dependencias` "+
+					"AS select distinct `persona`.`letraCif` AS `letraCif`,`persona`.`dni` "+
+					"AS `dni`,`persona`.`letraNif` AS `letraNif`,`persona`.`nombre` "+
+					"AS `nombre`,`persona`.`primerApe` AS `primerApe`,`persona`.`segundoApe` "+
+					"AS `segundoApe`,`observacion`.`fechaObservacion` "+
+					"AS `fechaObservacion`,`observacion`.`alimentacion` "+
+					"AS `alimentacion`,`observacion`.`movilidad` "+
+					"AS `movilidad`,`observacion`.`aseo` AS `aseo`,`observacion`.`vestido` "+
+					"AS `vestido`,`observacion`.`inodoro` AS `inodoro`,`observacion`.`esfinteres` "+
+					"AS `esfinteres`,`observacion`.`gradoDependencia` AS `gradoDependencia` "+
+					"from (((`persona` join `interno`) join `observacion`) join `interno_observacion`) "+
+					"where ((`persona`.`idPersona` = `interno`.`idPersona`) "+
+					"and (`interno`.`idPersona` = `interno_observacion`.`idPersona`) "+
+					"and (`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`) "+
+					"and (`observacion`.`fechaObservacion` <= \""+dia+"\")) "+
+					"order by `persona`.`primerApe`,`persona`.`segundoApe`,`persona`.`nombre`";
+			Updatear(cadenaCrearVistaDep);
+			
 			//vaciamos los parametros
 			parametros.clear();
 			//metemos en parametros la fecha
@@ -648,6 +692,22 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 					e.printStackTrace();				
 				}
 				return valor;
+		}
+		
+		public static void Updatear(String cadenaUpdate){
+			try{
+				dbConexion con=new dbConexion();
+				Connection conec=(Connection) con.getConexion();
+				java.sql.Statement st=conec.createStatement();
+				
+				st.executeUpdate(cadenaUpdate);
+				st.close();
+				conec.close();
+				con.desconectar();				
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}		
 		}
 }
 	

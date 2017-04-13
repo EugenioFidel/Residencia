@@ -279,23 +279,7 @@ import com.Eu.model.Observacion;
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-								}else if(e.getSource().equals(jmiInformeDependencias)){
-									JDateChooser jd = new JDateChooser();
-									String message ="Introduce la fecha del informe:\n";
-									Object[] params = {message,jd};
-									JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
-									String s="";
-									SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-									s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-									Date fecha;
-									try {
-										fecha = sdf.parse(s);
-										FuncionesDiversas.GenerarInformeDependencias(fecha);
-									} catch (ParseException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}
-										}else if(e.getSource().equals(jmiNumClientes)){
+								}else if(e.getSource().equals(jmiNumClientes)){
 											JDateChooser jd = new JDateChooser();
 											String message ="Introduce la fecha del informe:\n";
 											Object[] params = {message,jd};
