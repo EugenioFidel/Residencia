@@ -521,7 +521,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				dbConexion con=new dbConexion();
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfDependencias.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/cuotas/InformeDependencias_");
+				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/dependencias/InformeDependencias_");
 				conec.close();
 				con.desconectar();
 			} catch (JRException e1) {
