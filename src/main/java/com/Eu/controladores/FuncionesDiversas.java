@@ -4,6 +4,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,7 +53,7 @@ public class FuncionesDiversas {
 	//Un TableRowSorter para ordenar y filtrar la tabla
 	static TableRowSorter <TableModel>elQueOrdena=null;
 	final static Logger loggeador = Logger.getLogger(FuncionesDiversas.class);
-	//un Map para pasarle par�metros a los informes
+	//un Map para pasarle parámetros a los informes
 	public static Map<String, Object> parametros=new HashMap<String, Object>();
 			
 	public static JTable cargaDatosEnTablaPersonas(List<Object> lista,String[] cabeceras){				
@@ -576,7 +578,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				conec.close();
 				con.desconectar();
 				//generamos el mail
-				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION);
+				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
 					FuncionesDiversas.EnviarMail(nomFichero);
 				
 			} catch (JRException e1) {
@@ -709,6 +711,20 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				e.printStackTrace();
 			}		
 		}
+		
+		 public static Calendar DateToCalendar(Date date ){ 
+			 Calendar cal = null;
+			 try {   
+				 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				 date = (Date)formatter.parse(date.toString()); 
+				 cal=Calendar.getInstance();
+				 cal.setTime(date);
+			 }
+			 	catch (ParseException e){
+			 		loggeador.error(e);
+			 	}  
+		   return cal;
+		  }
 }
 	
 	

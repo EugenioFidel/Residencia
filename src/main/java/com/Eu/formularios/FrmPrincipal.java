@@ -6,8 +6,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -39,6 +37,7 @@ import com.Eu.paneles.PanelBotoneroPersonas;
 import com.Eu.paneles.PanelContratos;
 import com.Eu.paneles.PanelEstancias;
 import com.Eu.paneles.PanelFiltros;
+import com.Eu.paneles.PanelJornadas;
 import com.Eu.paneles.PanelObservaciones;
 import com.toedter.calendar.JDateChooser;
 import com.Eu.model.Empleado;
@@ -53,6 +52,7 @@ import com.Eu.model.Observacion;
 		 */
 		private static final long serialVersionUID = 1L;		
 		
+		final static Logger loggeador = Logger.getLogger(FrmPrincipal.class);
 		//Declaraciones para panel personas
 		JTabbedPane tp = new JTabbedPane();
 		JPanel jpTablas=new JPanel();
@@ -60,12 +60,15 @@ import com.Eu.model.Observacion;
 		
 		JPanel jpListados=new JPanel();
 		PanelBotoneroPersonas jpb=new PanelBotoneroPersonas();
-		enum eventos{Añadir,Editar,Borrar}
+		enum eventos{Añadir,Editar,Borrar};
+		public static int PERSONAS=0;
+		public static int EMPLEADOS=1;
+		public static int INTERNOS=2;
 		PanelFiltros pfTodos=null;
 		PanelFiltros pfInternos=null;
 		PanelFiltros pfEmpleados=null;
 		//un icono para el formulario
-		ImageIcon vaca=new ImageIcon("cowIcon.jpeg");
+		ImageIcon vaca=new ImageIcon("./src/main/resources/cowIcon.jpeg");
 		
 		//JMenuBar, barra de menus
 		JMenuBar jmbMenu=new JMenuBar();
@@ -73,6 +76,7 @@ import com.Eu.model.Observacion;
 		JMenu menuEditar = new JMenu("Editar");
 		JMenu menuListados= new JMenu("Listados");
 		JMenu menuInformes=new JMenu("Informes");
+		JMenu menuJornadas=new JMenu("Jornadas");
 		JMenuItem jmiListadoPersonas=new JMenuItem("Personas");
 		JMenuItem jmiListadoInternos=new JMenuItem("Internos");
 		JMenuItem jmiListadoEmpleados=new JMenuItem("Empleados");
@@ -83,39 +87,37 @@ import com.Eu.model.Observacion;
 		JMenuItem jmiInformeDependencias=new JMenuItem("Dependencias");
 		JMenuItem jmiNumClientes=new JMenuItem("Internos por día");
 		
+		JMenuItem jmiPatron=new JMenuItem("Generar patrón");
+		
 		public PanelObservaciones po=null;	
 		public PanelEstancias pe =null;
 		public PanelContratos pc=null;
+		public PanelJornadas pj=null;
+		public JPanel jpTelon=new JPanel();
 		
-		JPanel jpBotoneroInternos=new JPanel();
+		public JPanel jpBotoneroInternos=new JPanel();
 		JButton jbAnhadir =new JButton("Añadir");
 		JButton jbBorrar=new JButton("Borrar");
 		JRadioButton jrbObservaciones=new JRadioButton("Observaciones");
 		JRadioButton jrbEstancias=new JRadioButton("Estancias");
+		JRadioButton jrbContratos=new JRadioButton("Contratos");
+		JRadioButton jrbJornadas=new JRadioButton("Jornadas");
+		
 		ButtonGroup bgPaneles=new ButtonGroup();
 		
-		final static Logger loggeador = Logger.getLogger(FrmPrincipal.class);
-		
-	
+			
 	public FrmPrincipal() throws SQLException{
-		
-		pfTodos=new PanelFiltros(0);
-		pfInternos=new PanelFiltros(2);
-		pfEmpleados=new PanelFiltros(1);
-		jbAnhadir.addActionListener(this);
-		jbBorrar.addActionListener(this);
-		jrbObservaciones.addActionListener(this);
-		jrbEstancias.addActionListener(this);
-		jrbObservaciones.setSelected(true);
-		bgPaneles.add(jrbObservaciones);		
-		bgPaneles.add(jrbEstancias);
-		
 		
 		//características del formulario principal
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		isDefaultLookAndFeelDecorated();
+		FrmPrincipal.isDefaultLookAndFeelDecorated();
 		this.setTitle("Gestión de residencias 1.0");
+				
+		bgPaneles.add(jrbObservaciones);		
+		bgPaneles.add(jrbEstancias);	
+		bgPaneles.add(jrbContratos);	
+		bgPaneles.add(jrbJornadas);	
 		
 		//Declaramos el layout, GridBagLayout
 		GridBagLayout gbl=new GridBagLayout();
@@ -123,6 +125,10 @@ import com.Eu.model.Observacion;
 		this.setLayout(gbl);
 		this.setIconImage(vaca.getImage());	
 		
+
+		pfTodos=new PanelFiltros(PERSONAS);
+		pfInternos=new PanelFiltros(INTERNOS);
+		pfEmpleados=new PanelFiltros(EMPLEADOS);
 		tp.add("Todos",pfTodos);		
 		tp.add("Internos",pfInternos);		
 		tp.add("Empleados",pfEmpleados);
@@ -148,13 +154,20 @@ import com.Eu.model.Observacion;
         po=new PanelObservaciones(1000000);
 		pe=new PanelEstancias(1000000);	
 		pc=new PanelContratos(1000000);
+		pj=new PanelJornadas(1000000);
 		
 		jlpFuncionalidades.add(pe,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.add(po,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.add(pc,JLayeredPane.DEFAULT_LAYER);
-		jlpFuncionalidades.moveToFront(po);
+		jlpFuncionalidades.add(pj,JLayeredPane.DEFAULT_LAYER);
+		jlpFuncionalidades.add(jpTelon, JLayeredPane.DEFAULT_LAYER);
+		jpTelon.setSize(800, 600);
+		
+		jlpFuncionalidades.moveToFront(jpTelon);
+		jlpFuncionalidades.moveToBack(po);
 		jlpFuncionalidades.moveToBack(pe);		
 		jlpFuncionalidades.moveToBack(pc);
+		jlpFuncionalidades.moveToBack(pj);
 				        
         col.gridx=1;
         col.gridy=0;
@@ -170,6 +183,8 @@ import com.Eu.model.Observacion;
 		jpBotoneroInternos.add(jbBorrar);
 		jpBotoneroInternos.add(jrbObservaciones);
 		jpBotoneroInternos.add(jrbEstancias);
+		jpBotoneroInternos.add(jrbContratos);
+		jpBotoneroInternos.add(jrbJornadas);
 		col.gridx=1;
         col.gridy=1;
         col.insets=new Insets(5,5,5,5);
@@ -193,8 +208,10 @@ import com.Eu.model.Observacion;
 		menuInformes.add(jmiInformeCuotas);
 		menuInformes.add(jmiInformeDependencias);
 		menuInformes.add(jmiNumClientes);
+		menuJornadas.add(jmiPatron);
 		jmbMenu.add(menuListados);
 		jmbMenu.add(menuInformes);
+		jmbMenu.add(menuJornadas);
 		
 		jmiListadoPersonas.addActionListener(this);
 		jmiListadoInternos.addActionListener(this);
@@ -203,156 +220,165 @@ import com.Eu.model.Observacion;
 		jmiInformeCuotas.addActionListener(this);
 		jmiInformeDependencias.addActionListener(this);
 		jmiNumClientes.addActionListener(this);
+		jmiPatron.addActionListener(this);
 		
 		this.setJMenuBar(jmbMenu);		
 		
-		tp.addMouseListener(new MouseAdapter(){
-			   public void mouseClicked(MouseEvent e){
-				   if(e.getSource().equals(pfInternos)){
-					   jlpFuncionalidades.moveToFront(po);
-				   }else{
-					   jlpFuncionalidades.moveToFront(pe);
-				   }
-			   }
-			});	
-		}
+		jbAnhadir.addActionListener(this);
+		jbBorrar.addActionListener(this);
+		
+		jrbObservaciones.addActionListener(this);
+		jrbEstancias.addActionListener(this);
+		jrbContratos.addActionListener(this);
+		jrbContratos.addActionListener(this);
+		jrbObservaciones.setSelected(true);
+	}
 	
 	public void actionPerformed(ActionEvent e) {	
 		
 		//comprobamos el objeto que ha producido el evento
-		if(e.getSource().equals(jrbObservaciones)){
-			loggeador.debug("pulso en jrbObservaciones");
-			jlpFuncionalidades.moveToFront(po);
-		}else if(e.getSource().equals(jrbEstancias)){
-			loggeador.debug("pulso en jrbEstancias");
-			jlpFuncionalidades.moveToFront(pe);
-			}else if(e.getSource().equals(jbAnhadir)){					
-					//determinamos si estamos en observaciones o en instancias
-					if(jlpFuncionalidades.getPosition(po)==0){
-						loggeador.debug("Añadimos una observacion");
-						AnhadirObservacion();
-					}else if(jlpFuncionalidades.getPosition(pe)==0){
-						loggeador.debug("Añadimos una Estancia");
-						AnhadirEstancia();						
-					}else{
-						loggeador.debug("añadir un contrato");
-						AnhadirContrato();
-					}
-				}else if (e.getSource().equals(jbBorrar)){
-					if(jlpFuncionalidades.getPosition(po)==0){
-						loggeador.debug("Borramos una observacion");
-						BorrarObservacion();
-					}else{
-						loggeador.debug("Borramos una Estancia");
-					}
-					loggeador.debug("Ha pulsado borrar observación o estancia");
-					}else if(e.getSource().equals(jmiInformeCuotas)){
-						JDateChooser jd = new JDateChooser();
-						String message ="Introduce la fecha del informe:\n";
-						Object[] params = {message,jd};
-						JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
-						String s="";
-						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-						s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-						Date fecha;
-						try {
-							fecha = sdf.parse(s);
-							FuncionesDiversas.GenerarInformeCuotas(fecha);
-						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						
-						}else if(e.getSource().equals(jmiInformeDependencias)){
-							JDateChooser jd = new JDateChooser();
-							String message ="Introduce la fecha del informe:\n";
-							Object[] params = {message,jd};
-							JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
-							String s="";
-							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-							s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-							Date fecha;
-							try {
-								fecha = sdf.parse(s);
-								FuncionesDiversas.GenerarInformeDependencias(fecha);
-							} catch (ParseException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+		if(e.getSource().equals(jrbJornadas)){
+			loggeador.debug("pulso en jrbJornadas");
+			jlpFuncionalidades.moveToFront(pj);
+		}else if(e.getSource().equals(jrbContratos)){
+				loggeador.debug("pulso en jrbContratos");
+				jlpFuncionalidades.moveToFront(pc);
+			}else if(e.getSource().equals(jrbObservaciones)){
+					loggeador.debug("pulso en jrbObservaciones");
+					jlpFuncionalidades.moveToFront(po);
+				}else if(e.getSource().equals(jrbEstancias)){
+					loggeador.debug("pulso en jrbEstancias");
+					jlpFuncionalidades.moveToFront(pe);
+					}else if(e.getSource().equals(jbAnhadir)){					
+							//determinamos si estamos en observaciones o en instancias
+							if(jlpFuncionalidades.getPosition(po)==0){
+								loggeador.debug("Añadimos una observacion");
+								AnhadirObservacion();
+							}else if(jlpFuncionalidades.getPosition(pe)==0){
+								loggeador.debug("Añadimos una Estancia");
+								AnhadirEstancia();						
+							}else{
+								loggeador.debug("añadir un contrato");
+								AnhadirContrato();
 							}
-								}else if(e.getSource().equals(jmiNumClientes)){
-											JDateChooser jd = new JDateChooser();
-											String message ="Introduce la fecha del informe:\n";
-											Object[] params = {message,jd};
-											JOptionPane.showConfirmDialog(null,params,"Día del informe", JOptionPane.PLAIN_MESSAGE);
-											String s="";
-											String sMySQL="";
-											SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-											SimpleDateFormat sdfMysql=new SimpleDateFormat("yyyy-MM-dd");
-											s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-											sMySQL=sdfMysql.format(((JDateChooser)params[1]).getDate());
-											Date fecha;
-											try {
-												fecha = sdf.parse(s);
-												//llamamos al procedure que crea la tabla
-												dbConexion con=new dbConexion();
-												java.sql.Connection conec=con.getConexion();
-												CallableStatement cs=conec.prepareCall("call numClientes(\""+sMySQL+"\");");
-												cs.execute();
-												FuncionesDiversas.GenerarListadoNumClientes(fecha);
-											} catch (ParseException e2) {
-												// TODO Auto-generated catch block
-												e2.printStackTrace();
-											} catch (SQLException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
-											}
-											
-											}else if(e.getSource().equals(jmiListadoInternos)){
-												FuncionesDiversas.GenerarListadoInternos();
-												}else if(e.getSource().equals(jmiListadoEmpleados)){
-													FuncionesDiversas.GenerarListadoEmpleados();
-													}else if(e.getSource().equals(jmiListadoTelefonos)){
-														FuncionesDiversas.GenerarListadoTelefonos();
-														}else{
-															String resultado=((JButton)e.getSource()).getText();
-															JTabbedPane jtp=(JTabbedPane)jpTablas.getComponent(0);
-															int indiceTablaSeleccionada=jtp.getSelectedIndex();
-															PanelFiltros pf=(PanelFiltros)jtp.getComponent(indiceTablaSeleccionada);
-															JTable t=pf.getJt();
-															@SuppressWarnings("unused")
-															boolean r=true;						
-																
-															//toca ver que queremos añadir o borrar
-															if(resultado.equals("Añadir")){
-																//toca ver que es o que queremos añadir
-																switch(indiceTablaSeleccionada){
-																	//añadimos una persona
-																	case 0:
-																		r=Persona.AltaNuevaPersona(t);
-																		break;
-																	//añadimos un interno
-																	case 1:
-																		r=Interno.AltaNuevoInterno();
-																		break;
-																	//añadimos un empleado
-																	case 2:
-																		r=Empleado.AltaNuevoEmpleado();														
-																}
-															}else{
-																switch(indiceTablaSeleccionada){
-																	case 0:
-																		r=Persona.BorrarPersona(t);
-																		break;
-																	case 1:
-																		r=Interno.BorrarInterno(t);
-																		break;
-																	default:
-																		r=Empleado.BorrarEmpleado(t);
-																}
-															}
-																	
-														}
+						}else if (e.getSource().equals(jbBorrar)){
+							if(jlpFuncionalidades.getPosition(po)==0){
+								loggeador.debug("Borramos una observacion");
+								BorrarObservacion();
+							}else{
+								loggeador.debug("Borramos una Estancia");
+							}
+							loggeador.debug("Ha pulsado borrar observación o estancia");
+							}else if(e.getSource().equals(jmiInformeCuotas)){
+								JDateChooser jd = new JDateChooser();
+								String message ="Introduce la fecha del informe:\n";
+								Object[] params = {message,jd};
+								JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
+								String s="";
+								SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+								s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+								Date fecha;
+								try {
+									fecha = sdf.parse(s);
+									FuncionesDiversas.GenerarInformeCuotas(fecha);
+								} catch (ParseException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								
+								}else if(e.getSource().equals(jmiInformeDependencias)){
+									JDateChooser jd = new JDateChooser();
+									String message ="Introduce la fecha del informe:\n";
+									Object[] params = {message,jd};
+									JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
+									String s="";
+									SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+									s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+									Date fecha;
+									try {
+										fecha = sdf.parse(s);
+										FuncionesDiversas.GenerarInformeDependencias(fecha);
+									} catch (ParseException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+										}else if(e.getSource().equals(jmiNumClientes)){
+													JDateChooser jd = new JDateChooser();
+													String message ="Introduce la fecha del informe:\n";
+													Object[] params = {message,jd};
+													JOptionPane.showConfirmDialog(null,params,"Día del informe", JOptionPane.PLAIN_MESSAGE);
+													String s="";
+													String sMySQL="";
+													SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+													SimpleDateFormat sdfMysql=new SimpleDateFormat("yyyy-MM-dd");
+													s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+													sMySQL=sdfMysql.format(((JDateChooser)params[1]).getDate());
+													Date fecha;
+													try {
+														fecha = sdf.parse(s);
+														//llamamos al procedure que crea la tabla
+														dbConexion con=new dbConexion();
+														java.sql.Connection conec=con.getConexion();
+														CallableStatement cs=conec.prepareCall("call numClientes(\""+sMySQL+"\");");
+														cs.execute();
+														FuncionesDiversas.GenerarListadoNumClientes(fecha);
+													} catch (ParseException e2) {
+														// TODO Auto-generated catch block
+														e2.printStackTrace();
+													} catch (SQLException e1) {
+														// TODO Auto-generated catch block
+														e1.printStackTrace();
 													}
+													
+													}else if(e.getSource().equals(jmiListadoInternos)){
+														FuncionesDiversas.GenerarListadoInternos();
+														}else if(e.getSource().equals(jmiListadoEmpleados)){
+															FuncionesDiversas.GenerarListadoEmpleados();
+															}else if(e.getSource().equals(jmiListadoTelefonos)){
+																FuncionesDiversas.GenerarListadoTelefonos();
+																}else if(e.getSource().equals(jmiPatron)){
+																	loggeador.debug("abrir formulario Patron");		
+																	AltaPatron at=new AltaPatron();
+																	at.setVisible(true);
+																	}else{
+																		String resultado=((JButton)e.getSource()).getText();
+																		JTabbedPane jtp=(JTabbedPane)jpTablas.getComponent(0);
+																		int indiceTablaSeleccionada=jtp.getSelectedIndex();
+																		PanelFiltros pf=(PanelFiltros)jtp.getComponent(indiceTablaSeleccionada);
+																		JTable t=pf.getJt();
+																		@SuppressWarnings("unused")
+																		boolean r=true;						
+																			
+																		//toca ver que queremos añadir o borrar
+																		if(resultado.equals("Añadir")){
+																			//toca ver que es o que queremos añadir
+																			switch(indiceTablaSeleccionada){
+																				//añadimos una persona
+																				case 0:
+																					r=Persona.AltaNuevaPersona(t);
+																					break;
+																				//añadimos un interno
+																				case 1:
+																					r=Interno.AltaNuevoInterno();
+																					break;
+																				//añadimos un empleado
+																				case 2:
+																					r=Empleado.AltaNuevoEmpleado();														
+																			}
+																		}else{
+																			switch(indiceTablaSeleccionada){
+																				case 0:
+																					r=Persona.BorrarPersona(t);
+																					break;
+																				case 1:
+																					r=Interno.BorrarInterno(t);
+																					break;
+																				default:
+																					r=Empleado.BorrarEmpleado(t);
+																			}
+																		}
+																	}
+	}
 					
 		
 		
@@ -425,28 +451,55 @@ import com.Eu.model.Observacion;
 	public void setPc(PanelContratos pc) {
 		this.pc = pc;
 	}
+	
+	public PanelJornadas getPj() {
+		return pj;
+	}
+
+	public void setPj(PanelJornadas pj) {
+		this.pj = pj;
+	}
 
 	public JRadioButton getJrbObservaciones() {
 		return jrbObservaciones;
 	}
 
-
-
 	public void setJrbObservaciones(JRadioButton jrbObservaciones) {
 		this.jrbObservaciones = jrbObservaciones;
 	}
-
-
 
 	public JRadioButton getJrbEstancias() {
 		return jrbEstancias;
 	}
 
-
-
 	public void setJrbEstancias(JRadioButton jrbEstancias) {
 		this.jrbEstancias = jrbEstancias;
 	}
+
+	public JRadioButton getJrbContratos() {
+		return jrbContratos;
+	}
+
+	public void setJrbContratos(JRadioButton jrbContratos) {
+		this.jrbContratos = jrbContratos;
+	}
+
+	public JRadioButton getJrbJornadas() {
+		return jrbJornadas;
+	}
+
+	public void setJrbJornadas(JRadioButton jrbJornadas) {
+		this.jrbJornadas = jrbJornadas;
+	}
+
+	public JPanel getJpTelon() {
+		return jpTelon;
+	}
+
+	public void setJpTelon(JPanel jpTelon) {
+		this.jpTelon = jpTelon;
+	}	
+	
 }
 
 	

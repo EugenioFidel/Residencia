@@ -23,5 +23,9 @@
    		<mapping class="com.Eu.model.Empleado_contrato"/>
    		<mapping class="com.Eu.model.Tipo_contrato"/>
    		<mapping class="com.Eu.model.Categoria"/>
+   		<mapping class="com.Eu.model.Jornada"/>
+   		<mapping class="com.Eu.model.Empleado_contrato"/>
+   		<mapping class="com.Eu.model.Empleado_jornada"/>
+   		
 	</session-factory>
 </hibernate-configuration>

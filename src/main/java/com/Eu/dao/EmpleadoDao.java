@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -34,7 +35,7 @@ public class EmpleadoDao {
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
 	        @SuppressWarnings("unchecked")
-			List<Empleado>lista=sesion.createQuery("From Empleado order by primerApe, segundoApe, nombre").list();
+	        List<Empleado>lista=sesion.createQuery("From Empleado e ORDER BY e.primerApe,e.segundoApe,e.nombre").list();
 	        sesion.getTransaction().commit();
 	        return lista;
 	    } finally {
@@ -43,6 +44,31 @@ public class EmpleadoDao {
 	    }
 		
 	}
+	
+	public List<Object> listaEmpleadosAlta() {
+		
+		Session sesion=null;		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+			String query="select distinct "
+					+"persona.dni,persona.primerApe,persona.segundoApe, persona.nombre "
+					+"from persona,empleado,empleado_contrato,contrato "
+					+"where persona.idPersona=empleado.idPersona "
+					+"and empleado.idPersona=empleado_contrato.idEmpleado "
+					+"and empleado_contrato.idContrato=contrato.idContrato "
+					+"and contrato.fechaFin is null";
+	        SQLQuery q = sesion.createSQLQuery(query);
+	        @SuppressWarnings("unchecked")
+			List<Object> lista = (List<Object>)q.list();
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }		
+	}
+
 
 	public void deleteEmpleado(Empleado e) {
 		  Session sesion = null;

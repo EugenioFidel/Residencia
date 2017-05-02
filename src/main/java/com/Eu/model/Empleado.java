@@ -1,9 +1,16 @@
 package com.Eu.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.swing.JTable;
@@ -23,6 +30,8 @@ public class Empleado extends Persona{
 	
 	@Column (name="ss")
 	private String ss;
+	
+	private Set<Jornada> jornadas=new HashSet<Jornada>();
 	
 	public Empleado(){}	
 
@@ -59,6 +68,16 @@ public class Empleado extends Persona{
 
 	public void setSs(String ss) {
 		this.ss = ss;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@JoinTable(name = "empleado_jornada", joinColumns = { @JoinColumn(name = "idEmpleado") }, inverseJoinColumns = { @JoinColumn(name = "idJornada") })
+	public Set<Jornada> getJornadas() {
+		return jornadas;
+	}
+
+	public void setJornadas(Set<Jornada> jornadas) {
+		this.jornadas = jornadas;
 	}
 
 	public static boolean BorrarEmpleado(JTable t) {
