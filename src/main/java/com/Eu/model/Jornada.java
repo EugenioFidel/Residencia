@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Table(name="jornada")
 public class Jornada {
 	private int idJornada;
+	private int tipoJornada;
 	private Date inicioJornada;
 	private Date finJornada;
 	
@@ -20,9 +21,10 @@ public class Jornada {
 		
 	}
 
-	public Jornada(int idJornada, Date inicioJornada, Date finJornada) {
+	public Jornada(int idJornada, int tipoJornada, Date inicioJornada, Date finJornada) {
 		super();
 		this.idJornada = idJornada;
+		this.tipoJornada=tipoJornada;
 		this.inicioJornada = inicioJornada;
 		this.finJornada = finJornada;
 	}
@@ -36,6 +38,15 @@ public class Jornada {
 
 	public void setIdJornada(int idJornada) {
 		this.idJornada = idJornada;
+	}
+	
+	@Column(name="tipoJornada")
+	public int getTipoJornada() {
+		return tipoJornada;
+	}
+
+	public void setTipoJornada(int tipoJornada) {
+		this.tipoJornada = tipoJornada;
 	}
 	
 	@Column(name="inicioJornada")

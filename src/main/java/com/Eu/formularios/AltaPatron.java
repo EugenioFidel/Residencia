@@ -37,13 +37,24 @@ public class AltaPatron extends JDialog implements ActionListener{
 
 	final static Logger loggeador = Logger.getLogger(FrmPrincipal.class);
 	
+	static final int MANHANA=0;
+	static final int TARDE=1;
+	static final int NOCHE=2;
+	static final int PARTIDO=3;
+	static final int VACACION=4;
+	static final int IT=5;
+	static final int ASUNTOS=6;
+	static final int COMPENSACION=7;
+	static final int OTRAS=8;
+	static final int LIBRE=9;
+	
 	SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy"); 	
 	
 	JDateChooser jdcFechaInicio=new JDateChooser();
 	JDateChooser jdcFechaFin=new JDateChooser();
 	
 	JLabel jlEmpleado=new JLabel("Empleado: ");
-	JComboBox jcbEmpleados=new JComboBox();
+	JComboBox<String> jcbEmpleados=new JComboBox<String>();
 	
 	JLabel jlFechaInicio=new JLabel("Fecha inicio");
 	JLabel jlFechaFin=new JLabel("Fecha final");
@@ -238,7 +249,6 @@ public class AltaPatron extends JDialog implements ActionListener{
 		jbGrabar.addActionListener(this);
 	}
 	
-	@SuppressWarnings({"unchecked" })
 	private void RellenarComboEmpleados() {
 		// TODO Auto-generated method stub
 		EmpleadoDao ed=new EmpleadoDao();
@@ -281,16 +291,12 @@ public class AltaPatron extends JDialog implements ActionListener{
 			int i=0;
 			//recorremos las fechas desde el inicio hasta el final
 			while(cI.before(cF)){		
-				System.out.println("inicio " + cI.getTime());
-				System.out.println("final " + cF.getTime());
-				
 				//creamos la jornada
 				Jornada j =new Jornada();
 				//de qué es la jornada?
 				char tipoJornada=patron.charAt(i);
 				j=ObtenerJornada(tipoJornada,cI,Integer.parseInt(jtfHoras.getText()),Integer.parseInt(jtfMinutos.getText()));
-				
-				
+								
 				//incluimos la jornada en el empleado
 				l.add(j);
 				//incrementamos i
@@ -304,7 +310,6 @@ public class AltaPatron extends JDialog implements ActionListener{
 				cI.set(Calendar.MINUTE, 0);
 				cI.set(Calendar.SECOND,0);
 				cI.add(Calendar.DAY_OF_YEAR, 1);
-				System.out.println("inicio " + cI.getTime());
 			}
 			em.setJornadas(l);
 			try {
@@ -320,67 +325,73 @@ public class AltaPatron extends JDialog implements ActionListener{
 
 	private Jornada ObtenerJornada(char tipoJornada,Calendar fecha,int horas, int minutos) {
 		Jornada j=new Jornada();
-		System.out.println("inicio " + fecha.getTime());
+		boolean bandera=false;
 		switch(tipoJornada){
 		//Mañana
 		case 'M':
-			//hora de inicio las ocho de la mañana
-			fecha.add(Calendar.HOUR, 8);			
+			j.setTipoJornada(MANHANA);			
+			//hora de inicio las ocho de la mañana				
+			fecha.add(Calendar.HOUR_OF_DAY, 8);
 			break;
 		//Tarde
 		case 'T':
+			j.setTipoJornada(TARDE);
 			//hora de inicio las 16 horas
-			fecha.add(Calendar.HOUR, 16);
+			fecha.add(Calendar.HOUR_OF_DAY, 16);
 			break;
 		//Noche
 		case 'N':
+			j.setTipoJornada(NOCHE);
 			//hora de inicio las 0 horas
-			fecha.add(Calendar.HOUR, 0);
 			break;
 		//Partido
 		case 'P':
+			j.setTipoJornada(PARTIDO);
 			//hora de inicio las 10horas
-			fecha.add(Calendar.HOUR, 10);
+			fecha.add(Calendar.HOUR_OF_DAY, 10);
 			break;
 		//Vacaciones
 		case 'V':
-			//hora de inicio las 0 horas, 7 minutos
-			fecha.add(Calendar.MINUTE,7);
+			j.setTipoJornada(VACACION);
+			bandera=true;
 			break;
 		//IT
 		case 'I':
-			//hora de inicio las 0 horas, 8 minutos
-			fecha.add(Calendar.MINUTE,13);
+			j.setTipoJornada(IT);
+			bandera=true;
 			break;
 		//Asuntos propios
 		case 'A':
-			//hora de inicio las 0 horas, 9 minutos
-			fecha.add(Calendar.MINUTE,9);
+			j.setTipoJornada(ASUNTOS);
+			bandera=true;
 			break;
 		//Asuntos propios
 		case 'C':
-			//hora de inicio las 0 horas, 10 minutos
-			fecha.add(Calendar.MINUTE,14);
+			j.setTipoJornada(COMPENSACION);
+			bandera=true;
 			break;
 		//otras licencias
 		case 'O':
-			//hora de inicio las 0 horas, 11 minutos
-			fecha.add(Calendar.MINUTE,11);
+			j.setTipoJornada(OTRAS);
+			bandera=true;
 			break;
 		case 'L':
-			//hora de inicio las 0 horas, 12 minutos
-			fecha.add(Calendar.MINUTE,12);
-			break;
+			j.setTipoJornada(LIBRE);
+			bandera=true;
 		}
-		j.setInicioJornada(fecha.getTime());
-		//Hora de fin las ocho más lo que dure
-		fecha.add(Calendar.HOUR, horas);
-		fecha.add(Calendar.MINUTE, minutos);
-		if(tipoJornada=='T'){
-			fecha.add(Calendar.HOUR, -1);
-			fecha.add(Calendar.MINUTE, -1);
-		}
-		j.setFinJornada(fecha.getTime());
+		if(bandera){
+			j.setInicioJornada(fecha.getTime());
+			j.setFinJornada(fecha.getTime());
+		}else{
+			j.setInicioJornada(fecha.getTime());
+			//Hora de fin las ocho más lo que dure
+			fecha.add(Calendar.HOUR_OF_DAY, horas);
+			fecha.add(Calendar.MINUTE, minutos);
+			//ajustamos el final de la jornada restando un segundo
+			fecha.add(Calendar.SECOND, -1);
+			j.setFinJornada(fecha.getTime());
+		}	
+		
 		return j;
 	}
 
