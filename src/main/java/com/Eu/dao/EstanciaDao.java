@@ -60,4 +60,33 @@ public class EstanciaDao {
 	        sesion.close();
 	    }
 	}
+	
+	public void deleteEstancia(Estancia e)  {
+        Session sesion = null;
+        try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        sesion.delete(e);
+	        sesion.getTransaction().commit();
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }
+	}
+	
+	public Estancia getEstanciaById(int i) {
+	    Session sesion = null;
+	    Estancia es = null;
+	    try {
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        es = (Estancia)sesion.get(Estancia.class, i);
+	    } catch (Exception e) {
+	       e.printStackTrace();
+	    } finally {
+	        if (sesion != null && sesion.isOpen()) {
+	            sesion.close();
+	        }
+	    }
+	    return es;
+	}
 }

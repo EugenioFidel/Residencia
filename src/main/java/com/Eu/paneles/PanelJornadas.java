@@ -45,11 +45,9 @@ public class PanelJornadas extends JPanel {
 	GridBagConstraints gbc=new GridBagConstraints();
 	
 	private static final long serialVersionUID = 1L;
-	final static Logger loggeador = Logger.getLogger(PanelJornadas.class);
-	
+	final static Logger loggeador = Logger.getLogger(PanelJornadas.class);	
 
-	public PanelJornadas(int id){		
-		
+	public PanelJornadas(int id){			
 		this.setSize(800,600);
 		this.setLayout(gbl);	
 		
@@ -142,23 +140,6 @@ public class PanelJornadas extends JPanel {
 				PintarDia(c,tipoJornada);				
 			}		  
 		}
-	}
-	
-
-	public JCalendar getJcEmpleado() {
-		return jcEmpleado;
-	}
-
-	public void setJcEmpleado(JCalendar jcEmpleado) {
-		this.jcEmpleado = jcEmpleado;
-	}
-
-	public Empleado getE() {
-		return em;
-	}
-
-	public void setE(Empleado e) {
-		this.em = e;
 	}	
 	
 	private void PintarDia(Calendar c, int tipoJornada) {
@@ -237,5 +218,21 @@ public class PanelJornadas extends JPanel {
 			pdj.jrbLibre.setSelected(true);
 		}
 	}
+	
+	public JCalendar getJcEmpleado() {
+		return jcEmpleado;
+	}
+
+	public void setJcEmpleado(JCalendar jcEmpleado) {
+		this.jcEmpleado = jcEmpleado;
+	}
+
+	public Empleado getE() {
+		return em;
+	}
+
+	public void setE(Empleado e) {
+		this.em = e;
+	}	
 }
 

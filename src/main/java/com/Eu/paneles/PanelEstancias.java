@@ -1,6 +1,5 @@
 package com.Eu.paneles;
 
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.text.ParseException;
@@ -64,8 +63,7 @@ public class PanelEstancias extends JPanel implements TableModelListener {
 		gbc.weightx=1.0;
 		gbc.weighty=1.0;
 		gbc.fill=GridBagConstraints.BOTH;
-		this.add(jsp,gbc);
-		
+		this.add(jsp,gbc);		
 	}
 
 	public void RellenarTablaEstancias(int id) {	
@@ -155,20 +153,16 @@ public class PanelEstancias extends JPanel implements TableModelListener {
 				es.setMotivoBaja(A_DOMICILIO);
 			}else{
 				es.setMotivoBaja(A_OTRA_RESIDENCIA);
-			}
-			
+			}			
 			
 			EstanciaDao ed=new EstanciaDao();			
-			ed.updateEstancia(es);
-			
+			ed.updateEstancia(es);			
 
 		}else if(e.getType()==TableModelEvent.DELETE){
 			//Borrando una observación
 			System.out.println("Borrando una Estancia");
 		}
 	}
-
-
 
 	public JTable getJtEstancias() {
 		return jtEstancias;
@@ -205,8 +199,7 @@ public class PanelEstancias extends JPanel implements TableModelListener {
 
 	public void setDtm(DefaultTableModel dtm) {
 		this.dtm = dtm;
-	}
-	
+	}	
 }
 
 

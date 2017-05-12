@@ -30,12 +30,10 @@ import com.Eu.dao.ObservacionDao;
 import com.Eu.model.Interno;
 import com.Eu.model.Observacion;
 
-public class PanelObservaciones extends JPanel implements TableModelListener { 	
+public class PanelObservaciones extends JPanel implements TableModelListener { 
 	
-
 	public JTable jtObservaciones =new JTable();
-	public DefaultTableModel dtm=new DefaultTableModel();
-	
+	public DefaultTableModel dtm=new DefaultTableModel();	
 
 	//Un JScrollPane para alojar la tabla 
 	public JScrollPane jsp = new JScrollPane();	
@@ -61,65 +59,63 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 		gbc.weightx=1.0;
 		gbc.weighty=1.0;
 		gbc.fill=GridBagConstraints.BOTH;
-		this.add(jsp,gbc);
-		
+		this.add(jsp,gbc);		
 	}
 
 	public void RellenarTablaObservaciones(int id) {
 		//renders
-				MiRender miRender=new MiRender();		
+		MiRender miRender=new MiRender();		
 						
-				//el array con las cabeceras de la tabla
-				String[]cabecerasTablaObservaciones=new String[9];
-				cabecerasTablaObservaciones[0]="Id.";
-				cabecerasTablaObservaciones[1]="Fecha";
-				cabecerasTablaObservaciones[2]="Alimentación";
-				cabecerasTablaObservaciones[3]="Movilidad";
-				cabecerasTablaObservaciones[4]="Aseo";
-				cabecerasTablaObservaciones[5]="Vestido";
-				cabecerasTablaObservaciones[6]="Inodoro";
-				cabecerasTablaObservaciones[7]="Esfínteres";
-				cabecerasTablaObservaciones[8]="Gr.dep.";	
+		//el array con las cabeceras de la tabla
+		String[]cabecerasTablaObservaciones=new String[9];
+		cabecerasTablaObservaciones[0]="Id.";
+		cabecerasTablaObservaciones[1]="Fecha";
+		cabecerasTablaObservaciones[2]="Alimentación";
+		cabecerasTablaObservaciones[3]="Movilidad";
+		cabecerasTablaObservaciones[4]="Aseo";
+		cabecerasTablaObservaciones[5]="Vestido";
+		cabecerasTablaObservaciones[6]="Inodoro";
+		cabecerasTablaObservaciones[7]="Esfínteres";
+		cabecerasTablaObservaciones[8]="Gr.dep.";	
 						
-				ObservacionDao od=new ObservacionDao();		
-				List<Observacion> observaciones = od.listaObservaciones(id);
-				jtObservaciones=FuncionesDiversas.cargaDatosEnTablaObservaciones(observaciones, cabecerasTablaObservaciones);
-				System.out.println("filas en tabla observaciones"+jtObservaciones.getRowCount());	
+		ObservacionDao od=new ObservacionDao();		
+		List<Observacion> observaciones = od.listaObservaciones(id);
+		jtObservaciones=FuncionesDiversas.cargaDatosEnTablaObservaciones(observaciones, cabecerasTablaObservaciones);
+								
+		TableColumnModel conjuntoColumnas=jtObservaciones.getColumnModel();
+		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
+			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
+		}
 						
-				TableColumnModel conjuntoColumnas=jtObservaciones.getColumnModel();
-				for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
-					conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
-				}
-						
-				TableColumn columna=jtObservaciones.getColumn("Id.");
-				columna.setPreferredWidth(30);
-				columna=jtObservaciones.getColumn("Fecha");
-				columna.setPreferredWidth(76);
-				columna=jtObservaciones.getColumn("Alimentación");
-				columna.setPreferredWidth(105);
-				columna=jtObservaciones.getColumn("Movilidad");			
-				columna.setPreferredWidth(105);
-				columna=jtObservaciones.getColumn("Aseo");			
-				columna.setPreferredWidth(105);
-				columna=jtObservaciones.getColumn("Vestido");
-				columna.setPreferredWidth(105);
-				columna=jtObservaciones.getColumn("Inodoro");
-				columna.setPreferredWidth(105);
-				columna=jtObservaciones.getColumn("Esfínteres");
-				columna.setPreferredWidth(105);
-				columna=jtObservaciones.getColumn("Gr.dep.");
-				columna.setPreferredWidth(60);
+		TableColumn columna=jtObservaciones.getColumn("Id.");
+		columna.setPreferredWidth(30);
+		columna=jtObservaciones.getColumn("Fecha");
+		columna.setPreferredWidth(76);
+		columna=jtObservaciones.getColumn("Alimentación");
+		columna.setPreferredWidth(105);
+		columna=jtObservaciones.getColumn("Movilidad");			
+		columna.setPreferredWidth(105);
+		columna=jtObservaciones.getColumn("Aseo");			
+		columna.setPreferredWidth(105);
+		columna=jtObservaciones.getColumn("Vestido");
+		columna.setPreferredWidth(105);
+		columna=jtObservaciones.getColumn("Inodoro");
+		columna.setPreferredWidth(105);
+		columna=jtObservaciones.getColumn("Esfínteres");
+		columna.setPreferredWidth(105);
+		columna=jtObservaciones.getColumn("Gr.dep.");
+		columna.setPreferredWidth(60);
+			
+		jtObservaciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jtObservaciones.doLayout();
+		this.setJtObservaciones(jtObservaciones);
+					
+		TableModel dtm=jtObservaciones.getModel();
+		dtm.addTableModelListener(this);		
 				
-				jtObservaciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-				jtObservaciones.doLayout();
-				this.setJtObservaciones(jtObservaciones);
-						
-				TableModel dtm=jtObservaciones.getModel();
-				dtm.addTableModelListener(this);		
+		jsp.setViewportView(jtObservaciones);
 				
-				jsp.setViewportView(jtObservaciones);
-				
-				this.setDtm((DefaultTableModel)jtObservaciones.getModel());
+		this.setDtm((DefaultTableModel)jtObservaciones.getModel());
 	}
 
 	public void tableChanged(TableModelEvent e) {
@@ -149,8 +145,7 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 			FuncionesDiversas.evaluarGradoDependencia(o);
 			
 			ObservacionDao od=new ObservacionDao();			
-			od.updateObservacion(o);
-			
+			od.updateObservacion(o);		
 
 		}else if(e.getType()==TableModelEvent.DELETE){
 			//Borrando una observación
@@ -184,8 +179,7 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 	
 	public void redibujar(){
 		jsp.setViewportView(jtObservaciones);		
-	}
-	
+	}	
 
 	public DefaultTableModel getDtm() {
 		return dtm;

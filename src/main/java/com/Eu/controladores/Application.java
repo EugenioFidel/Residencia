@@ -1,18 +1,8 @@
 package com.Eu.controladores;
 
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import com.Eu.dao.EmpleadoDao;
-import com.Eu.dao.JornadaDao;
 import com.Eu.formularios.FrmPrincipal;
-import com.Eu.model.Empleado;
-import com.Eu.model.Jornada;
 
 public class Application {
 	

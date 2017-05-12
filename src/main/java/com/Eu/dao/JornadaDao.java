@@ -1,7 +1,6 @@
 package com.Eu.dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.Eu.controladores.HibernateUtil;
-import com.Eu.model.Empleado;
-import com.Eu.model.Interno;
 import com.Eu.model.Jornada;
 
 public class JornadaDao {

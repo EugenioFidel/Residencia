@@ -65,8 +65,7 @@ public class PanelDetalleJ extends JPanel implements ActionListener{
 	
 	SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
-	public PanelDetalleJ(){
-		
+	public PanelDetalleJ(){		
 		GridBagLayout gbl=new GridBagLayout();
 		GridBagConstraints gbc=new GridBagConstraints();
 		
@@ -77,8 +76,7 @@ public class PanelDetalleJ extends JPanel implements ActionListener{
 		gbc.gridy=0;
 		gbc.gridwidth=4;
 		gbc.insets=new Insets(10,10,10,10);
-		this.add(jlDia, gbc);
-		
+		this.add(jlDia, gbc);		
 		
 		bg.add(jrbManhana);
 		bg.add(jrbTarde);
@@ -150,32 +148,8 @@ public class PanelDetalleJ extends JPanel implements ActionListener{
 		gbc.gridwidth=4;
 		gbc.fill=GridBagConstraints.BOTH;
 		this.add(jlCompanheros,gbc);
-	}
+	}	
 	
-	public Jornada getJ() {
-		return j;
-	}
-
-	public void setJ(Jornada j) {
-		this.j = j;
-	}
-
-	public Empleado getE() {
-		return e;
-	}
-
-	public void setE(Empleado e) {
-		this.e = e;
-	}
-
-	public Calendar getC() {
-		return c;
-	}
-
-	public void setC(Calendar c) {
-		this.c = c;
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		jtfHoraInicio.setEditable(true);
@@ -235,8 +209,7 @@ public class PanelDetalleJ extends JPanel implements ActionListener{
 											EstablecerHora(0,0,0);
 											jtfHoraInicio.setText(sdf.format(c.getTime()));
 											jtfHoraFin.setText(sdf.format(c.getTime()));
-										}
-		
+										}		
 		
 		try {
 			jo.setInicioJornada(sdf.parse(jtfHoraInicio.getText()));
@@ -262,5 +235,30 @@ public class PanelDetalleJ extends JPanel implements ActionListener{
 		c.set(Calendar.MINUTE, minuto);
 		c.set(Calendar.SECOND,segundo);
 	}
+	
+	public Jornada getJ() {
+		return j;
+	}
+
+	public void setJ(Jornada j) {
+		this.j = j;
+	}
+
+	public Empleado getE() {
+		return e;
+	}
+
+	public void setE(Empleado e) {
+		this.e = e;
+	}
+
+	public Calendar getC() {
+		return c;
+	}
+
+	public void setC(Calendar c) {
+		this.c = c;
+	}
+
 
 }

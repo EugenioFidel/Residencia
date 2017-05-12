@@ -1,6 +1,5 @@
 package com.Eu.model;
 
-import java.util.Comparator;
 import java.util.Date;
 
 import javax.persistence.Column;

@@ -1,6 +1,5 @@
 package com.Eu.paneles;
 
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -41,8 +40,6 @@ import com.Eu.model.Empleado;
 import com.Eu.model.Tipo_contrato;
 import com.toedter.calendar.JDateChooser;
 
-
-
 public class PanelContratos extends JPanel implements ActionListener,TableModelListener { 		
 
 	public JTable jtContratos =new JTable();
@@ -63,9 +60,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 	JPopupMenu jpuMenuContextual=new JPopupMenu();	
 	JSeparator jsSeparador1=new JSeparator();
 	JSeparator jsSeparador2=new JSeparator();
-	JMenuItem jmiInfContrato=new JMenuItem("Informe nuevo contrato");
-	
-	
+	JMenuItem jmiInfContrato=new JMenuItem("Informe nuevo contrato");	
 
 	public PanelContratos (int id){
 		EmpleadoDao ed=new EmpleadoDao();
@@ -82,16 +77,14 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		jmiInfContrato.addActionListener(this);
 		
 		MouseListener popupListener=new PopupListener();
-		jtContratos.addMouseListener(popupListener);
-		
+		jtContratos.addMouseListener(popupListener);		
 		
 		gbc.gridx=0;
 		gbc.gridy=0;
 		gbc.weightx=1.0;
 		gbc.weighty=1.0;
 		gbc.fill=GridBagConstraints.BOTH;
-		this.add(jsp,gbc);
-		
+		this.add(jsp,gbc);		
 	}
 
 	public void RellenarTablaContratos(int id) {	
@@ -105,8 +98,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		cabecerasTablaEstancias[3]="H/s";
 		cabecerasTablaEstancias[4]="Tipo contrato";
 		cabecerasTablaEstancias[5]="Categoria profesional";
-		cabecerasTablaEstancias[6]="Empleado sustituido";
-		
+		cabecerasTablaEstancias[6]="Empleado sustituido";		
 						
 		ContratoDao cd=new ContratoDao();		
 		List<Object> contratos = cd.listaContratos(id);
@@ -148,7 +140,6 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		this.setDtm((DefaultTableModel)jtContratos.getModel());
 	}
 
-
 	public void tableChanged(TableModelEvent e) {
 		// TODO Auto-generated method stub
 		SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy");
@@ -180,10 +171,8 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 			//Borrando un contrato
 			loggeador.debug("Borrando un contrato");				
 			cd.deleteContrato(c);
-		}
-	
-	}
-	
+		}	
+	}	
 	
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -200,10 +189,8 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 			fechaF=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
 			parametros.put("fechaFinPrevista", fechaF);
 			parametros.put("empSustituido", dtm.getValueAt(jtContratos.getSelectedRow(), 6));
-			FuncionesDiversas.GenerarInformeContratoSustitucion(parametros);
-			
+			FuncionesDiversas.GenerarInformeContratoSustitucion(parametros);			
 	}
-
 
 	public JScrollPane getJsp() {
 		return jsp;
@@ -223,8 +210,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 	
 	public void redibujar(){
 		jsp.setViewportView(jtContratos);		
-	}
-	
+	}	
 
 	public DefaultTableModel getDtm() {
 		return dtm;
@@ -240,9 +226,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 
 	public void setJtContratos(JTable jtContratos) {
 		this.jtContratos = jtContratos;
-	}
-	
-	
+	}	
 
 	class PopupListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
@@ -259,7 +243,5 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 			        	}		        	
 			        }
 			      }	  	     
-	}
-	
-	
+	}	
 }
