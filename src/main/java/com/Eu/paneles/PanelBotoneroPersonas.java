@@ -17,7 +17,7 @@ import com.Eu.model.Persona;
 
 public class PanelBotoneroPersonas extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JButton jbAnhadir,jbBorrar;
+	private JButton jbAnhadir,jbBorrar,jbSalir;
 	
 	public PanelBotoneroPersonas() {
 		// TODO Auto-generated constructor stub
@@ -25,28 +25,15 @@ public class PanelBotoneroPersonas extends JPanel implements ActionListener {
 		
 		jbAnhadir=new JButton("Añadir");
 		jbBorrar=new JButton("Borrar");
+		jbSalir=new JButton("SALIR");
 		
 		jbAnhadir.addActionListener(this);
 		jbBorrar.addActionListener(this);
+		jbSalir.addActionListener(this);
 				
 		this.add(jbAnhadir);
 		this.add(jbBorrar);		
-	}
-
-	public JButton getJbAnhadir() {
-		return jbAnhadir;
-	}
-
-	public void setJbAnhadir(JButton jbAnhadir) {
-		this.jbAnhadir = jbAnhadir;
-	}
-
-	public JButton getJbBorrar() {
-		return jbBorrar;
-	}
-
-	public void setJbBorrar(JButton jbBorrar) {
-		this.jbBorrar = jbBorrar;
+		this.add(jbSalir);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -76,7 +63,7 @@ public class PanelBotoneroPersonas extends JPanel implements ActionListener {
 				case 2:
 					r=Empleado.AltaNuevoEmpleado();														
 			}
-		}else{
+		}else if (e.getSource().equals(jbBorrar)){
 			switch(indiceTablaSeleccionada){
 				case 0:
 					r=Persona.BorrarPersona(t);
@@ -87,6 +74,24 @@ public class PanelBotoneroPersonas extends JPanel implements ActionListener {
 				default:
 					r=Empleado.BorrarEmpleado(t);
 			}
-		}	
+		}else{
+			System.exit(0);
+		}
+	}	
+
+	public JButton getJbAnhadir() {
+		return jbAnhadir;
+	}
+
+	public void setJbAnhadir(JButton jbAnhadir) {
+		this.jbAnhadir = jbAnhadir;
+	}
+
+	public JButton getJbBorrar() {
+		return jbBorrar;
+	}
+
+	public void setJbBorrar(JButton jbBorrar) {
+		this.jbBorrar = jbBorrar;
 	}
 }

@@ -9,7 +9,7 @@ import com.Eu.controladores.HibernateUtil;
 import com.Eu.model.Interno_estancia;
 
 public class Interno_estanciaDao {
-	public Interno_estancia getInternoEstanciaById(Long InternoEstanciaId) {
+	public Interno_estancia getInternoEstanciaById(int InternoEstanciaId) {
         Session sesion = null;
         Interno_estancia ie = null;
         try {            

@@ -13,9 +13,7 @@ import org.hibernate.criterion.Restrictions;
 import com.Eu.controladores.HibernateUtil;
 import com.Eu.model.Jornada;
 
-public class JornadaDao {
-
-	
+public class JornadaDao {	
 	public List<Jornada> listaJornadas(int id){
 		Session sesion=null;
 		
@@ -23,16 +21,16 @@ public class JornadaDao {
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
 	        @SuppressWarnings("unchecked")
-			List<Jornada>lista=sesion.createQuery("select j From Jornada j,Empleado_jornada e where j.idJornada=e.idJornada and e.idEmpleado="+id).list();
+			List<Jornada>lista=sesion.createQuery("select j From Jornada j,Empleado_jornada e "+
+												"where j.idJornada=e.idJornada and e.idEmpleado="+id).list();
 	        sesion.getTransaction().commit();
 	        return lista;
 	    } finally {
 	        if ((sesion != null) && (sesion.isOpen()))
 	        sesion.close();
-	    }
-		
+	    }		
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Jornada> getJornadasPorFecha(Calendar c) {
 		// TODO Auto-generated method stub
@@ -56,11 +54,35 @@ public class JornadaDao {
 	        if ((sesion != null) && (sesion.isOpen()))
 	        sesion.close();
 	    }
-
 	}
 
-	public int getIdEmpleado(Jornada j) {
+	@SuppressWarnings("unchecked")
+	public List<Jornada> getJornadasPorFechaYTipo(Calendar c,Jornada j) {
+		// TODO Auto-generated method stub
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND,0);
+		Date dIni=c.getTime();
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND,59);
+		Date dFin=c.getTime();
 		
+		Session sesion=null;
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        Criteria criteria = sesion.createCriteria(Jornada.class ); 
+	        criteria.add( Restrictions.between("inicioJornada", dIni, dFin));
+	        criteria.add(Restrictions.like("tipoJornada", j.getTipoJornada()));
+	        return criteria.list();
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }
+	}	
+
+	public int getIdEmpleado(Jornada j) {		
 		Session sesion=null;		
 		try{
 	        sesion = HibernateUtil.getSessionfactory().openSession();
@@ -84,16 +106,33 @@ public class JornadaDao {
 	
 	public void addJornada(Jornada j) throws SQLException {
 	      Session sesion = null;
-	        try{
-		        sesion = HibernateUtil.getSessionfactory().openSession();
-		        sesion.beginTransaction();
-		        sesion.saveOrUpdate(j);
-		        sesion.getTransaction().commit();
-		    } catch(Exception e){
-		        e.printStackTrace();
-		    } finally {
-		        if ((sesion != null) && (sesion.isOpen()))
-		        sesion.close();
-		    }
-		}
+	      try{
+	    	  sesion = HibernateUtil.getSessionfactory().openSession();
+		      sesion.beginTransaction();
+		      sesion.saveOrUpdate(j);
+		      sesion.getTransaction().commit();
+		  }catch(Exception e){
+		      e.printStackTrace();
+		  }finally{
+		      if ((sesion != null) && (sesion.isOpen()))
+		    	  sesion.close();
+		  }
+	}
+
+	public List<Jornada> listaJornadasCoincidentes(int id, Jornada j) {
+		Session sesion=null;
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        @SuppressWarnings("unchecked")
+	        List<Jornada>lista=sesion.createQuery("select j From Jornada j,Empleado_jornada e "+
+	        		"where j.idJornada=e.idJornada and e.idEmpleado="+id+" and j.tipoJornada = "+j.getTipoJornada()).list();
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }		
+	}
 }

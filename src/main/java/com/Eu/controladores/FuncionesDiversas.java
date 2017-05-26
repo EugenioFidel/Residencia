@@ -498,20 +498,25 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			//actualizamos en la base la vista obs
 			String cadenaCrearVistaDep="create or replace VIEW `dependencias` "+
 					"AS select distinct `persona`.`letraCif` AS `letraCif`,`persona`.`dni` "+
-					"AS `dni`,`persona`.`letraNif` AS `letraNif`,`persona`.`nombre` "+
-					"AS `nombre`,`persona`.`primerApe` AS `primerApe`,`persona`.`segundoApe` "+
-					"AS `segundoApe`,`observacion`.`fechaObservacion` "+
-					"AS `fechaObservacion`,`observacion`.`alimentacion` "+
-					"AS `alimentacion`,`observacion`.`movilidad` "+
-					"AS `movilidad`,`observacion`.`aseo` AS `aseo`,`observacion`.`vestido` "+
-					"AS `vestido`,`observacion`.`inodoro` AS `inodoro`,`observacion`.`esfinteres` "+
-					"AS `esfinteres`,`observacion`.`gradoDependencia` AS `gradoDependencia` "+
+					"AS `dni`,`persona`.`letraNif` AS `letraNif`,`persona`.`nombre` AS `nombre`,"+
+					"`persona`.`primerApe` AS `primerApe`,`persona`.`segundoApe` AS `segundoApe`,"+
+					"`observacion`.`fechaObservacion` AS `fechaObservacion`,"+
+					"`observacion`.`alimentacion` AS `alimentacion`,`observacion`."+
+					"`movilidad` AS `movilidad`,`observacion`.`aseo` AS `aseo`,`observacion`."+
+					"`vestido` AS `vestido`,`observacion`.`inodoro` AS `inodoro`,"+
+					"`observacion`.`esfinteres` AS `esfinteres`,"+
+					"`observacion`.`gradoDependencia` AS `gradoDependencia` "+
 					"from (((`persona` join `interno`) join `observacion`) join `interno_observacion`) "+
-					"where ((`persona`.`idPersona` = `interno`.`idPersona`) "+
-					"and (`interno`.`idPersona` = `interno_observacion`.`idPersona`) "+
-					"and (`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`) "+
-					"and (`observacion`.`fechaObservacion` <= \""+dia+"\")) "+
-					"order by `persona`.`primerApe`,`persona`.`segundoApe`,`persona`.`nombre`";
+					"where ((`persona`.`idPersona` = `interno`.`idPersona`) and "+
+					"(`interno`.`idPersona` = `interno_observacion`.`idPersona`) and "+
+					"(`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`) "+
+					"and (`observacion`.`fechaObservacion` <= \""+dia+"\") and "+
+					"`interno`.`idPersona` in (select `interno`.`idPersona` "+
+					"from ((`interno` join `interno_estancia`) join `estancia`) "+
+					"where ((`interno`.`idPersona` = `interno_estancia`.`idPersona`) "+
+					"and (`interno_estancia`.`idEstancia` = `estancia`.`idEstancia`) "+
+					"and (`estancia`.`motivoBaja` = 0)))) order by `persona`.`primerApe`,"+
+					"`persona`.`segundoApe`,`persona`.`nombre`";
 			Updatear(cadenaCrearVistaDep);
 			
 			//vaciamos los parametros
@@ -579,7 +584,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				con.desconectar();
 				//generamos el mail
 				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					FuncionesDiversas.EnviarMail(nomFichero);
+					FuncionesDiversas.EnviarMail(nomFichero,"propuesta de contratación");
 				
 			} catch (JRException e1) {
 				System.out.println("Error en la generación de listado");
@@ -591,7 +596,69 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			}
 		}
 		
-		public static void EnviarMail(String adj) {
+		public static void GenerarAltaResidente(Map<String, Object> parametros){
+			Calendar fechaActual=Calendar.getInstance();
+			String nomFichero="./src/main/resources/informes/ComAltaResidente_";
+					
+			nomFichero=nomFichero+
+					Integer.toString(fechaActual.get(Calendar.DATE))
+					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			
+			try {
+				//conexion para el reporte
+				dbConexion con=new dbConexion();
+				java.sql.Connection conec=con.getConexion();
+				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionAltaResidente.jrxml");
+				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/ComAltaResidente_");
+				conec.close();
+				con.desconectar();
+				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el alta del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+					FuncionesDiversas.EnviarMail(nomFichero, "alta de residente");
+				
+			} catch (JRException e1) {
+				System.out.println("Error en la generación del informe");
+				e1.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}
+		
+		public static void GenerarBajaResidente(Map<String, Object> parametros) {
+			Calendar fechaActual=Calendar.getInstance();
+			String nomFichero="./src/main/resources/informes/ComBajaResidente_";
+					
+			nomFichero=nomFichero+
+					Integer.toString(fechaActual.get(Calendar.DATE))
+					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			
+			try {
+				//conexion para el reporte
+				dbConexion con=new dbConexion();
+				java.sql.Connection conec=con.getConexion();
+				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionBajaResidente.jrxml");
+				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/ComBajaResidente_");
+				conec.close();
+				con.desconectar();
+				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión la baja del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+					FuncionesDiversas.EnviarMail(nomFichero, "baja de residente");
+				
+			} catch (JRException e1) {
+				System.out.println("Error en la generación del informe");
+				e1.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}
+		
+		public static void EnviarMail(String adj, String documento) {
 			String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
 			String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
 			String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros");
@@ -621,7 +688,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				// TODO Auto-generated method stub
 				BodyPart texto = new MimeBodyPart();
 				try {
-					texto.setText("Adjunto a la presente te remito una comunicación de nueva contratación\n"+
+					texto.setText("Adjunto a la presente te remito "+documento+"\n"+
 									"cualquier cosa, ya sabes.\n"+
 									"\t\tUn saludo\n\t\t\tRaquel");
 				} catch (MessagingException e) {
@@ -641,11 +708,12 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 					// Se rellenan los destinatarios
 					message.addRecipient(Message.RecipientType.TO, new InternetAddress(direccion));
 					// Se rellena el subject
-					message.setSubject("Propuesta de contratación");
+					message.setSubject(documento+ " Hoyo de Pinares");
 					// Se mete el texto y la foto adjunta.
 					message.setContent(multiParte);
 					Transport t = session.getTransport("smtp");
-					t.connect(originMail,"cueva valiente");
+//					t.connect(originMail,"cueva valiente");
+					t.connect(originMail,pss);
 					t.sendMessage(message,message.getAllRecipients());
 					t.close();
 					JOptionPane.showMessageDialog(null, "Mensaje enviado", "Atención", JOptionPane.OK_OPTION);
@@ -725,6 +793,8 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			 	}  
 		   return cal;
 		  }
+
+		
 }
 	
 	

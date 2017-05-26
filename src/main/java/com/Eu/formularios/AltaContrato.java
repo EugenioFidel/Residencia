@@ -195,9 +195,7 @@ public class AltaContrato extends JDialog implements ActionListener{
 		  {
 		     return new JLabel (((String[])o)[1]);
 		  }
-		});
-		
-				
+		});				
 	}
 
 	public void actionPerformed(ActionEvent e) {

@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/main/resources/AltasEnIntervalo.jrxml=UTF-8
 encoding//src/main/resources/BajasEnIntervalo.jrxml=UTF-8
+encoding//src/main/resources/ComunicacionAltaResidente.jrxml=UTF-8
+encoding//src/main/resources/ComunicacionBajaResidente.jrxml=UTF-8
 encoding//src/main/resources/EmpSustituido.jrxml=UTF-8
 encoding//src/main/resources/InfCuotas.jrxml=UTF-8
 encoding//src/main/resources/InfDependencias.jrxml=UTF-8

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-23T12:27:21 -->
+<!-- 2017-05-21T21:22:07 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="550" pageHeight="150" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="500" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="d879a8de-11dd-4d98-a61e-63a6895cb744">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
@@ -97,7 +97,7 @@ AND estancia.fechaBaja >= (SELECT $P{fechaInforme} - interval( DAY( $P{fechaInfo
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{nombre}+" "+$F{segundoApe}+" "+$F{segundoApe}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombre}+" "+$F{primerApe}+" "+$F{segundoApe}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="280" y="0" width="102" height="20" uuid="25850449-68fa-4913-bd9e-df40c8b064d4"/>

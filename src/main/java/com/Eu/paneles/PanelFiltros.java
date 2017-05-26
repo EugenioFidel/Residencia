@@ -13,6 +13,9 @@ import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -59,27 +62,29 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 				break;
 			case 3:
 				RellenarTablaPersonasParaEmpleados();
-		}	
+		}			
 		
-		//controlando las pulsaciones en algún panel filtros
-		jt.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				JTable tabla=(JTable) e.getSource();
-				int numColumnas=tabla.getColumnCount();
+		final ListSelectionModel m_modelSelection = jt.getSelectionModel();
+
+		m_modelSelection.addListSelectionListener(new ListSelectionListener(){
+
+			public void valueChanged(ListSelectionEvent e){
+				int numColumnas=jt.getColumnCount();
 				//Comprobamos Si tenemos seleccionado observaciones o estancias
-				JRootPane jrp=tabla.getRootPane();
+				JRootPane jrp=jt.getRootPane();
 				FrmPrincipal f=(FrmPrincipal) jrp.getParent();
 								
 				switch(numColumnas){
 					//panel personas
 					case PERSONAS:
-						loggeador.info("pulsado panel personas");	
-//						f.jpBotoneroInternos.setVisible(false);
+						loggeador.info("evento en panel personas");	
 						JPanel jpTelon=f.getJpTelon();
 						f.getJlpFuncionalidades().moveToFront(jpTelon);
 						break;
 					case INTERNOS:
-						loggeador.info("pulsado panel internos");
+						loggeador.info("evento en panel internos");
+						ActualizarTablaObservaciones(jt);
+						ActualizarTablaEstancias(jt);
 						f.jpBotoneroInternos.setVisible(true);
 						JRadioButton jrbObservaciones=f.getJpBotoneroInternos().getjrbObservaciones();
 						PanelObservaciones po=f.getPo();
@@ -90,13 +95,12 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 						}else{
 							f.getJlpFuncionalidades().moveToBack(po);
 							f.getJlpFuncionalidades().moveToFront(pe);
-						}
-						
-						ActualizarTablaObservaciones(tabla);
-						ActualizarTablaEstancias(tabla);
+						}						
 						break;
 					default:
-						loggeador.debug("pulsado panel empleados");
+						loggeador.debug("evento en panel empleados");
+						ActualizarTablaContratos(jt);
+						ActualizarTablaJornadas(jt);
 						JRadioButton jrbContratos=f.getJpBotoneroEmpleados().getjrbContratos();
 						PanelContratos pc=f.getPc();
 						PanelJornadas pj=f.getPj();
@@ -106,13 +110,13 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 						}else {
 							f.getJlpFuncionalidades().moveToFront(pj);
 							f.getJlpFuncionalidades().moveToBack(pc);
-						}						
-						ActualizarTablaContratos(tabla);
-						ActualizarTablaJornadas(tabla);
+						}					
 				}				
-			}					
-		});		
-	}	
+
+				}
+
+			});
+	}
 
 	protected void ActualizarTablaObservaciones(JTable tabla) {
 		JRootPane jrp=tabla.getRootPane();

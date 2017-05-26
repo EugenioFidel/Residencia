@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-05-26T17:46:12 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComunicacionAltaResidente" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="976d4b6c-0044-4d29-909a-054861025856">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="fechaAlta" class="java.lang.String"/>
+	<parameter name="Nombre" class="java.lang.String"/>
+	<parameter name="primerApe" class="java.lang.String"/>
+	<parameter name="segundoApellido" class="java.lang.String"/>
+	<parameter name="dni" class="java.lang.String"/>
+	<parameter name="sSocial" class="java.lang.String"/>
+	<parameter name="causaBaja" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="residencia" class="java.lang.String"/>
+	<parameter name="dependencia" class="java.lang.String"/>
+	<parameter name="cc" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select count(dni) from persona;]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="90" splitType="Stretch">
+			<image>
+				<reportElement x="10" y="10" width="91" height="80" uuid="1584f62e-7cfa-4bc3-8e95-24fc89d73643"/>
+				<imageExpression><![CDATA["src/main/resources/gttsLogo.gif"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="431" splitType="Stretch">
+			<staticText>
+				<reportElement x="57" y="42" width="441" height="41" uuid="4cbf462a-ee7f-413b-8427-734d35f818f5"/>
+				<box>
+					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comunicación de alta de residente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="106" width="291" height="31" uuid="2fbeed12-cbe4-4bb8-aceb-b53e7b67b4a8"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha de alta en el Centro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="140" width="291" height="31" uuid="3f5f07de-9c87-4d46-a725-e5f6891a7e49"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="175" width="291" height="31" uuid="6674e98a-5438-4978-acd7-281318217b86"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Primer apellido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="210" width="291" height="31" uuid="940ef24d-babc-4c8b-bef3-ac15506ad427"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Segundo apellido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="247" width="291" height="31" uuid="f979977d-2c22-48a1-b847-8dfc8e321e1a"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[D.N.I. / N.I.E.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="283" width="291" height="31" uuid="5603e0b5-c616-48ec-8d1f-86ac50ccef5e"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Número de afiliación a la S. Social]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="319" width="291" height="31" uuid="b707dfcf-5ce7-416c-bfcc-f12ee846113e"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Número cuenta domiciliación bancaria]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="353" width="291" height="31" uuid="e97afc9c-8fa8-442a-8233-cf5191c77a95"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Grado de dependencia]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="331" y="353" width="200" height="31" uuid="2ded7398-b66f-4993-8044-9b047f83c0a8"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dependencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="319" width="200" height="31" uuid="ca826a5a-ce74-4410-a8b0-955f3dee7b13"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="283" width="200" height="31" uuid="06ea009c-adc8-4a87-a110-82e7fe8c63d0"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sSocial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="247" width="200" height="31" uuid="afbb4c32-1ce1-4561-b64e-124d4044513d"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="210" width="200" height="31" uuid="47406315-437b-48c8-a29b-806ec3c303a6"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{segundoApellido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="175" width="200" height="31" uuid="92b4e1c2-9cae-4ca0-963f-c969dacd5475"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{primerApe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="140" width="200" height="31" uuid="715b486a-2ef9-4ee1-ad5b-ebebf8953685"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="106" width="200" height="31" uuid="5610a8ca-7ea6-4690-8bab-1f1eb0939134"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechaAlta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="390" width="200" height="31" uuid="fbaf7407-d8eb-41d0-af7d-5d4e30ea38ad"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{residencia}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="30" y="390" width="291" height="31" uuid="2b279538-d560-44dc-84b8-bc3843087727"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Residencia]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="10" y="30" width="204" height="13" uuid="938ec419-c523-49e8-9e49-ad95408eca89"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

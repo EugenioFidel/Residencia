@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -19,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import com.Eu.dao.EmpleadoDao;
 import com.Eu.dao.JornadaDao;
 import com.Eu.model.Empleado;
 import com.Eu.model.Jornada;
@@ -259,6 +263,93 @@ public class PanelDetalleJ extends JPanel implements ActionListener{
 	public void setC(Calendar c) {
 		this.c = c;
 	}
-
-
+	
+	public void RellenarListaJornadas(Calendar cal, Empleado empleado){
+		//Vaciamos los campos de texto y el defaultListModel
+	       dlm.clear();
+	       jtfHoraInicio.setEditable(true);
+	       jtfHoraFin.setEditable(true);
+	       jtfHoraFin.setText("");
+	       jtfHoraInicio.setText("");
+	       int tipoJornada=1000;
+	       SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");
+	       //Obtemenos el array list de jornadas del empleado en cuestión
+	       Set<Jornada>listaJornadasEmpleado=new HashSet<Jornada>();
+	       listaJornadasEmpleado=empleado.getJornadas();
+	       for(Jornada je:listaJornadasEmpleado){
+	    	   System.out.println(sdf2.format(je.getInicioJornada()));
+	    	   System.out.println(sdf2.format(cal.getTime()));
+	    	  //obtenemos la fecha de cada jornada y la comparamos con la pulsada extrayendo su tipo de jornada
+	    	   if(sdf2.format(je.getInicioJornada()).equals(sdf2.format(cal.getTime()))){
+	    		   tipoJornada=je.getTipoJornada();
+	    		   break;
+	    	   }		   
+	    	   
+	       } 	
+	       
+	       System.out.println("fecha buscada " +sdf2.format(cal.getTime()));
+	       
+	       //conseguimos las jornadas de ese día y las metemos en una lista
+	       JornadaDao jd=new JornadaDao();
+	       List<Jornada>lista=jd.getJornadasPorFecha(cal);
+	       //la Jornada del tío seleccionado se grabará en cuadros de texto. Los otros a la lista
+	       for(Jornada j:lista){
+	    	   int idEmpleado=jd.getIdEmpleado(j);
+	    	   EmpleadoDao ed=new EmpleadoDao();
+	    	   Empleado emp=ed.getEmpleadoById(idEmpleado);
+	    	   if(emp.getIdpersona()==empleado.getIdpersona()){
+	    		   SimpleDateFormat sdt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	    		   setJ(j);
+	    		   setC(cal);
+	    		   jtfHoraInicio.setText(sdt.format(j.getInicioJornada()));		    		  
+	    		   jtfHoraFin.setText(sdt.format(j.getFinJornada()));			    		   
+	    		   MarcarJRadio(j.getTipoJornada());
+	    	   }else{
+	    		   int tipoJ=j.getTipoJornada();
+	    		   if(tipoJ==tipoJornada){
+	    			   if(tipoJ==MANHANA || tipoJ==TARDE||tipoJ==NOCHE||tipoJ==PARTIDO|tipoJ==OTRAS){
+	    				   dlm.addElement(emp.getNombre()+" "+emp.getPrimerApe());
+	    			   }
+	    		   }
+	    		   		    		  
+	    	   }		    	   
+	       }
+	       jtfHoraInicio.setEditable(false);
+	       jtfHoraFin.setEditable(false);
+	}
+	
+	private void MarcarJRadio(int tipoJornada) {
+		// TODO Auto-generated method stub
+		switch (tipoJornada){
+		case MANHANA:
+			jrbManhana.setSelected(true);
+			break;
+		case TARDE:
+			jrbTarde.setSelected(true);
+			break;
+		case NOCHE:
+			jrbNoche.setSelected(true);
+			break;
+		case VACACION:
+			jrbVacaciones.setSelected(true);
+			break;
+		case ASUNTOS:
+			jrbAsuntos.setSelected(true);
+			break;
+		case COMPENSACION:
+			jrbCompensacion.setSelected(true);
+			break;
+		case OTRAS:
+			jrbOtras.setSelected(true);
+			break;
+		case IT:
+			jrbIt.setSelected(true);
+			break;
+		case PARTIDO:
+			jrbPartido.setSelected(true);
+			break;
+		default:
+			jrbLibre.setSelected(true);
+		}
+	}
 }

@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.Eu.controladores.FuncionesDiversas;
-import com.Eu.dao.EmpleadoDao;
 import com.Eu.dao.JornadaDao;
 import com.Eu.model.Empleado;
 import com.Eu.model.Jornada;
@@ -70,40 +68,8 @@ public class PanelJornadas extends JPanel {
 
 		    @Autowired
 			public void propertyChange(PropertyChangeEvent e) {
-		    	
-		       //Vaciamos los campos de texto y el defaultListModel
-		       pdj.dlm.clear();
-		       pdj.jtfHoraInicio.setEditable(true);
-		       pdj.jtfHoraFin.setEditable(true);
-		       pdj.jtfHoraFin.setText("");
-		       pdj.jtfHoraInicio.setText("");
-		       //en qué dia hemos pulsado?
-		       Calendar c=jcEmpleado.getCalendar();		       
-		       
-		       //conseguimos las jornadas de ese día y las metemos en una lista
-		       JornadaDao jd=new JornadaDao();
-		       List<Jornada>lista=jd.getJornadasPorFecha(c);
-		       //la Jornada del tío seleccionado se grabará en cuadros de texto. Los otros a la lista
-		       for(Jornada j:lista){
-		    	   int idEmpleado=jd.getIdEmpleado(j);
-		    	   EmpleadoDao ed=new EmpleadoDao();
-		    	   Empleado emp=ed.getEmpleadoById(idEmpleado);
-		    	   if(emp.getIdpersona()==em.getIdpersona()){
-		    		   SimpleDateFormat sdt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		    		   pdj.setJ(j);
-		    		   pdj.setC(c);
-		    		   pdj.jtfHoraInicio.setText(sdt.format(j.getInicioJornada()));		    		  
-		    		   pdj.jtfHoraFin.setText(sdt.format(j.getFinJornada()));			    		   
-		    		   MarcarJRadio(j.getTipoJornada());
-		    	   }else{
-		    		   int tipoJ=j.getTipoJornada();
-		    		   if(tipoJ==MANHANA || tipoJ==TARDE||tipoJ==NOCHE||tipoJ==PARTIDO|tipoJ==OTRAS){
-		    			    pdj.dlm.addElement(emp.getNombre()+" "+emp.getPrimerApe());
-		    		   }		    		  
-		    	   }		    	   
-		       }
-		       pdj.jtfHoraInicio.setEditable(false);
-		       pdj.jtfHoraFin.setEditable(false);
+		    	 Calendar c=jcEmpleado.getCalendar();	
+		    	 pdj.RellenarListaJornadas(c, em);
 		    }			
 		});			
 	}
@@ -182,42 +148,7 @@ public class PanelJornadas extends JPanel {
 			case PARTIDO:
 				componentes[ dia + offset ].setBackground(Color.green);												
 		}		
-	}
-	
-	private void MarcarJRadio(int tipoJornada) {
-		// TODO Auto-generated method stub
-		switch (tipoJornada){
-		case MANHANA:
-			pdj.jrbManhana.setSelected(true);
-			break;
-		case TARDE:
-			pdj.jrbTarde.setSelected(true);
-			break;
-		case NOCHE:
-			pdj.jrbNoche.setSelected(true);
-			break;
-		case VACACION:
-			pdj.jrbVacaciones.setSelected(true);
-			break;
-		case ASUNTOS:
-			pdj.jrbAsuntos.setSelected(true);
-			break;
-		case COMPENSACION:
-			pdj.jrbCompensacion.setSelected(true);
-			break;
-		case OTRAS:
-			pdj.jrbOtras.setSelected(true);
-			break;
-		case IT:
-			pdj.jrbIt.setSelected(true);
-			break;
-		case PARTIDO:
-			pdj.jrbPartido.setSelected(true);
-			break;
-		default:
-			pdj.jrbLibre.setSelected(true);
-		}
-	}
+	}	
 	
 	public JCalendar getJcEmpleado() {
 		return jcEmpleado;
