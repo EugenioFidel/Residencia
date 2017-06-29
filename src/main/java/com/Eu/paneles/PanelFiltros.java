@@ -50,6 +50,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 	public PanelFiltros(int tipo){		
 		setLayout(new BorderLayout());		
 		
+		
 		switch (tipo){
 			case 0:
 				RellenarTablaPersonas();	
@@ -65,6 +66,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		}			
 		
 		final ListSelectionModel m_modelSelection = jt.getSelectionModel();
+		
 
 		m_modelSelection.addListSelectionListener(new ListSelectionListener(){
 
@@ -229,6 +231,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jt.doLayout();
+		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJt(jt);
 				
 		TableModel dtm=jt.getModel();
@@ -302,6 +305,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jt.doLayout();
+		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJt(jt);
 				
 		TableModel dtm=jt.getModel();
@@ -364,6 +368,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jt.doLayout();
+		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJt(jt);
 		
 		TableModel dtm=jt.getModel();
@@ -422,6 +427,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jt.doLayout();
+		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJt(jt);
 		
 		TableModel dtm=jt.getModel();

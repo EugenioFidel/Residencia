@@ -12,6 +12,7 @@ import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -108,6 +109,7 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 			
 		jtObservaciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jtObservaciones.doLayout();
+		jtObservaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJtObservaciones(jtObservaciones);
 					
 		TableModel dtm=jtObservaciones.getModel();

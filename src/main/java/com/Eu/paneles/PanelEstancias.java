@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -129,6 +130,7 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 				
 		jtEstancias.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jtEstancias.doLayout();
+		jtEstancias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJtEstancias(jtEstancias);
 					
 		TableModel dtm=jtEstancias.getModel();

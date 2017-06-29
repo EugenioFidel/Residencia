@@ -21,6 +21,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -130,6 +131,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		
 		jtContratos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jtContratos.doLayout();
+		jtContratos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJtContratos(jtContratos);
 					
 		TableModel dtm=jtContratos.getModel();
