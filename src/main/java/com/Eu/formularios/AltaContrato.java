@@ -205,13 +205,12 @@ public class AltaContrato extends JDialog implements ActionListener{
 			int idContrato=GrabarContrato(en);	
 			String[]emp=(String[])jcbEmpleados.getSelectedItem();
 					
-			Object[]fila={idContrato,dt.format(jdcFechaInicio.getDate()),null,jcbHoras.getSelectedItem(),jtTipoContrato.getText(),jtCategoria.getText(),emp[1]};
+			Object[]fila={idContrato,dt.format(jdcFechaInicio.getDate()),null,jcbHoras.getSelectedItem(),jtTipoContrato.getText(),jtCategoria.getText(),null,emp[1]};
 			dtm.addRow(fila);
 			this.dispose();
 		}else{
 			this.dispose();
-		}
-		
+		}		
 	}
 
 	private int GrabarContrato(Empleado e) {

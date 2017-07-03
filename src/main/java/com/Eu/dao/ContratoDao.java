@@ -48,7 +48,7 @@ public class ContratoDao {
 			String query="SELECT DISTINCT "
 					+ "contrato.idContrato, "
 					+ "contrato.fechaInicio, contrato.fechaFin, contrato.horas, "
-					+ "tipoContrato.tipoContrato, categoria.categoria, empleado_contrato.idSustituido "
+					+ "tipoContrato.tipoContrato, categoria.categoria, contrato.fechaComunicacion, empleado_contrato.idSustituido "
 					+ "FROM empleado_contrato, contrato, categoria, tipoContrato "
 					+ "WHERE empleado_contrato.idEmpleado ="+id+" "
 					+ "AND empleado_contrato.idContrato = contrato.idContrato "

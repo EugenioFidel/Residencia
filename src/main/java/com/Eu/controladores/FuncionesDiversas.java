@@ -250,13 +250,13 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			Object filaB[]=new Object[fila.length];
 			filaB[0]=fila[0];
 			for(int i=1;i<fila.length;i++){
-				if(i==1 || i==2){
+				if(i==1 || i==2||i==6){
 					if(!(fila[i] == null)){
 						filaB[i]=dt.format(fila[i]);
 					}else{
 						filaB[i]=null;
 					}
-				}else if(i==6){
+				}else if(i==7){
 					if(!(fila[i].equals(0))){
 						EmpleadoDao ed=new EmpleadoDao();
 						Empleado e=ed.getEmpleadoById(Integer.parseInt(fila[i].toString()));
@@ -563,11 +563,12 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			}
 		}
 
-		public static void GenerarInformeContratoSustitucion(Map<String, Object> parametros) {
+		public static int GenerarInformeContratoSustitucion(Map<String, Object> parametros) {
 			// TODO Auto-generated method stub
 			Calendar fechaActual=Calendar.getInstance();
 			String nomFichero="./src/main/resources/informes/contratos/InformeContrato_";
-					
+			int resultado=0;
+			
 			nomFichero=nomFichero+
 					Integer.toString(fechaActual.get(Calendar.DATE))
 					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
@@ -584,7 +585,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				con.desconectar();
 				//generamos el mail
 				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					FuncionesDiversas.EnviarMail(nomFichero,"propuesta de contratación");
+					resultado=FuncionesDiversas.EnviarMail(nomFichero,"propuesta de contratación");
 				
 			} catch (JRException e1) {
 				System.out.println("Error en la generación de listado");
@@ -594,6 +595,8 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				System.out.println("Error en la generación de listado");
 				loggeador.debug(e);
 			}
+			return resultado;			
+			
 		}
 		
 		public static void GenerarAltaResidente(Map<String, Object> parametros){
@@ -658,7 +661,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			}			
 		}
 		
-		public static void EnviarMail(String adj, String documento) {
+		public static int EnviarMail(String adj, String documento) {
 			String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
 			String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
 			String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros");
@@ -718,11 +721,14 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 					t.close();
 					JOptionPane.showMessageDialog(null, "Mensaje enviado", "Atención", JOptionPane.OK_OPTION);
 					loggeador.debug("error de contraseña");
+					return 1;
 				} catch (MessagingException e1) {
 					// TODO Auto-generated catch block
-					loggeador.debug(e1);	
+					loggeador.debug(e1);
+					return 0;
 				}	
 			}
+			return 0;
 			
 			
 		}

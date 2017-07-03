@@ -9,13 +9,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -39,7 +39,6 @@ import com.Eu.model.Categoria;
 import com.Eu.model.Contrato;
 import com.Eu.model.Empleado;
 import com.Eu.model.Tipo_contrato;
-import com.toedter.calendar.JDateChooser;
 
 public class PanelContratos extends JPanel implements ActionListener,TableModelListener { 		
 
@@ -92,14 +91,15 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		MiRender miRender=new MiRender();	
 						
 		//el array con las cabeceras de la tabla
-		String[]cabecerasTablaEstancias=new String[7];
+		String[]cabecerasTablaEstancias=new String[8];
 		cabecerasTablaEstancias[0]="Id";
 		cabecerasTablaEstancias[1]="Fecha inicio";
 		cabecerasTablaEstancias[2]="Fecha fin";
 		cabecerasTablaEstancias[3]="H/s";
 		cabecerasTablaEstancias[4]="Tipo contrato";
 		cabecerasTablaEstancias[5]="Categoria profesional";
-		cabecerasTablaEstancias[6]="Empleado sustituido";		
+		cabecerasTablaEstancias[6]="Fecha comunicación";
+		cabecerasTablaEstancias[7]="Empleado sustituido";		
 						
 		ContratoDao cd=new ContratoDao();		
 		List<Object> contratos = cd.listaContratos(id);
@@ -123,6 +123,8 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		columna.setPreferredWidth(175);
 		columna=jtContratos.getColumn("Categoria profesional");
 		columna.setPreferredWidth(175);
+		columna=jtContratos.getColumn("Fecha comunicación");
+		columna.setPreferredWidth(80);
 		columna=jtContratos.getColumn("Empleado sustituido");
 		columna.setPreferredWidth(237);
 		
@@ -156,7 +158,9 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 				if(v.elementAt(1)!=null)
 					c.setFechaInicio(dt.parse((String)v.elementAt(1)));
 				if(v.elementAt(2)!=null)
-					c.setFechaFin(dt.parse((String)v.elementAt(2)));				
+					c.setFechaFin(dt.parse((String)v.elementAt(2)));
+				if(v.elementAt(6)!=null)
+					c.setFechaComunicacion(dt.parse((String)v.elementAt(6)));
 			} catch (ParseException e2) {
 				// TODO Auto-generated catch block
 				loggeador.debug(e2);
@@ -166,7 +170,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 			c.setTipoContrato(tc);
 			Categoria cat=new Categoria();
 			cat.setCategoria(v.elementAt(5).toString());
-			c.setCategoria(cat);
+			c.setCategoria(cat);			
 			c.setHoras(Integer.parseInt(v.elementAt(3).toString()));
 			cd.addContrato(c);
 		}else if(e.getType()==TableModelEvent.DELETE){
@@ -182,16 +186,26 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 			loggeador.debug("evento en el menu contextual");
 			Map<String, Object> parametros=new HashMap<String, Object>();			
 			parametros.put("idContrato",dtm.getValueAt(jtContratos.getSelectedRow(), 0));
-			JDateChooser jd = new JDateChooser();
-			String message ="Selecciona la fecha prevista\nde fin de contrato:";
-			Object[] params = {message,jd};
-			JOptionPane.showConfirmDialog(null,params,"Fecha final prevista", JOptionPane.PLAIN_MESSAGE);
 			String fechaF="";
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			fechaF=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+			try {
+				fechaF=sdf.format(sdf.parse(dtm.getValueAt(jtContratos.getSelectedRow(), 2).toString()));
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			parametros.put("fechaFinPrevista", fechaF);
-			parametros.put("empSustituido", dtm.getValueAt(jtContratos.getSelectedRow(), 6));
-			FuncionesDiversas.GenerarInformeContratoSustitucion(parametros);			
+			parametros.put("empSustituido", dtm.getValueAt(jtContratos.getSelectedRow(), 7));
+			int resultado=FuncionesDiversas.GenerarInformeContratoSustitucion(parametros);	
+			if (resultado==1){
+				Calendar fechaActual=Calendar.getInstance();
+				String idContrato=dtm.getValueAt(jtContratos.getSelectedRow(), 0).toString();
+				int id=Integer.parseUnsignedInt(idContrato);
+				ContratoDao cd =new ContratoDao();
+				Contrato co=cd.getContratoById(id);
+				co.setFechaComunicacion(fechaActual.getTime());
+				cd.addContrato(co);				
+			}
 	}
 
 	public JScrollPane getJsp() {

@@ -21,6 +21,7 @@ public class Contrato {
 	private int horas;	
 	private Tipo_contrato tipoContrato;
 	private Categoria categoria;
+	private Date fechaComunicacion;	
 	
 	public Contrato(){}
 	
@@ -97,5 +98,14 @@ public class Contrato {
 	
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
-	}			
+	}
+
+	public Date getFechaComunicacion() {
+		return fechaComunicacion;
+	}
+
+	public void setFechaComunicacion(Date fechaComunicacion) {
+		this.fechaComunicacion = fechaComunicacion;
+	}		
+	
 }
