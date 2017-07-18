@@ -59,7 +59,7 @@ public class AltaInterno extends JDialog implements ActionListener{
 	
 	public AltaInterno(){
 		
-		setSize(600,600);
+		setSize(700,700);
 		setLocation(200, 100);
 		setTitle("Alta de Interno en el sistema");
 		setLayout(gbl);

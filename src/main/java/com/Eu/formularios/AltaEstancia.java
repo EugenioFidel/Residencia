@@ -55,7 +55,7 @@ public class AltaEstancia extends JDialog implements ActionListener{
 		
 		//propiedades del formulario
 		setModal(true);
-		setBounds(300, 300, 350,200);
+		setBounds(300, 300, 450,300);
 		isDefaultLookAndFeelDecorated();
 		setTitle("Residenciator - Alta de nueva estancia");
 		

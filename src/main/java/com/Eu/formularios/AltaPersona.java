@@ -81,7 +81,7 @@ public class AltaPersona extends JDialog implements ActionListener{
 	
 	public AltaPersona(JTable t){
 		dtmPersona=(DefaultTableModel) t.getModel();
-		setSize(650,450);
+		setSize(750,550);
 		setLocation(200, 200);
 		setTitle("Alta de persona en el sistema");
 		setLayout(gbl);

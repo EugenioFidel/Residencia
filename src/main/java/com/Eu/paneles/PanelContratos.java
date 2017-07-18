@@ -104,7 +104,6 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		ContratoDao cd=new ContratoDao();		
 		List<Object> contratos = cd.listaContratos(id);
 		jtContratos=FuncionesDiversas.cargaDatosEnTablaContratos(contratos, cabecerasTablaEstancias);
-		System.out.println("filas en tabla contratos"+jtContratos.getRowCount());	
 						
 		TableColumnModel conjuntoColumnas=jtContratos.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
@@ -188,12 +187,15 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 			parametros.put("idContrato",dtm.getValueAt(jtContratos.getSelectedRow(), 0));
 			String fechaF="";
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			try {
-				fechaF=sdf.format(sdf.parse(dtm.getValueAt(jtContratos.getSelectedRow(), 2).toString()));
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if(dtm.getValueAt(jtContratos.getSelectedRow(), 2)!=null){
+				try {				
+					fechaF=sdf.format(sdf.parse(dtm.getValueAt(jtContratos.getSelectedRow(), 2).toString()));
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
+			
 			parametros.put("fechaFinPrevista", fechaF);
 			parametros.put("empSustituido", dtm.getValueAt(jtContratos.getSelectedRow(), 7));
 			int resultado=FuncionesDiversas.GenerarInformeContratoSustitucion(parametros);	

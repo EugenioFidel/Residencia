@@ -53,7 +53,7 @@ public class PanelBotoneroEmpleados extends JPanel implements ActionListener {
 		jrbContratos=new JRadioButton("Cont.");
 		jrbJornadas=new JRadioButton("Jorn.");
 		
-		jrbJornadas.setSelected(true);
+		jrbContratos.setSelected(true);
 		
 		jrbContratos.addActionListener(this);
 		jrbJornadas.addActionListener(this);

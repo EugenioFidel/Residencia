@@ -69,6 +69,7 @@ import com.toedter.calendar.JDateChooser;
 		JMenu menuListados= new JMenu("Listados");
 		JMenu menuInformes=new JMenu("Informes");
 		JMenu menuJornadas=new JMenu("Jornadas");
+		JMenuItem jmiPlanillas=new JMenuItem("Abrir planillas");
 		JMenuItem jmiListadoPersonas=new JMenuItem("Personas");
 		JMenuItem jmiListadoInternos=new JMenuItem("Internos");
 		JMenuItem jmiListadoEmpleados=new JMenuItem("Empleados");
@@ -89,15 +90,7 @@ import com.toedter.calendar.JDateChooser;
 		
 		public PanelBotoneroInternos jpBotoneroInternos=new PanelBotoneroInternos();
 		public PanelBotoneroEmpleados jpBotoneroEmpleados=new PanelBotoneroEmpleados();
-//		JButton jbAnhadir =new JButton("Añadir");
-//		JButton jbBorrar=new JButton("Borrar");
-//		JRadioButton jrbObservaciones=new JRadioButton("Observaciones");
-//		JRadioButton jrbEstancias=new JRadioButton("Estancias");
-//		JRadioButton jrbContratos=new JRadioButton("Contratos");
-//		JRadioButton jrbJornadas=new JRadioButton("Jornadas");
-		
-//		ButtonGroup bgPaneles=new ButtonGroup();
-		
+
 			
 	public FrmPrincipal() throws SQLException{
 		
@@ -106,11 +99,6 @@ import com.toedter.calendar.JDateChooser;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FrmPrincipal.isDefaultLookAndFeelDecorated();
 		this.setTitle("Gestión de residencias 1.0");
-				
-//		bgPaneles.add(jrbObservaciones);		
-//		bgPaneles.add(jrbEstancias);	
-//		bgPaneles.add(jrbContratos);	
-//		bgPaneles.add(jrbJornadas);	
 		
 		//Declaramos el layout, GridBagLayout
 		GridBagLayout gbl=new GridBagLayout();
@@ -186,7 +174,7 @@ import com.toedter.calendar.JDateChooser;
         //=========================================================================================
 		// BARRA DE MENU ==========================================================================
 		//=========================================================================================
-		
+		menuArchivo.add(jmiPlanillas);        
 		jmbMenu.add(menuArchivo);
 		jmbMenu.add(menuEditar);
 		menuListados.add(jmiListadoPersonas);
@@ -202,6 +190,7 @@ import com.toedter.calendar.JDateChooser;
 		jmbMenu.add(menuInformes);
 		jmbMenu.add(menuJornadas);
 		
+		jmiPlanillas.addActionListener(this);
 		jmiListadoPersonas.addActionListener(this);
 		jmiListadoInternos.addActionListener(this);
 		jmiListadoEmpleados.addActionListener(this);
@@ -216,77 +205,81 @@ import com.toedter.calendar.JDateChooser;
 	
 	public void actionPerformed(ActionEvent e) {		
 		//comprobamos el objeto que ha producido el evento
-		if(e.getSource().equals(jmiInformeCuotas)){
-			JDateChooser jd = new JDateChooser();
-			String message ="Introduce la fecha del informe:\n";
-			Object[] params = {message,jd};
-			JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
-			String s="";
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-			Date fecha;
-			try {
-				fecha = sdf.parse(s);
-				FuncionesDiversas.GenerarInformeCuotas(fecha);
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-								
-		}else if(e.getSource().equals(jmiInformeDependencias)){
-					JDateChooser jd = new JDateChooser();
-					String message ="Introduce la fecha del informe:\n";
-					Object[] params = {message,jd};
-					JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
-					String s="";
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-					s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-					Date fecha;
-					try {
-						fecha = sdf.parse(s);
-						FuncionesDiversas.GenerarInformeDependencias(fecha);
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}else if(e.getSource().equals(jmiNumClientes)){
-							JDateChooser jd = new JDateChooser();
-							String message ="Introduce la fecha del informe:\n";
-							Object[] params = {message,jd};
-							JOptionPane.showConfirmDialog(null,params,"Día del informe", JOptionPane.PLAIN_MESSAGE);
-							String s="";
-							String sMySQL="";
-							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-							SimpleDateFormat sdfMysql=new SimpleDateFormat("yyyy-MM-dd");
-							s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-							sMySQL=sdfMysql.format(((JDateChooser)params[1]).getDate());
-							Date fecha;
-							try {
-								fecha = sdf.parse(s);
-								//llamamos al procedure que crea la tabla
-								dbConexion con=new dbConexion();
-								java.sql.Connection conec=con.getConexion();
-								CallableStatement cs=conec.prepareCall("call numClientes(\""+sMySQL+"\");");
-								cs.execute();
-								FuncionesDiversas.GenerarListadoNumClientes(fecha);
-							} catch (ParseException e2) {
-								// TODO Auto-generated catch block
-								e2.printStackTrace();
-							} catch (SQLException e1) {
+		if(e.getSource().equals(jmiPlanillas)){
+			System.out.println("planillas");
+			AccPlanillas ap=new AccPlanillas();
+			ap.setVisible(true);
+		}else if(e.getSource().equals(jmiInformeCuotas)){
+				JDateChooser jd = new JDateChooser();
+				String message ="Introduce la fecha del informe:\n";
+				Object[] params = {message,jd};
+				JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
+				String s="";
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+				Date fecha;
+				try {
+					fecha = sdf.parse(s);
+					FuncionesDiversas.GenerarInformeCuotas(fecha);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+									
+			}else if(e.getSource().equals(jmiInformeDependencias)){
+						JDateChooser jd = new JDateChooser();
+						String message ="Introduce la fecha del informe:\n";
+						Object[] params = {message,jd};
+						JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
+						String s="";
+						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+						s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+						Date fecha;
+						try {
+							fecha = sdf.parse(s);
+							FuncionesDiversas.GenerarInformeDependencias(fecha);
+						} catch (ParseException e1) {
 							// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-													
-						}else if(e.getSource().equals(jmiListadoInternos)){
-									FuncionesDiversas.GenerarListadoInternos();
-							  }else if(e.getSource().equals(jmiListadoEmpleados)){
-										FuncionesDiversas.GenerarListadoEmpleados();
-									}else if(e.getSource().equals(jmiListadoTelefonos)){
-											FuncionesDiversas.GenerarListadoTelefonos();
-										  }else if(e.getSource().equals(jmiPatron)){
-													loggeador.debug("abrir formulario Patron");		
-													AltaPatron at=new AltaPatron();
-													at.setVisible(true);
-												}
+							e1.printStackTrace();
+						}
+					}else if(e.getSource().equals(jmiNumClientes)){
+								JDateChooser jd = new JDateChooser();
+								String message ="Introduce la fecha del informe:\n";
+								Object[] params = {message,jd};
+								JOptionPane.showConfirmDialog(null,params,"Día del informe", JOptionPane.PLAIN_MESSAGE);
+								String s="";
+								String sMySQL="";
+								SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+								SimpleDateFormat sdfMysql=new SimpleDateFormat("yyyy-MM-dd");
+								s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
+								sMySQL=sdfMysql.format(((JDateChooser)params[1]).getDate());
+								Date fecha;
+								try {
+									fecha = sdf.parse(s);
+									//llamamos al procedure que crea la tabla
+									dbConexion con=new dbConexion();
+									java.sql.Connection conec=con.getConexion();
+									CallableStatement cs=conec.prepareCall("call numClientes(\""+sMySQL+"\");");
+									cs.execute();
+									FuncionesDiversas.GenerarListadoNumClientes(fecha);
+								} catch (ParseException e2) {
+									// TODO Auto-generated catch block
+									e2.printStackTrace();
+								} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+														
+							}else if(e.getSource().equals(jmiListadoInternos)){
+										FuncionesDiversas.GenerarListadoInternos();
+								  }else if(e.getSource().equals(jmiListadoEmpleados)){
+											FuncionesDiversas.GenerarListadoEmpleados();
+										}else if(e.getSource().equals(jmiListadoTelefonos)){
+												FuncionesDiversas.GenerarListadoTelefonos();
+											  }else if(e.getSource().equals(jmiPatron)){
+														loggeador.debug("abrir formulario Patron");		
+														AltaPatron at=new AltaPatron();
+														at.setVisible(true);
+													}
 	}	
 	
 	

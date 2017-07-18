@@ -85,7 +85,7 @@ public class AltaObservacion extends JDialog implements ActionListener{
 		
 		//propiedades del formulario
 		setModal(true);
-		setBounds(300, 150, 500, 300);
+		setBounds(300, 150, 600, 400);
 		isDefaultLookAndFeelDecorated();
 		setTitle("Residenciator - Alta de nueva observacion");
 		

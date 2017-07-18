@@ -71,7 +71,7 @@ public class AltaContrato extends JDialog implements ActionListener{
 		
 		//propiedades del formulario
 		setModal(true);
-		setBounds(300, 300, 550,300);
+		setBounds(300, 300, 650,400);
 		isDefaultLookAndFeelDecorated();
 		setTitle("Residenciator - Alta de contrato");
 		

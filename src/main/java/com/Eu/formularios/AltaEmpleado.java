@@ -55,7 +55,7 @@ public class AltaEmpleado extends JDialog implements ActionListener{
 	
 	public AltaEmpleado(){
 		
-		setSize(600,600);
+		setSize(700,700);
 		setLocation(200, 100);
 		setTitle("Alta de Empleado en el sistema");
 		setLayout(gbl);

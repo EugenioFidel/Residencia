@@ -110,8 +110,7 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 		EstanciaDao ed=new EstanciaDao();		
 		List<Estancia> estancias = ed.listaEstancias(id);
 		jtEstancias=FuncionesDiversas.cargaDatosEnTablaEstancias(estancias, cabecerasTablaEstancias);
-		System.out.println("filas en tabla estancias"+jtEstancias.getRowCount());	
-						
+								
 		TableColumnModel conjuntoColumnas=jtEstancias.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
