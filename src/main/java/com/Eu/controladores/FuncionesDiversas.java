@@ -601,7 +601,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		
 		public static void GenerarAltaResidente(Map<String, Object> parametros){
 			Calendar fechaActual=Calendar.getInstance();
-			String nomFichero="./src/main/resources/informes/ComAltaResidente_";
+			String nomFichero="./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_";
 					
 			nomFichero=nomFichero+
 					Integer.toString(fechaActual.get(Calendar.DATE))
@@ -615,7 +615,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				dbConexion con=new dbConexion();
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionAltaResidente.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/ComAltaResidente_");
+				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_");
 				conec.close();
 				con.desconectar();
 				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el alta del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
@@ -632,7 +632,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		
 		public static void GenerarBajaResidente(Map<String, Object> parametros) {
 			Calendar fechaActual=Calendar.getInstance();
-			String nomFichero="./src/main/resources/informes/ComBajaResidente_";
+			String nomFichero="./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_";
 					
 			nomFichero=nomFichero+
 					Integer.toString(fechaActual.get(Calendar.DATE))
@@ -646,7 +646,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				dbConexion con=new dbConexion();
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionBajaResidente.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/ComBajaResidente_");
+				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_");
 				conec.close();
 				con.desconectar();
 				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión la baja del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
@@ -670,7 +670,15 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				loggeador.debug("error de contraseña");
 			}else{
 				Calendar fechaActual=Calendar.getInstance();
-				String nomFichero="InformeNewContrato_"+
+				String nomFichero="InformeNewContrato";
+				
+				if(documento.equals("baja de residente")){
+					nomFichero="bajaResidente";
+				}else{
+					if(documento.equals("alta de residente"));
+						nomFichero="altaResidente";
+				}
+				nomFichero=nomFichero+
 						Integer.toString(fechaActual.get(Calendar.DATE))
 						+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
 						+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
@@ -693,7 +701,8 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 				try {
 					texto.setText("Adjunto a la presente te remito "+documento+"\n"+
 									"cualquier cosa, ya sabes.\n"+
-									"\t\tUn saludo\n\t\t\tRaquel");
+									"\t\tUn saludo\n\t\t\tRaquel"+
+									"\n\n Ruego me hagas acuse de recibo de este mail para tener certeza de su recepción. Gracias.");
 				} catch (MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -715,12 +724,11 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 					// Se mete el texto y la foto adjunta.
 					message.setContent(multiParte);
 					Transport t = session.getTransport("smtp");
-//					t.connect(originMail,"cueva valiente");
 					t.connect(originMail,pss);
 					t.sendMessage(message,message.getAllRecipients());
 					t.close();
 					JOptionPane.showMessageDialog(null, "Mensaje enviado", "Atención", JOptionPane.OK_OPTION);
-					loggeador.debug("error de contraseña");
+//					loggeador.debug("error de contraseña");
 					return 1;
 				} catch (MessagingException e1) {
 					// TODO Auto-generated catch block

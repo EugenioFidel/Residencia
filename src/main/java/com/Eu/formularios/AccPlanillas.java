@@ -88,7 +88,7 @@ public class AccPlanillas extends JDialog implements ActionListener{
 		if(e.getSource().equals(jbAbrir)){
 			String rutaPlanilla=FuncionesDiversas.obtenerStringBase("Select rutaPlanillas from parametros");
 			//ruta del archivo en el pc
-			  String file = new String(rutaPlanilla+jcbMeses.getSelectedItem()+jcbAnho.getSelectedItem()+".xlsx"); 
+			  String file = new String(rutaPlanilla+jcbMeses.getSelectedItem()+jcbAnho.getSelectedItem()+".xlsm"); 
 						 
 			 try{			
 			    Desktop.getDesktop().open(new File(file));
