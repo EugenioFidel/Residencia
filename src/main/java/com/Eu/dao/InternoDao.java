@@ -39,14 +39,14 @@ public class InternoDao {
 	    }
 	}
 	
-	public List<Object> listaInternos(){
+	public List<Interno> listaInternos(){
 		Session sesion=null;
 		
 		try{
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
 	        @SuppressWarnings("unchecked")
-			List<Object>lista=sesion.createQuery("From Interno ORDER BY primerApe,segundoApe,nombre").list();
+			List<Interno>lista=sesion.createQuery("From Interno ORDER BY primerApe,segundoApe,nombre").list();
 	        sesion.getTransaction().commit();
 	        return lista;
 	    } finally {
@@ -54,6 +54,47 @@ public class InternoDao {
 	        sesion.close();
 	    }
 		
+	}
+	
+	public List<Interno> listaInternosAlta() {
+		
+		Session sesion=null;
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        @SuppressWarnings("unchecked")
+			List<Interno>lista=sesion.createQuery("select distinct i From Interno i,Interno_estancia ie,Estancia e "+
+												"where i.idpersona=ie.idPersona and ie.idEstancia=e.idEstancia "+
+												"and e.fechaBaja is null order by i.primerApe,i.segundoApe, i.nombre").list();
+	       
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }	
+	}
+
+	public List<Interno> listaInternosBaja() {
+		Session sesion=null;
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        @SuppressWarnings("unchecked")
+			List<Interno>lista=sesion.createQuery("select distinct i From Interno i,Interno_estancia ie,Estancia e "+
+												"where i.idpersona=ie.idPersona and ie.idEstancia=e.idEstancia "+
+												"and e.fechaBaja is not null and i.idpersona not in (select distinct i From Interno i,Interno_estancia ie,Estancia e "+
+												"where i.idpersona=ie.idPersona and ie.idEstancia=e.idEstancia "+
+												"and e.fechaBaja is null) order by i.primerApe,i.segundoApe, i.nombre").list();
+	       
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }	
 	}
 	
 	public void deleteInterno(Interno i) {
@@ -79,7 +120,7 @@ public class InternoDao {
         try{
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
-	        String q="insert into interno values("+datos[0].toString()+",'"+datos[1]+"','"+datos[2]+"','"+datos[3]+"')";
+	        String q="insert into interno values("+datos[0].toString()+",'"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"')";
         	Query query = sesion.createSQLQuery(q);        	 
         	int result = query.executeUpdate();        	 
         	if (result > 0) {
@@ -149,6 +190,7 @@ public class InternoDao {
 	        		", email=:email"+
 	        		", cc=:cc"+
 	        		", ss=:ss"+
+	        		", habitacion=:habitacion"+
     				" where dni = :dni");
 	        query.setParameter("letraCif", i.getLetraCif());
 	        query.setParameter("letraNif", i.getLetraNif());
@@ -166,6 +208,7 @@ public class InternoDao {
 	        query.setParameter("dni", i.getDni());
 	        query.setParameter("cc", i.getCc());
 	        query.setParameter("ss", i.getSs());
+	        query.setParameter("habitacion", i.getHabitacion());
 	        int result = query.executeUpdate();
 	        System.out.println(result);
 	        sesion.getTransaction().commit();

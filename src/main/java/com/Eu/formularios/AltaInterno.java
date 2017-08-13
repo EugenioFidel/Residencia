@@ -38,6 +38,8 @@ public class AltaInterno extends JDialog implements ActionListener{
 	JTextField jtfCc=new JTextField(30);
 	JLabel jlSs=new JLabel("Número de afiliación a la S.Social");
 	JTextField jtfSs=new JTextField(30);
+	JLabel jlHabitacion=new JLabel("Habitación");
+	JTextField jtfHabitación=new JTextField(10);
 	JLabel jlDniResponsable=new JLabel("Persona responsable");
 	JComboBox<String> jcbPersonaResponsable=new JComboBox<String>();
 	
@@ -98,11 +100,13 @@ public class AltaInterno extends JDialog implements ActionListener{
 		add(jpPersonas,col);
 		col.weighty=0;
 		
-		jpDatos.setLayout(new GridLayout(3,2,10,10));
+		jpDatos.setLayout(new GridLayout(4,2,10,10));
 		jpDatos.add(jlCc);
 		jpDatos.add(jtfCc);
 		jpDatos.add(jlSs);
 		jpDatos.add(jtfSs);
+		jpDatos.add(jlHabitacion);
+		jpDatos.add(jtfHabitación);
 		jpDatos.add(jlDniResponsable);
 		RellenarComboPersonas();
 		jpDatos.add(jcbPersonaResponsable);
@@ -157,6 +161,7 @@ public class AltaInterno extends JDialog implements ActionListener{
 						p.getIdpersona(),
 						jtfCc.getText(),
 						jtfSs.getText(),
+						jtfHabitación.getText(),
 						palabrasEnCombo[0]						
 				};
 				InternoDao id=new InternoDao();

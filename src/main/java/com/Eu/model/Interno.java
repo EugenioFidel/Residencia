@@ -28,6 +28,7 @@ public class Interno extends Persona implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String cc;	
 	private String ss;
+	private int habitacion;
 	private String dniResponsable;	
 	
 	private Set<Observacion> observaciones=new HashSet<Observacion>();
@@ -38,11 +39,12 @@ public class Interno extends Persona implements Serializable{
 			String nombre, String primerApe, String segundoApe,
 			Date fechaNacimiento, String direccion, String localidad,
 			String municipio, String cp, String provincia, String telefono1,
-			String telefono2, String email,String cc, String ss,String dniResponsable) {
+			String telefono2, String email,String cc, String ss,int habitacion,String dniResponsable) {
 		super(letraCif,dni,letraNif,nombre,primerApe,segundoApe,fechaNacimiento,
 				direccion,localidad,municipio,cp,provincia,telefono1,telefono2,email);
 		this.cc = cc;
 		this.ss = ss;
+		this.habitacion=habitacion;
 		this.dniResponsable=dniResponsable;
 	}
 
@@ -63,6 +65,15 @@ public class Interno extends Persona implements Serializable{
 	public void setSs(String ss) {
 		this.ss = ss;
 	}	
+	
+	@Column (name="habitacion")
+	public int getHabitacion() {
+		return habitacion;
+	}
+
+	public void setHabitacion(int habitacion) {
+		this.habitacion = habitacion;
+	}
 	
 	@Column (name="dniResponsable")	
 	public String getDniResponsable() {

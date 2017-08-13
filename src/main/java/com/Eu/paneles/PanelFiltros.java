@@ -3,10 +3,13 @@ package com.Eu.paneles;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JRootPane;
@@ -35,20 +38,38 @@ import com.Eu.model.Empleado;
 import com.Eu.model.Interno;
 import com.Eu.model.Persona;
 
-public class PanelFiltros extends JPanel implements TableModelListener{ 
+public class PanelFiltros extends JPanel implements TableModelListener, ActionListener{ 
 	
 	private static final long serialVersionUID = 1L;
 	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
 	private final int PERSONAS=9;
-	private final int INTERNOS=12;
+	private final int INTERNOS=13;
 	
 	private JTable jt= new JTable();
 	//Un JScrollPane para alojar la tabla 
-	private JScrollPane jsp = new JScrollPane();		
+	private JScrollPane jsp = new JScrollPane();
+	private JPanel jpRb=new JPanel();
+	private JRadioButton jrbTodos;
+	private JRadioButton jrbAltas;
+	private JRadioButton jrbBajas;
 	private int tipoPanel;	
 
 	public PanelFiltros(int tipo){		
-		setLayout(new BorderLayout());		
+		setLayout(new BorderLayout());	
+		jrbTodos=new JRadioButton("Todos");
+		jrbAltas=new JRadioButton("Altas");
+		jrbBajas=new JRadioButton("Bajas");
+		jrbTodos.addActionListener(this);
+		jrbAltas.addActionListener(this);
+		jrbBajas.addActionListener(this);
+		ButtonGroup bg=new ButtonGroup();
+		bg.add(jrbTodos);
+		bg.add(jrbAltas);
+		bg.add(jrbBajas);
+		jrbTodos.setSelected(true);
+		jpRb.add(jrbTodos);
+		jpRb.add(jrbAltas);
+		jpRb.add(jrbBajas);
 		
 		
 		switch (tipo){
@@ -64,10 +85,11 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 			case 3:
 				RellenarTablaPersonasParaEmpleados();
 		}			
-		
-		final ListSelectionModel m_modelSelection = jt.getSelectionModel();
-		
+		AsignarEventosEnTablas();		
+	}
 
+	private void AsignarEventosEnTablas() {
+		final ListSelectionModel m_modelSelection = jt.getSelectionModel();
 		m_modelSelection.addListSelectionListener(new ListSelectionListener(){
 
 			public void valueChanged(ListSelectionEvent e){
@@ -113,11 +135,9 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 							f.getJlpFuncionalidades().moveToFront(pj);
 							f.getJlpFuncionalidades().moveToBack(pc);
 						}					
-				}				
-
 				}
-
-			});
+				}
+			});		
 	}
 
 	protected void ActualizarTablaObservaciones(JTable tabla) {
@@ -179,7 +199,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 	}	
 
 	private void RellenarTablaEmpleados() {
-		//decimos que el panel es de Personas
+		//decimos que el panel es de Empleados
 		setTipoPanel(2);
 										
 		//renders
@@ -199,10 +219,18 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		cabecerasTablaEmpleados[9]="IBAN";
 		cabecerasTablaEmpleados[10]="Número afiliac.";
 				
-		EmpleadoDao em=new EmpleadoDao();		
-		List<Empleado> empleados = em.listaEmpleados();	
+		EmpleadoDao em=new EmpleadoDao();
+		List<Empleado> empleados=null;
+		if(jrbTodos.isSelected()){
+			empleados = em.listaEmpleados();	
+		}else if(jrbAltas.isSelected()){
+			empleados = em.listaEmpleadosAlta();
+		}else{
+			empleados = em.listaEmpleadosBaja();
+		}		
+		
 		jt=FuncionesDiversas.cargaDatosEnTablaEmpleados(empleados, cabecerasTablaEmpleados);
-				
+		
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
@@ -240,23 +268,18 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		jsp.setViewportView(jt);
 				
 		this.add(jsp,BorderLayout.CENTER);
-		
+		this.add(jpRb, BorderLayout.SOUTH);		
 	}
 
 	private void RellenarTablaInternos() {
 		//decimos que el panel es de Personas
 		setTipoPanel(1);
-		//una tabla para los internos
-		JTable jt= new JTable();
-					
-		//Un JScrollPane para alojar la tabla 
-		JScrollPane jsp = new JScrollPane();	
 				
 		//renders
 		MiRender miRender=new MiRender();		
 				
 		//el array con las cabeceras de la tabla
-		String[]cabecerasTablaInternos=new String[12];
+		String[]cabecerasTablaInternos=new String[13];
 		cabecerasTablaInternos[0]="D.N.I/N.I.E";
 		cabecerasTablaInternos[1]="Apellidos y nombre";
 		cabecerasTablaInternos[2]="Dirección";
@@ -268,10 +291,20 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		cabecerasTablaInternos[8]="e-mail";
 		cabecerasTablaInternos[9]="IBAN";
 		cabecerasTablaInternos[10]="Número afiliac.";
-		cabecerasTablaInternos[11]="Persona responsable";
+		cabecerasTablaInternos[11]="Hab.";
+		cabecerasTablaInternos[12]="Persona responsable";
 				
-		InternoDao in=new InternoDao();		
-		List<Object> internos = in.listaInternos();	
+		InternoDao in=new InternoDao();	
+		List<Interno> internos=null;	
+		
+		if(jrbTodos.isSelected()){
+			internos = in.listaInternos();	
+		}else if(jrbAltas.isSelected()){
+			internos = in.listaInternosAlta();
+		}else{
+			internos = in.listaInternosBaja();
+		}
+		
 		jt=FuncionesDiversas.cargaDatosEnTablaInternos(internos, cabecerasTablaInternos);		
 				
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
@@ -299,9 +332,10 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		columna.setPreferredWidth(200);
 		columna=jt.getColumn("Número afiliac.");
 		columna.setPreferredWidth(200);
+		columna=jt.getColumn("Hab.");
+		columna.setPreferredWidth(40);
 		columna=jt.getColumn("Persona responsable");
-		columna.setPreferredWidth(300);
-				
+		columna.setPreferredWidth(300);				
 		
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jt.doLayout();
@@ -314,16 +348,13 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		jsp.setViewportView(jt);
 				
 		this.add(jsp,BorderLayout.CENTER);
-		
+		this.add(jpRb, BorderLayout.SOUTH);
 	}
 
 	private void RellenarTablaPersonas() {
 		//decimos que el panel es de Personas
 		setTipoPanel(0);
-			
-		//Un JScrollPane para alojar la tabla 
-		JScrollPane jsp = new JScrollPane();	
-		
+	
 		//renders
 		MiRender miRender=new MiRender();		
 		
@@ -340,9 +371,8 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		cabecerasTablaPersonas[8]="e-mail";
 		
 		PersonaDao pd=new PersonaDao();		
-		List<Object> personas = pd.listaPersonas();	
-		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);
-		
+		List<Object> personas = pd.listaPersonas();			
+		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);		
 		
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
@@ -376,7 +406,7 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		
 		jsp.setViewportView(jt);
 		
-		this.add(jsp,BorderLayout.CENTER);		
+		this.add(jsp,BorderLayout.CENTER);	
 	}
 	
 	private void RellenarTablaPersonasParaEmpleados() {		
@@ -437,6 +467,27 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		
 		this.add(jsp,BorderLayout.CENTER);		
 	}	
+	public void actionPerformed(ActionEvent e) {
+		int tipoPanel=this.getTipoPanel();
+		switch (tipoPanel){		
+		//evento en panel internos
+		case 1:
+			loggeador.info("Evento en tabla internos");
+			System.out.println("internos");
+			RellenarTablaInternos();
+			break;
+		//evento en el panel de empleados
+		case 2:
+			loggeador.info("Evento en tabla empleados");
+			System.out.println("empleados");
+			RellenarTablaEmpleados();
+			break;
+		default:
+			loggeador.debug("Error en la selección de panel");
+		}	
+		AsignarEventosEnTablas();
+		
+	}
 	
 	public void tableChanged(TableModelEvent ev) {
 		int tipoPanel=this.getTipoPanel();
@@ -629,6 +680,9 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 		i.setEmail(v.elementAt(8).toString().trim().toUpperCase());
 		i.setCc(v.elementAt(9).toString().trim().toUpperCase());	
 		i.setSs(v.elementAt(10).toString().trim().toUpperCase());
+		String numero =v.elementAt(11).toString().trim().toUpperCase();
+		int numeroNum=Integer.parseInt(numero);
+		i.setHabitacion(numeroNum);
 				
 		InternoDao id=new InternoDao();
 		id.update(i);		
@@ -671,4 +725,13 @@ public class PanelFiltros extends JPanel implements TableModelListener{
 	public void setJsp(JScrollPane jsp) {
 		this.jsp = jsp;
 	}
+	public JPanel getJpRb() {
+		return jpRb;
+	}
+
+	public void setJpRb(JPanel jpRb) {
+		this.jpRb = jpRb;
+	}
+
+	
 }

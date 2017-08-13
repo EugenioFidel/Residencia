@@ -123,7 +123,7 @@ public class FuncionesDiversas {
 			return tb;			
 	}	
 	
-public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabeceras){			
+public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabeceras){			
 		
 		DefaultTableModel dtm=new DefaultTableModel();	
 			for (int i = 0; i < cabeceras.length; i++) 
@@ -144,11 +144,12 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 			fila[8]=i.getEmail();
 			fila[9]=i.getCc();
 			fila[10]=i.getSs();
+			fila[11]=i.getHabitacion();
 			
 			PersonaDao pd =new PersonaDao();
 			List<Object>lp=pd.listaPersonasPorDni(i.getDniResponsable());
 			Persona p=(Persona)lp.get(0);
-			fila[11]=p.getNombre()+" "+p.getPrimerApe()+" "+p.getSegundoApe();
+			fila[12]=p.getNombre()+" "+p.getPrimerApe()+" "+p.getSegundoApe();
 			
 			dtm.addRow(fila);
 		}
@@ -159,7 +160,7 @@ public static JTable cargaDatosEnTablaInternos(List<Object> lista,String[] cabec
 		
 		tb.setRowSorter(elQueOrdena);
 			
-			return tb;			
+		return tb;			
 	}	
 	
 	public static JTable cargaDatosEnTablaObservaciones(List<Observacion> lista,String[] cabeceras){

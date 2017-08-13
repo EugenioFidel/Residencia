@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -27,48 +26,6 @@ public class EmpleadoDao {
 	        sesion.close();
 	    }
 	}
-	
-	public List<Empleado> listaEmpleados(){
-		Session sesion=null;
-		
-		try{
-	        sesion = HibernateUtil.getSessionfactory().openSession();
-	        sesion.beginTransaction();
-	        @SuppressWarnings("unchecked")
-	        List<Empleado>lista=sesion.createQuery("From Empleado e ORDER BY e.primerApe,e.segundoApe,e.nombre").list();
-	        sesion.getTransaction().commit();
-	        return lista;
-	    } finally {
-	        if ((sesion != null) && (sesion.isOpen()))
-	        sesion.close();
-	    }
-		
-	}
-	
-	public List<Object> listaEmpleadosAlta() {
-		
-		Session sesion=null;		
-		try{
-	        sesion = HibernateUtil.getSessionfactory().openSession();
-	        sesion.beginTransaction();
-			String query="select distinct "
-					+"persona.dni,persona.primerApe,persona.segundoApe, persona.nombre "
-					+"from persona,empleado,empleado_contrato,contrato "
-					+"where persona.idPersona=empleado.idPersona "
-					+"and empleado.idPersona=empleado_contrato.idEmpleado "
-					+"and empleado_contrato.idContrato=contrato.idContrato "
-					+"and contrato.fechaFin is null";
-	        SQLQuery q = sesion.createSQLQuery(query);
-	        @SuppressWarnings("unchecked")
-			List<Object> lista = (List<Object>)q.list();
-	        sesion.getTransaction().commit();
-	        return lista;
-	    } finally {
-	        if ((sesion != null) && (sesion.isOpen()))
-	        sesion.close();
-	    }		
-	}
-
 
 	public void deleteEmpleado(Empleado e) {
 		  Session sesion = null;
@@ -190,5 +147,83 @@ public class EmpleadoDao {
 	        sesion.close();
 	    }
 		
+	}
+	
+	public List<Empleado> listaEmpleados(){
+		Session sesion=null;
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        @SuppressWarnings("unchecked")
+	        List<Empleado>lista=sesion.createQuery("From Empleado e ORDER BY e.primerApe,e.segundoApe,e.nombre").list();
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }
+		
+	}
+
+	public List<Empleado> listaEmpleadosAlta() {
+		
+		Session sesion=null;
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        @SuppressWarnings("unchecked")
+			List<Empleado>lista=sesion.createQuery("select distinct e From Empleado e,Empleado_contrato ec,Contrato c "+
+												"where e.idpersona=ec.idEmpleado and ec.idContrato=c.idContrato "+
+												"and c.fechaFin is null order by e.primerApe,e.segundoApe, e.nombre").list();
+	       
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }	
+	}
+
+	public List<Empleado> listaEmpleadosBaja() {
+		Session sesion=null;
+		
+		try{
+	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        sesion.beginTransaction();
+	        @SuppressWarnings("unchecked")
+			List<Empleado>lista=sesion.createQuery("select distinct e From Empleado e,Empleado_contrato ec,Contrato c "+
+												"where e.idpersona=ec.idEmpleado and ec.idContrato=c.idContrato "+
+												"and c.fechaFin is not null and e.idpersona not in (select e From Empleado e,Empleado_contrato ec,Contrato c "+
+												"where e.idpersona=ec.idEmpleado and ec.idContrato=c.idContrato "+
+												"and c.fechaFin is null) order by e.primerApe,e.segundoApe, e.nombre").list();
+	       
+	        sesion.getTransaction().commit();
+	        return lista;
+	    } finally {
+	        if ((sesion != null) && (sesion.isOpen()))
+	        sesion.close();
+	    }	
+//		Session sesion=null;		
+//		try{
+//	        sesion = HibernateUtil.getSessionfactory().openSession();
+//	        sesion.beginTransaction();
+//			String query="select distinct "
+//					+"persona.dni,persona.primerApe,persona.segundoApe, persona.nombre "
+//					+"from persona,empleado,empleado_contrato,contrato "
+//					+"where persona.idPersona=empleado.idPersona "
+//					+"and empleado.idPersona=empleado_contrato.idEmpleado "
+//					+"and empleado_contrato.idContrato=contrato.idContrato "
+//					+"and contrato.fechaFin is not null";
+//	        SQLQuery q = sesion.createSQLQuery(query);
+//	        @SuppressWarnings("unchecked")
+//			List<Empleado> lista = (List<Empleado>)q.list();
+//	        sesion.getTransaction().commit();
+//	        return lista;
+//	    } finally {
+//	        if ((sesion != null) && (sesion.isOpen()))
+//	        sesion.close();
+//	    }	
 	}
 }

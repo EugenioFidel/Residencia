@@ -30,22 +30,22 @@ public Component getTableCellRendererComponent(JTable table, Object value, boole
 		}
 	}
 	
-	//modificamos los colores de las filas al marcar el JCheckBox
-	if(table.getColumnCount()==13){
-		Boolean loQueTiene= (Boolean) table.getValueAt(row,0);
-		
-		if(loQueTiene!=null){
-			if(loQueTiene.equals(true) ){
-				this.setBackground(color1);
-			}else{
-				if(row%2==1){		
-					this.setBackground(color2);
-				}else{
-					this.setBackground(Color.white);
-				}
-			}
-		}
-	}	
+//	//modificamos los colores de las filas al marcar el JCheckBox
+//	if(table.getColumnCount()==13){
+//		Boolean loQueTiene= (Boolean) table.getValueAt(row,0);
+//		
+//		if(loQueTiene!=null){
+//			if(loQueTiene.equals(true) ){
+//				this.setBackground(color1);
+//			}else{
+//				if(row%2==1){		
+//					this.setBackground(color2);
+//				}else{
+//					this.setBackground(Color.white);
+//				}
+//			}
+//		}
+//	}	
 	
 	return cell;
 	}
