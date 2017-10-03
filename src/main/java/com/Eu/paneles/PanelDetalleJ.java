@@ -1,5 +1,6 @@
 package com.Eu.paneles;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -68,6 +69,9 @@ public class PanelDetalleJ extends JPanel implements ActionListener{
 	JRadioButton jrbLibre=new JRadioButton("Libre");
 	
 	SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	
+	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
 	
 	public PanelDetalleJ(){		
 		GridBagLayout gbl=new GridBagLayout();

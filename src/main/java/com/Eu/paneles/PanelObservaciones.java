@@ -1,8 +1,7 @@
 package com.Eu.paneles;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -38,29 +37,25 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 
 	//Un JScrollPane para alojar la tabla 
 	public JScrollPane jsp = new JScrollPane();	
-	GridBagLayout gbl=new GridBagLayout();
-	GridBagConstraints gbc=new GridBagConstraints();
+	GridLayout gbl=new GridLayout(1,1);
 	
 	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
 	
 	Interno i=new Interno();	
 	
 	private static final long serialVersionUID = 1L;
+	
+	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
 
 	public PanelObservaciones(int id){
 		InternoDao i=new InternoDao();
 		this.setI(i.getInternoById(id));		
 		
-		this.setSize(800,600);
+		this.setSize(1010,880);
 		this.setLayout(gbl);
 		this.RellenarTablaObservaciones(id);
-		
-		gbc.gridx=0;
-		gbc.gridy=0;
-		gbc.weightx=1.0;
-		gbc.weighty=1.0;
-		gbc.fill=GridBagConstraints.BOTH;
-		this.add(jsp,gbc);		
+		this.add(jsp);		
 	}
 
 	public void RellenarTablaObservaciones(int id) {
@@ -82,30 +77,32 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 		ObservacionDao od=new ObservacionDao();		
 		List<Observacion> observaciones = od.listaObservaciones(id);
 		jtObservaciones=FuncionesDiversas.cargaDatosEnTablaObservaciones(observaciones, cabecerasTablaObservaciones);
-								
+		jtObservaciones.setFont(fuente);
+
+		
 		TableColumnModel conjuntoColumnas=jtObservaciones.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
 		}
 						
 		TableColumn columna=jtObservaciones.getColumn("Id.");
-		columna.setPreferredWidth(30);
+		columna.setPreferredWidth(50);
 		columna=jtObservaciones.getColumn("Fecha");
-		columna.setPreferredWidth(76);
+		columna.setPreferredWidth(160);
 		columna=jtObservaciones.getColumn("Alimentación");
-		columna.setPreferredWidth(105);
+		columna.setPreferredWidth(120);
 		columna=jtObservaciones.getColumn("Movilidad");			
-		columna.setPreferredWidth(105);
+		columna.setPreferredWidth(120);
 		columna=jtObservaciones.getColumn("Aseo");			
-		columna.setPreferredWidth(105);
+		columna.setPreferredWidth(120);
 		columna=jtObservaciones.getColumn("Vestido");
-		columna.setPreferredWidth(105);
+		columna.setPreferredWidth(120);
 		columna=jtObservaciones.getColumn("Inodoro");
-		columna.setPreferredWidth(105);
+		columna.setPreferredWidth(120);
 		columna=jtObservaciones.getColumn("Esfínteres");
-		columna.setPreferredWidth(105);
+		columna.setPreferredWidth(120);
 		columna=jtObservaciones.getColumn("Gr.dep.");
-		columna.setPreferredWidth(60);
+		columna.setPreferredWidth(80);
 			
 		jtObservaciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jtObservaciones.doLayout();

@@ -3,6 +3,7 @@ package com.Eu.paneles;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -53,12 +54,18 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 	private JRadioButton jrbAltas;
 	private JRadioButton jrbBajas;
 	private int tipoPanel;	
+	
+	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
 
 	public PanelFiltros(int tipo){		
 		setLayout(new BorderLayout());	
 		jrbTodos=new JRadioButton("Todos");
+		jrbTodos.setFont(fuenteN);
 		jrbAltas=new JRadioButton("Altas");
+		jrbAltas.setFont(fuenteN);
 		jrbBajas=new JRadioButton("Bajas");
+		jrbBajas.setFont(fuenteN);
 		jrbTodos.addActionListener(this);
 		jrbAltas.addActionListener(this);
 		jrbBajas.addActionListener(this);
@@ -230,7 +237,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		}		
 		
 		jt=FuncionesDiversas.cargaDatosEnTablaEmpleados(empleados, cabecerasTablaEmpleados);
-		
+		jt.setFont(fuente);
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
@@ -306,7 +313,8 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		}
 		
 		jt=FuncionesDiversas.cargaDatosEnTablaInternos(internos, cabecerasTablaInternos);		
-				
+		jt.setFont(fuente);
+		
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
@@ -373,7 +381,9 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		PersonaDao pd=new PersonaDao();		
 		List<Object> personas = pd.listaPersonas();			
 		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);		
+		jt.setFont(fuente);
 		
+		jrbTodos.setFont(fuenteN);
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);

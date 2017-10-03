@@ -46,7 +46,7 @@ public class PanelJornadas extends JPanel {
 	final static Logger loggeador = Logger.getLogger(PanelJornadas.class);	
 
 	public PanelJornadas(int id){			
-		this.setSize(800,600);
+		this.setSize(1010,880);
 		this.setLayout(gbl);	
 		
 		jcEmpleado.setSize(400, 400);

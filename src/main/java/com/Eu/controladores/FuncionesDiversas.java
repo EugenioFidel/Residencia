@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -55,6 +56,7 @@ public class FuncionesDiversas {
 	final static Logger loggeador = Logger.getLogger(FuncionesDiversas.class);
 	//un Map para pasarle parámetros a los informes
 	public static Map<String, Object> parametros=new HashMap<String, Object>();
+	String pss;
 			
 	public static JTable cargaDatosEnTablaPersonas(List<Object> lista,String[] cabeceras){				
 		
@@ -322,10 +324,10 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}
 		}
 		
-		public static void GenerarListadoPersonas(){
+		public static void GenerarListadoPersonas(String pss){
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfPersonas.jrxml");
 				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoPersonas_");
@@ -340,10 +342,10 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}			
 		}
 		
-		public static void GenerarListadoTelefonos(){
+		public void GenerarListadoTelefonos(String pss){
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfTelefonos.jrxml");
 				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoTelefonos_");
@@ -358,10 +360,10 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}			
 		}
 		
-		public static void GenerarListadoInternos() {
+		public void GenerarListadoInternos(String pss) {
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfResidentes.jrxml");
 				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoResidentes_");
@@ -376,10 +378,10 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}			
 		}
 		
-		public static void GenerarListadoEmpleados() {
+		public void GenerarListadoEmpleados(String pss) {
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfEmpleados.jrxml");
 				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoEmpleados_");
@@ -394,7 +396,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}			
 		}	 
 		
-		public static void GenerarInformeCuotas(Date fecha) {
+		public void GenerarInformeCuotas(Date fecha,String pss) {
 			// TODO Auto-generated method stub
 						SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd)");
 						String dia=sdt.format(fecha);
@@ -418,14 +420,14 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 								" and (`observacion`.`gradoDependencia` = `importes`.`gradoDependencia`)"+
 								" and (`observacion`.`fechaObservacion` <= \""+dia+"\"))"+
 								" order by `persona`.`primerApe`,`persona`.`segundoApe`,`persona`.`nombre`";
-						Updatear(cadenaCrearVistaCuotas);
+						Updatear(cadenaCrearVistaCuotas,pss);
 			//vaciamos los parametros
 			parametros.clear();
 			//metemos en parametros la fecha
 			parametros.put("fechaInforme", fecha);
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfCuotas.jrxml");
 				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/cuotas/InformeCuotas_");
@@ -440,7 +442,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}	
 		}
 		
-		public static void GenerarInformeNuevoContrato(int idContrato) {
+		public static void GenerarInformeNuevoContrato(int idContrato,String pss) {
 			// TODO Auto-generated method stub
 			//vaciamos los parametros
 			parametros.clear();
@@ -448,7 +450,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			parametros.put("idContrato", idContrato);
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
 				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeNuevoContrato_");
@@ -492,7 +494,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 				}			
 			}
 
-		public static void GenerarInformeDependencias(Date fecha) {
+		public void GenerarInformeDependencias(Date fecha,String pss) {
 			// TODO Auto-generated method stub
 			SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd");
 			String dia=sdt.format(fecha);
@@ -518,7 +520,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 					"and (`interno_estancia`.`idEstancia` = `estancia`.`idEstancia`) "+
 					"and (`estancia`.`motivoBaja` = 0)))) order by `persona`.`primerApe`,"+
 					"`persona`.`segundoApe`,`persona`.`nombre`";
-			Updatear(cadenaCrearVistaDep);
+			Updatear(cadenaCrearVistaDep,pss);
 			
 			//vaciamos los parametros
 			parametros.clear();
@@ -526,7 +528,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			parametros.put("fechaInforme", fecha);
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfDependencias.jrxml");
 				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/dependencias/InformeDependencias_");
@@ -541,7 +543,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}	
 		}
 
-		public static void GenerarListadoNumClientes(Date fecha) {
+		public void GenerarListadoNumClientes(Date fecha,String pss) {
 			// TODO Auto-generated method stub
 			//vaciamos los parametros
 			parametros.clear();
@@ -549,7 +551,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			parametros.put("fechaInforme", fecha);
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNumClientes.jrxml");
 				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/numClientes/InformeNumClientes_");
@@ -564,7 +566,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}
 		}
 
-		public static int GenerarInformeContratoSustitucion(Map<String, Object> parametros) {
+		public static int GenerarInformeContratoSustitucion(Map<String, Object> parametros,String pss) {
 			// TODO Auto-generated method stub
 			Calendar fechaActual=Calendar.getInstance();
 			String nomFichero="./src/main/resources/informes/contratos/InformeContrato_";
@@ -578,7 +580,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
 				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeContrato_");
@@ -586,7 +588,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 				con.desconectar();
 				//generamos el mail
 				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					resultado=FuncionesDiversas.EnviarMail(nomFichero,"propuesta de contratación");
+					resultado=FuncionesDiversas.EnviarMail(nomFichero,"propuesta de contratación",pss);
 				
 			} catch (JRException e1) {
 				System.out.println("Error en la generación de listado");
@@ -600,7 +602,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			
 		}
 		
-		public static void GenerarAltaResidente(Map<String, Object> parametros){
+		public static void GenerarAltaResidente(Map<String, Object> parametros,String pss){
 			Calendar fechaActual=Calendar.getInstance();
 			String nomFichero="./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_";
 					
@@ -613,14 +615,14 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionAltaResidente.jrxml");
 				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_");
 				conec.close();
 				con.desconectar();
 				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el alta del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					FuncionesDiversas.EnviarMail(nomFichero, "alta de residente");
+					FuncionesDiversas.EnviarMail(nomFichero, "alta de residente",pss);
 				
 			} catch (JRException e1) {
 				System.out.println("Error en la generación del informe");
@@ -631,7 +633,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}			
 		}
 		
-		public static void GenerarBajaResidente(Map<String, Object> parametros) {
+		public static void GenerarBajaResidente(Map<String, Object> parametros, String pss) {
 			Calendar fechaActual=Calendar.getInstance();
 			String nomFichero="./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_";
 					
@@ -644,14 +646,14 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			
 			try {
 				//conexion para el reporte
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				java.sql.Connection conec=con.getConexion();
 				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionBajaResidente.jrxml");
 				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_");
 				conec.close();
 				con.desconectar();
 				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión la baja del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					FuncionesDiversas.EnviarMail(nomFichero, "baja de residente");
+					FuncionesDiversas.EnviarMail(nomFichero, "baja de residente",pss);
 				
 			} catch (JRException e1) {
 				System.out.println("Error en la generación del informe");
@@ -662,10 +664,10 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			}			
 		}
 		
-		public static int EnviarMail(String adj, String documento) {
+		public static int EnviarMail(String adj, String documento, String pssw) {
 			String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
 			String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
-			String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros");
+			String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros",pss);
 			if(!password.equals(FuncionesDiversas.getCifrado(pss, "MD5"))){
 				JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Atención", JOptionPane.ERROR_MESSAGE);
 				loggeador.debug("error de contraseña");
@@ -686,7 +688,7 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 						" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
 						"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
 				
-				String originMail=FuncionesDiversas.obtenerStringBase("select mailDir from parametros");
+				String originMail=FuncionesDiversas.obtenerStringBase("select mailDir from parametros",pssw);
 				
 				Properties props = new Properties();
 				props.setProperty("mail.smtp.host", "smtp.gmail.com");
@@ -758,10 +760,10 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 		      return "";
 		}	
 		
-		public static String obtenerStringBase(String consulta){
+		public static String obtenerStringBase(String consulta,String pss){
 			String valor="";	
 			try{
-					dbConexion con=new dbConexion();
+					dbConexion con=new dbConexion(pss);
 					Connection conec=(Connection) con.getConexion();
 					java.sql.Statement st=conec.createStatement();
 					
@@ -779,9 +781,9 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 				return valor;
 		}
 		
-		public static void Updatear(String cadenaUpdate){
+		public static void Updatear(String cadenaUpdate, String pss){
 			try{
-				dbConexion con=new dbConexion();
+				dbConexion con=new dbConexion(pss);
 				Connection conec=(Connection) con.getConexion();
 				java.sql.Statement st=conec.createStatement();
 				
@@ -808,8 +810,21 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			 	}  
 		   return cal;
 		  }
+		 
+		 public static boolean ComprobarFormFecha(String fecha){
+			 String regexp = "\\d{1,2}/\\d{1,2}/\\d{4}";
+			 boolean result = (Pattern.matches(regexp, fecha))?true:false;
+			 return result;
+			 
+		 }
 
-		
+		public String getPss() {
+			return pss;
+		}
+
+		public void setPss(String pss) {
+			this.pss = pss;
+		}		
 }
 	
 	

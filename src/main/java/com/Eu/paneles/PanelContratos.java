@@ -1,7 +1,7 @@
 package com.Eu.paneles;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -47,8 +48,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 	
 	//Un JScrollPane para alojar la tabla 
 	public JScrollPane jsp = new JScrollPane();	
-	GridBagLayout gbl=new GridBagLayout();
-	GridBagConstraints gbc=new GridBagConstraints();
+	GridLayout gbl=new GridLayout(1,1);
 	
 	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
 	
@@ -61,12 +61,18 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 	JSeparator jsSeparador1=new JSeparator();
 	JSeparator jsSeparador2=new JSeparator();
 	JMenuItem jmiInfContrato=new JMenuItem("Informe nuevo contrato");	
+	
+	Font fuente=new Font("Ubuntu",0,16);
+	Font fuenteN=new Font("Ubuntu",1,16);
+	
+	String ps;
 
-	public PanelContratos (int id){
+	public PanelContratos (int id,String ps){
+		this.setPs(ps);
 		EmpleadoDao ed=new EmpleadoDao();
 		this.setE(ed.getEmpleadoById(id));		
 		
-		this.setSize(800,600);
+		this.setSize(1010,880);
 		this.setLayout(gbl);
 		this.RellenarTablaContratos(id);	
 		
@@ -77,14 +83,10 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		jmiInfContrato.addActionListener(this);
 		
 		MouseListener popupListener=new PopupListener();
-		jtContratos.addMouseListener(popupListener);		
-		
-		gbc.gridx=0;
-		gbc.gridy=0;
-		gbc.weightx=1.0;
-		gbc.weighty=1.0;
-		gbc.fill=GridBagConstraints.BOTH;
-		this.add(jsp,gbc);		
+		jtContratos.addMouseListener(popupListener);
+		jtContratos.setFont(new java.awt.Font("Tahoma", 0, 16));
+
+		this.add(jsp);		
 	}
 
 	public void RellenarTablaContratos(int id) {	
@@ -104,28 +106,29 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		ContratoDao cd=new ContratoDao();		
 		List<Object> contratos = cd.listaContratos(id);
 		jtContratos=FuncionesDiversas.cargaDatosEnTablaContratos(contratos, cabecerasTablaEstancias);
-						
+		jtContratos.setFont(fuente);	
+		
 		TableColumnModel conjuntoColumnas=jtContratos.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
 		}
 				
 		TableColumn columna=jtContratos.getColumn("Id");
-		columna.setPreferredWidth(25);
+		columna.setPreferredWidth(30);
 		columna=jtContratos.getColumn("Fecha inicio");
-		columna.setPreferredWidth(80);
+		columna.setPreferredWidth(100);
 		columna=jtContratos.getColumn("Fecha fin");			
-		columna.setPreferredWidth(80);
+		columna.setPreferredWidth(100);
 		columna=jtContratos.getColumn("H/s");			
-		columna.setPreferredWidth(25);
+		columna.setPreferredWidth(30);
 		columna=jtContratos.getColumn("Tipo contrato");
-		columna.setPreferredWidth(175);
+		columna.setPreferredWidth(250);
 		columna=jtContratos.getColumn("Categoria profesional");
-		columna.setPreferredWidth(175);
+		columna.setPreferredWidth(170);
 		columna=jtContratos.getColumn("Fecha comunicación");
-		columna.setPreferredWidth(80);
+		columna.setPreferredWidth(100);
 		columna=jtContratos.getColumn("Empleado sustituido");
-		columna.setPreferredWidth(237);
+		columna.setPreferredWidth(230);
 		
 		MouseListener popupListener=new PopupListener();
 		jtContratos.addMouseListener(popupListener);
@@ -194,11 +197,19 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}else{
+				fechaF = JOptionPane.showInputDialog(this,"Fecha prevista de fin de contrato", JOptionPane.QUESTION_MESSAGE); 
+				try {				
+					fechaF=sdf.format(sdf.parse(fechaF));
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 			parametros.put("fechaFinPrevista", fechaF);
 			parametros.put("empSustituido", dtm.getValueAt(jtContratos.getSelectedRow(), 7));
-			int resultado=FuncionesDiversas.GenerarInformeContratoSustitucion(parametros);	
+			int resultado=FuncionesDiversas.GenerarInformeContratoSustitucion(parametros,this.getPs());	
 			if (resultado==1){
 				Calendar fechaActual=Calendar.getInstance();
 				String idContrato=dtm.getValueAt(jtContratos.getSelectedRow(), 0).toString();
@@ -244,7 +255,19 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 
 	public void setJtContratos(JTable jtContratos) {
 		this.jtContratos = jtContratos;
-	}	
+	}
+	
+	
+
+	public String getPs() {
+		return ps;
+	}
+
+	public void setPs(String ps) {
+		this.ps = ps;
+	}
+
+
 
 	class PopupListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {

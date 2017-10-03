@@ -1,5 +1,6 @@
 package com.Eu.paneles;
 
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,13 +20,19 @@ public class PanelBotoneroPersonas extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JButton jbAnhadir,jbBorrar,jbSalir;
 	
+	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
+	
 	public PanelBotoneroPersonas() {
 		// TODO Auto-generated constructor stub
 		this.setLayout(new GridLayout(1,32,10,10));
 		
 		jbAnhadir=new JButton("Añadir");
+		jbAnhadir.setFont(fuenteN);
 		jbBorrar=new JButton("Borrar");
+		jbBorrar.setFont(fuenteN);
 		jbSalir=new JButton("SALIR");
+		jbSalir.setFont(fuenteN);
 		
 		jbAnhadir.addActionListener(this);
 		jbBorrar.addActionListener(this);

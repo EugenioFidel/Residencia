@@ -1,7 +1,7 @@
 package com.Eu.paneles;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -47,8 +47,7 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 	
 	//Un JScrollPane para alojar la tabla 
 	public JScrollPane jsp = new JScrollPane();	
-	GridBagLayout gbl=new GridBagLayout();
-	GridBagConstraints gbc=new GridBagConstraints();
+	GridLayout gbl=new GridLayout(1,1);
 	
 	JPopupMenu jpuMenuContextual=new JPopupMenu();	
 	JMenuItem jmiInformeAltaResidente;
@@ -67,21 +66,22 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 	static final int EXITUS=1;
 	static final int A_DOMICILIO=2;
 	static final int A_OTRA_RESIDENCIA=3;
+	
+	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
+	
+	String ps;
 
-	public PanelEstancias(int id){
+	public PanelEstancias(int id,String ps){
+		this.setPs(ps);
 		InternoDao i=new InternoDao();
 		this.setI(i.getInternoById(id));		
 		
-		this.setSize(800,600);
+		this.setSize(1010,880);
 		this.setLayout(gbl);
 		this.RellenarTablaEstancias(id);		
-		
-		gbc.gridx=0;
-		gbc.gridy=0;
-		gbc.weightx=1.0;
-		gbc.weighty=1.0;
-		gbc.fill=GridBagConstraints.BOTH;
-		this.add(jsp,gbc);			
+
+		this.add(jsp);			
 		
 		//Popup sobre Estancias
 		
@@ -110,22 +110,23 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 		EstanciaDao ed=new EstanciaDao();		
 		List<Estancia> estancias = ed.listaEstancias(id);
 		jtEstancias=FuncionesDiversas.cargaDatosEnTablaEstancias(estancias, cabecerasTablaEstancias);
-								
+		jtEstancias.setFont(fuente);
+		
 		TableColumnModel conjuntoColumnas=jtEstancias.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
 		}
 						
 		TableColumn columna=jtEstancias.getColumn("Id.Est.");
-		columna.setPreferredWidth(50);
+		columna.setPreferredWidth(70);
 		columna=jtEstancias.getColumn("Fecha de alta");
-		columna.setPreferredWidth(150);
+		columna.setPreferredWidth(200);
 		columna=jtEstancias.getColumn("Tipo de estancia");			
 		columna.setPreferredWidth(200);
 		columna=jtEstancias.getColumn("Fecha de baja");			
-		columna.setPreferredWidth(150);
+		columna.setPreferredWidth(200);
 		columna=jtEstancias.getColumn("Motivo de la baja");
-		columna.setPreferredWidth(245);
+		columna.setPreferredWidth(340);
 				
 		jtEstancias.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jtEstancias.doLayout();
@@ -234,6 +235,56 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 		this.dtm = dtm;
 	}	
 	
+	
+	
+	public String getPs() {
+		return ps;
+	}
+
+	public void setPs(String ps) {
+		this.ps = ps;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		//necesitamos varios datos comunes
+		Map<String,Object>parametros=new HashMap<String,Object>();
+		//los datos del residente
+		
+		Interno i=ObtenerInterno();		
+		parametros.put("Nombre", i.getNombre());
+		parametros.put("primerApe",i.getPrimerApe());
+		parametros.put("segundoApellido", i.getSegundoApe());
+		parametros.put("dni", i.getLetraCif()+"-"+i.getDni()+"-"+i.getLetraNif());		
+		parametros.put("sSocial", i.getSs());
+		String resi=FuncionesDiversas.obtenerStringBase("select nombreRes from parametros",this.getPs());
+		parametros.put("residencia", resi);
+		if(e.getSource().equals(jmiInformeAltaResidente)){
+			loggeador.debug("Emisión informe Alta Residente");
+			System.out.println("Informe alta");
+			String gradoDep=JOptionPane.showInputDialog(this, "Residente pendiente de valoración\n introducir grado de dependencia actual", "Válido");
+			parametros.put("cc", i.getCc());
+			parametros.put("dependencia",gradoDep);
+			parametros.put("fechaAlta", dtm.getValueAt(jtEstancias.getSelectedRow(), 1).toString());
+			FuncionesDiversas.GenerarAltaResidente(parametros,this.getPs());
+		}else if(e.getSource().equals(jmiInformeBajaResidente)){
+			loggeador.debug("Emisión informe Baja Residente");
+			System.out.println("Informe baja");			
+			parametros.put("causaBaja", dtm.getValueAt(jtEstancias.getSelectedRow(), 4).toString());
+			parametros.put("fechaBaja", dtm.getValueAt(jtEstancias.getSelectedRow(), 3).toString());
+			FuncionesDiversas.GenerarBajaResidente(parametros,this.getPs());
+		}		
+	}	
+
+	private Interno ObtenerInterno() {
+		EstanciaDao ed=new EstanciaDao();
+		Estancia es=ed.getEstanciaById(Integer.parseInt(dtm.getValueAt(jtEstancias.getSelectedRow(), 0).toString()));
+		Interno_estanciaDao ied=new Interno_estanciaDao();
+		Interno_estancia ie=ied.getInternoEstanciaById(es.getIdEstancia());
+		InternoDao id=new InternoDao();
+		Interno i=id.getInternoById(ie.getIdPersona());
+		return i;
+	}
+	
 	class PopupListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
 		showPopup(e);
@@ -250,47 +301,6 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 			        }
 			      }	  	     
 		 }
-
-	public void actionPerformed(ActionEvent e) {
-		//necesitamos varios datos comunes
-		Map<String,Object>parametros=new HashMap<String,Object>();
-		//los datos del residente
-		
-		Interno i=ObtenerInterno();		
-		parametros.put("Nombre", i.getNombre());
-		parametros.put("primerApe",i.getPrimerApe());
-		parametros.put("segundoApellido", i.getSegundoApe());
-		parametros.put("dni", i.getLetraCif()+"-"+i.getDni()+"-"+i.getLetraNif());		
-		parametros.put("sSocial", i.getSs());
-		String resi=FuncionesDiversas.obtenerStringBase("select nombreRes from parametros");
-		parametros.put("residencia", resi);
-		if(e.getSource().equals(jmiInformeAltaResidente)){
-			loggeador.debug("Emisión informe Alta Residente");
-			System.out.println("Informe alta");
-			String gradoDep=JOptionPane.showInputDialog(this, "Residente pendiente de valoración\n introducir grado de dependencia actual", "Válido");
-			parametros.put("cc", i.getCc());
-			parametros.put("dependencia",gradoDep);
-			parametros.put("fechaAlta", dtm.getValueAt(jtEstancias.getSelectedRow(), 1).toString());
-			FuncionesDiversas.GenerarAltaResidente(parametros);
-		}else if(e.getSource().equals(jmiInformeBajaResidente)){
-			loggeador.debug("Emisión informe Baja Residente");
-			System.out.println("Informe baja");			
-			parametros.put("causaBaja", dtm.getValueAt(jtEstancias.getSelectedRow(), 4).toString());
-			parametros.put("fechaBaja", dtm.getValueAt(jtEstancias.getSelectedRow(), 3).toString());
-			FuncionesDiversas.GenerarBajaResidente(parametros);
-		}
-		
-	}
-
-	private Interno ObtenerInterno() {
-		EstanciaDao ed=new EstanciaDao();
-		Estancia es=ed.getEstanciaById(Integer.parseInt(dtm.getValueAt(jtEstancias.getSelectedRow(), 0).toString()));
-		Interno_estanciaDao ied=new Interno_estanciaDao();
-		Interno_estancia ie=ied.getInternoEstanciaById(es.getIdEstancia());
-		InternoDao id=new InternoDao();
-		Interno i=id.getInternoById(ie.getIdPersona());
-		return i;
-	}
 }
 
 

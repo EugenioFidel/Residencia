@@ -1,6 +1,7 @@
 package com.Eu.paneles;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,6 +38,8 @@ public class PanelBotoneroEmpleados extends JPanel implements ActionListener {
 	
 	PanelContratos pc;
 	PanelJornadas pj;
+	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
 	
 	
 	public PanelBotoneroEmpleados() {
@@ -44,14 +47,18 @@ public class PanelBotoneroEmpleados extends JPanel implements ActionListener {
 		this.setLayout(new GridLayout(1,32,10,10));
 		
 		jbAnhadir=new JButton("Añadir");
+		jbAnhadir.setFont(fuenteN);
 		jbBorrar=new JButton("Borrar");
+		jbBorrar.setFont(fuenteN);
 		
 		jbAnhadir.addActionListener(this);
 		jbBorrar.addActionListener(this);
 		
 		bg=new ButtonGroup();
 		jrbContratos=new JRadioButton("Cont.");
+		jrbContratos.setFont(fuenteN);
 		jrbJornadas=new JRadioButton("Jorn.");
+		jrbJornadas.setFont(fuenteN);
 		
 		jrbContratos.setSelected(true);
 		

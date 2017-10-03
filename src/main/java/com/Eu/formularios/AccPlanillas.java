@@ -7,7 +7,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -34,11 +33,14 @@ public class AccPlanillas extends JDialog implements ActionListener{
 	JButton jbCancelar=new JButton("Cancelar");
 	JButton jbAbrir=new JButton("Abrir");
 	
+	String ps;
 	
-	public AccPlanillas(){
+	
+	public AccPlanillas(String pss){
+		this.setPs(pss);
 		//propiedades del formulario
 		setModal(true);
-		setBounds(300, 300, 400,150);
+		setBounds(300, 400, 400,150);
 		isDefaultLookAndFeelDecorated();
 		setTitle("Residenciator - Abrir planillas de trabajo");
 		
@@ -86,9 +88,9 @@ public class AccPlanillas extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(jbAbrir)){
-			String rutaPlanilla=FuncionesDiversas.obtenerStringBase("Select rutaPlanillas from parametros");
+			String rutaPlanilla=FuncionesDiversas.obtenerStringBase("Select rutaPlanillas from parametros",this.getPs());
 			//ruta del archivo en el pc
-			  String file = new String(rutaPlanilla+jcbMeses.getSelectedItem()+jcbAnho.getSelectedItem()+".xlsm"); 
+			  String file = new String(rutaPlanilla+jcbAnho.getSelectedItem()+"/planilla"+jcbMeses.getSelectedItem()+jcbAnho.getSelectedItem()+".xlsm"); 
 						 
 			 try{			
 			    Desktop.getDesktop().open(new File(file));
@@ -101,6 +103,15 @@ public class AccPlanillas extends JDialog implements ActionListener{
 		
 		this.dispose();
 	}
+	
+	public String getPs() {
+		return ps;
+	}
+
+	public void setPs(String ps) {
+		this.ps = ps;
+	}
+
 
 }
 

@@ -1,6 +1,7 @@
 package com.Eu.paneles;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,12 +44,17 @@ public class PanelBotoneroInternos extends JPanel implements ActionListener{
 	
 	public final int INTERNOS=1;
 	
+	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
+	
 	public PanelBotoneroInternos() {
 		// TODO Auto-generated constructor stub
 		this.setLayout(new GridLayout(1,32,10,10));
 		
 		jbAnhadir=new JButton("Añadir");
+		jbAnhadir.setFont(fuenteN);
 		jbBorrar=new JButton("Borrar");
+		jbBorrar.setFont(fuenteN);
 		
 		jbAnhadir.addActionListener(this);
 		jbBorrar.addActionListener(this);
@@ -56,6 +62,9 @@ public class PanelBotoneroInternos extends JPanel implements ActionListener{
 		bg=new ButtonGroup();
 		jrbEstancias=new JRadioButton("Est.");
 		jrbObservaciones=new JRadioButton("Obs.");
+		
+		jrbEstancias.setFont(fuenteN);
+		jrbObservaciones.setFont(fuenteN);
 		
 		jrbEstancias.addActionListener(this);
 		jrbObservaciones.addActionListener(this);

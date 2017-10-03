@@ -1,5 +1,7 @@
 package com.Eu.formularios;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -42,7 +44,8 @@ import com.toedter.calendar.JDateChooser;
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = 1L;		
+		private static final long serialVersionUID = 1L;
+		
 		
 		final static Logger loggeador = Logger.getLogger(FrmPrincipal.class);
 		//Declaraciones para panel personas
@@ -91,11 +94,22 @@ import com.toedter.calendar.JDateChooser;
 		public PanelBotoneroInternos jpBotoneroInternos=new PanelBotoneroInternos();
 		public PanelBotoneroEmpleados jpBotoneroEmpleados=new PanelBotoneroEmpleados();
 
+		Font fuente=new Font("Ubuntu",0,16);
+		Font fuenteN=new Font("Ubuntu",1,16);
+		
+		FuncionesDiversas fd=new FuncionesDiversas();
 			
 	public FrmPrincipal() throws SQLException{
 		
+		
+		//password para la BD
+		String password=(String)JOptionPane.showInputDialog("Introduce la contraseña /nde la base de datos:");
+		fd.setPss(password);
+		
 		//características del formulario principal
+		
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		//this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FrmPrincipal.isDefaultLookAndFeelDecorated();
 		this.setTitle("Gestión de residencias 1.0");
@@ -106,7 +120,7 @@ import com.toedter.calendar.JDateChooser;
 		this.setLayout(gbl);
 		this.setIconImage(vaca.getImage());	
 		
-
+		tp.setFont(fuente);
 		pfTodos=new PanelFiltros(PERSONAS);
 		pfInternos=new PanelFiltros(INTERNOS);
 		pfEmpleados=new PanelFiltros(EMPLEADOS);
@@ -119,12 +133,14 @@ import com.toedter.calendar.JDateChooser;
 		
 		col.gridx=0;
 		col.gridy=0;
+		col.weightx=1.5;
 		col.anchor=GridBagConstraints.NORTHWEST;
 		col.fill=GridBagConstraints.BOTH;
 		col.insets=new Insets(5,5,5,5);
 		this.getContentPane().add(jpTablas,col);
 		col.anchor=GridBagConstraints.CENTER;
-        col.fill=GridBagConstraints.NONE;       
+        col.fill=GridBagConstraints.NONE;   
+        col.weightx=0;
         
         col.gridx=0;
         col.gridy=1;
@@ -133,22 +149,25 @@ import com.toedter.calendar.JDateChooser;
         col.anchor=GridBagConstraints.CENTER;
         
         po=new PanelObservaciones(1000000);
-		pe=new PanelEstancias(1000000);	
-		pc=new PanelContratos(1000000);
+		pe=new PanelEstancias(1000000,fd.getPss());	
+		pc=new PanelContratos(1000000,fd.getPss());
 		pj=new PanelJornadas(1000000);
+		
 		
 		jlpFuncionalidades.add(pe,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.add(po,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.add(pc,JLayeredPane.DEFAULT_LAYER);
 		jlpFuncionalidades.add(pj,JLayeredPane.DEFAULT_LAYER);
-		jlpFuncionalidades.add(jpTelon, JLayeredPane.DEFAULT_LAYER);
-		jpTelon.setSize(800, 600);
+		jpTelon.setBackground(Color.WHITE);
+		jpTelon.setSize(950,600);
+		jlpFuncionalidades.add(jpTelon, JLayeredPane.DEFAULT_LAYER);		
 		
-		jlpFuncionalidades.moveToFront(jpTelon);
+		
 		jlpFuncionalidades.moveToBack(po);
 		jlpFuncionalidades.moveToBack(pe);		
 		jlpFuncionalidades.moveToBack(pc);
 		jlpFuncionalidades.moveToBack(pj);
+		jlpFuncionalidades.moveToFront(jpTelon);
 				        
         col.gridx=1;
         col.gridy=0;
@@ -174,9 +193,20 @@ import com.toedter.calendar.JDateChooser;
         //=========================================================================================
 		// BARRA DE MENU ==========================================================================
 		//=========================================================================================
-		menuArchivo.add(jmiPlanillas);        
+		jmiPlanillas.setFont(fuenteN);
+        menuArchivo.add(jmiPlanillas); 
+        menuArchivo.setFont(fuenteN);
 		jmbMenu.add(menuArchivo);
+		menuEditar.setFont(fuenteN);
 		jmbMenu.add(menuEditar);
+		jmiListadoPersonas.setFont(fuenteN);
+		jmiListadoInternos.setFont(fuenteN);
+		jmiListadoEmpleados.setFont(fuenteN);
+		jmiListadoTelefonos.setFont(fuenteN);
+		jmiInformeCuotas.setFont(fuenteN);
+		jmiInformeDependencias.setFont(fuenteN);
+		jmiNumClientes.setFont(fuenteN);
+		jmiPatron.setFont(fuenteN);
 		menuListados.add(jmiListadoPersonas);
 		menuListados.add(jmiListadoInternos);
 		menuListados.add(jmiListadoEmpleados);
@@ -186,6 +216,9 @@ import com.toedter.calendar.JDateChooser;
 		menuInformes.add(jmiInformeDependencias);
 		menuInformes.add(jmiNumClientes);
 		menuJornadas.add(jmiPatron);
+		menuListados.setFont(fuenteN);
+		menuInformes.setFont(fuenteN);
+		menuJornadas.setFont(fuenteN);
 		jmbMenu.add(menuListados);
 		jmbMenu.add(menuInformes);
 		jmbMenu.add(menuJornadas);
@@ -200,14 +233,16 @@ import com.toedter.calendar.JDateChooser;
 		jmiNumClientes.addActionListener(this);
 		jmiPatron.addActionListener(this);
 		
-		this.setJMenuBar(jmbMenu);			
+		this.setJMenuBar(jmbMenu);	
+		
+		this.pack();
 	}
 	
 	public void actionPerformed(ActionEvent e) {		
 		//comprobamos el objeto que ha producido el evento
 		if(e.getSource().equals(jmiPlanillas)){
 			System.out.println("planillas");
-			AccPlanillas ap=new AccPlanillas();
+			AccPlanillas ap=new AccPlanillas(fd.getPss());
 			ap.setVisible(true);
 		}else if(e.getSource().equals(jmiInformeCuotas)){
 				JDateChooser jd = new JDateChooser();
@@ -220,7 +255,7 @@ import com.toedter.calendar.JDateChooser;
 				Date fecha;
 				try {
 					fecha = sdf.parse(s);
-					FuncionesDiversas.GenerarInformeCuotas(fecha);
+					fd.GenerarInformeCuotas(fecha,fd.getPss());
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
@@ -236,7 +271,7 @@ import com.toedter.calendar.JDateChooser;
 						Date fecha;
 						try {
 							fecha = sdf.parse(s);
-							FuncionesDiversas.GenerarInformeDependencias(fecha);
+							fd.GenerarInformeDependencias(fecha,fd.getPss());
 						} catch (ParseException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -256,11 +291,11 @@ import com.toedter.calendar.JDateChooser;
 								try {
 									fecha = sdf.parse(s);
 									//llamamos al procedure que crea la tabla
-									dbConexion con=new dbConexion();
+									dbConexion con=new dbConexion(fd.getPss());
 									java.sql.Connection conec=con.getConexion();
 									CallableStatement cs=conec.prepareCall("call numClientes(\""+sMySQL+"\");");
 									cs.execute();
-									FuncionesDiversas.GenerarListadoNumClientes(fecha);
+									fd.GenerarListadoNumClientes(fecha,fd.getPss());
 								} catch (ParseException e2) {
 									// TODO Auto-generated catch block
 									e2.printStackTrace();
@@ -270,11 +305,11 @@ import com.toedter.calendar.JDateChooser;
 								}
 														
 							}else if(e.getSource().equals(jmiListadoInternos)){
-										FuncionesDiversas.GenerarListadoInternos();
+										fd.GenerarListadoInternos(fd.getPss());
 								  }else if(e.getSource().equals(jmiListadoEmpleados)){
-											FuncionesDiversas.GenerarListadoEmpleados();
+											fd.GenerarListadoEmpleados(fd.getPss());
 										}else if(e.getSource().equals(jmiListadoTelefonos)){
-												FuncionesDiversas.GenerarListadoTelefonos();
+												fd.GenerarListadoTelefonos(fd.getPss());
 											  }else if(e.getSource().equals(jmiPatron)){
 														loggeador.debug("abrir formulario Patron");		
 														AltaPatron at=new AltaPatron();
@@ -360,8 +395,8 @@ import com.toedter.calendar.JDateChooser;
 
 	public void setJpBotoneroEmpleados(PanelBotoneroEmpleados jpBotoneroEmpleados) {
 		this.jpBotoneroEmpleados = jpBotoneroEmpleados;
-	}	
-	
+	}
+
 }
 
 	

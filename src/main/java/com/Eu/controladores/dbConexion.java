@@ -11,18 +11,17 @@ import java.sql.SQLException;
 public class dbConexion {
 	   static String bd = "residentor";
 	   static String login = "root";
-	   static String password = "hierba artificial";
 	   static String url = "jdbc:mysql://localhost/"+bd;
 
 	   Connection con = null;
 
 	   /** Constructor de DbConnection */
-	   public dbConexion() {
+	   public dbConexion(String pss) {
 	      try{
 	         //obtenemos el driver de para mysql
 	         Class.forName("com.mysql.jdbc.Driver");
 	         //obtenemos la conexi�n
-	         con= DriverManager.getConnection(url,login,password);
+	         con= DriverManager.getConnection(url,login,pss);
 	         if (con==null){
 	            System.out.println("error en la conexión a la base "+bd);
 	         }

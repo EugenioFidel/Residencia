@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
+import com.Eu.controladores.FuncionesDiversas;
 import com.Eu.dao.CategoriaDao;
 import com.Eu.dao.ContratoDao;
 import com.Eu.dao.EmpleadoDao;
@@ -199,13 +200,18 @@ public class AltaContrato extends JDialog implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getSource().equals(jbGrabar)){
+			String f=dt.format(jdcFechaInicio.getDate());
+			//Comprobamos el formato de la fecha
+			if(!FuncionesDiversas.ComprobarFormFecha(f)){
+				
+			}
 			loggeador.debug("Grabar contrato");
 			int idContrato=GrabarContrato(en);	
 			String[]emp=(String[])jcbEmpleados.getSelectedItem();
 					
-			Object[]fila={idContrato,dt.format(jdcFechaInicio.getDate()),null,jcbHoras.getSelectedItem(),jtTipoContrato.getText(),jtCategoria.getText(),null,emp[1]};
+			Object[]fila={idContrato,f,null,jcbHoras.getSelectedItem(),jtTipoContrato.getText(),jtCategoria.getText(),null,emp[1]};
 			dtm.addRow(fila);
 			this.dispose();
 		}else{
