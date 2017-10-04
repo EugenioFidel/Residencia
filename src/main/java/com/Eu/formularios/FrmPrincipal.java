@@ -40,70 +40,70 @@ import com.Eu.paneles.PanelObservaciones;
 
 import com.toedter.calendar.JDateChooser;
 
-	public class FrmPrincipal extends JFrame implements ActionListener { 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		
-		final static Logger loggeador = Logger.getLogger(FrmPrincipal.class);
-		//Declaraciones para panel personas
-		JTabbedPane tp = new JTabbedPane();
-		JPanel jpTablas=new JPanel();
-		JLayeredPane jlpFuncionalidades=new JLayeredPane();
-		
-		JPanel jpListados=new JPanel();
-		PanelBotoneroPersonas jpb=new PanelBotoneroPersonas();
-		enum eventos{Añadir,Editar,Borrar};
-		public static int PERSONAS=0;
-		public static int EMPLEADOS=1;
-		public static int INTERNOS=2;
-		PanelFiltros pfTodos=null;
-		PanelFiltros pfInternos=null;
-		PanelFiltros pfEmpleados=null;
-		//un icono para el formulario
-		ImageIcon vaca=new ImageIcon("./src/main/resources/cowIcon.jpeg");
-		
-		//JMenuBar, barra de menus
-		JMenuBar jmbMenu=new JMenuBar();
-		JMenu menuArchivo = new JMenu("Archivo");
-		JMenu menuEditar = new JMenu("Editar");
-		JMenu menuListados= new JMenu("Listados");
-		JMenu menuInformes=new JMenu("Informes");
-		JMenu menuJornadas=new JMenu("Jornadas");
-		JMenuItem jmiPlanillas=new JMenuItem("Abrir planillas");
-		JMenuItem jmiListadoPersonas=new JMenuItem("Personas");
-		JMenuItem jmiListadoInternos=new JMenuItem("Internos");
-		JMenuItem jmiListadoEmpleados=new JMenuItem("Empleados");
-		JSeparator jsSeparador1MenuListados=new JSeparator();
-		JMenuItem jmiListadoTelefonos=new JMenuItem("Teléfonos");
-		
-		JMenuItem jmiInformeCuotas= new JMenuItem("Cuotas");
-		JMenuItem jmiInformeDependencias=new JMenuItem("Dependencias");
-		JMenuItem jmiNumClientes=new JMenuItem("Internos por día");
-		
-		JMenuItem jmiPatron=new JMenuItem("Grabar jornada/s");
-		
-		public PanelObservaciones po=null;	
-		public PanelEstancias pe =null;
-		public PanelContratos pc=null;
-		public PanelJornadas pj=null;
-		public JPanel jpTelon=new JPanel();
-		
-		public PanelBotoneroInternos jpBotoneroInternos=new PanelBotoneroInternos();
-		public PanelBotoneroEmpleados jpBotoneroEmpleados=new PanelBotoneroEmpleados();
+public class FrmPrincipal extends JFrame implements ActionListener { 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	final static Logger loggeador = Logger.getLogger(FrmPrincipal.class);
+	//Declaraciones para panel personas
+	JTabbedPane tp = new JTabbedPane();
+	JPanel jpTablas=new JPanel();
+	JLayeredPane jlpFuncionalidades=new JLayeredPane();
+	
+	JPanel jpListados=new JPanel();
+	PanelBotoneroPersonas jpb=new PanelBotoneroPersonas();
+	enum eventos{Añadir,Editar,Borrar};
+	public static int PERSONAS=0;
+	public static int EMPLEADOS=1;
+	public static int INTERNOS=2;
+	PanelFiltros pfTodos=null;
+	PanelFiltros pfInternos=null;
+	PanelFiltros pfEmpleados=null;
+	//un icono para el formulario
+	ImageIcon vaca=new ImageIcon("./src/main/resources/cowIcon.jpeg");
+	
+	//JMenuBar, barra de menus
+	JMenuBar jmbMenu=new JMenuBar();
+	JMenu menuArchivo = new JMenu("Archivo");
+	JMenu menuEditar = new JMenu("Editar");
+	JMenu menuListados= new JMenu("Listados");
+	JMenu menuInformes=new JMenu("Informes");
+	JMenu menuJornadas=new JMenu("Jornadas");
+	JMenuItem jmiPlanillas=new JMenuItem("Abrir planillas");
+	JMenuItem jmiListadoPersonas=new JMenuItem("Personas");
+	JMenuItem jmiListadoInternos=new JMenuItem("Internos");
+	JMenuItem jmiListadoEmpleados=new JMenuItem("Empleados");
+	JSeparator jsSeparador1MenuListados=new JSeparator();
+	JMenuItem jmiListadoTelefonos=new JMenuItem("Teléfonos");
+	
+	JMenuItem jmiInformeCuotas= new JMenuItem("Cuotas");
+	JMenuItem jmiInformeDependencias=new JMenuItem("Dependencias");
+	JMenuItem jmiNumClientes=new JMenuItem("Internos por día");
+	
+	JMenuItem jmiPatron=new JMenuItem("Grabar jornada/s");
+	
+	public PanelObservaciones po=null;	
+	public PanelEstancias pe =null;
+	public PanelContratos pc=null;
+	public PanelJornadas pj=null;
+	public JPanel jpTelon=new JPanel();
+	
+	public PanelBotoneroInternos jpBotoneroInternos=new PanelBotoneroInternos();
+	public PanelBotoneroEmpleados jpBotoneroEmpleados=new PanelBotoneroEmpleados();
 
-		Font fuente=new Font("Ubuntu",0,16);
-		Font fuenteN=new Font("Ubuntu",1,16);
-		
-		FuncionesDiversas fd=new FuncionesDiversas();
+	Font fuente=new Font("Ubuntu",0,16);
+	Font fuenteN=new Font("Ubuntu",1,16);
+	
+	FuncionesDiversas fd=new FuncionesDiversas();
 			
 	public FrmPrincipal() throws SQLException{
 		
 		
 		//password para la BD
-		String password=(String)JOptionPane.showInputDialog("Introduce la contraseña /nde la base de datos:");
+		String password=(String)JOptionPane.showInputDialog("Introduce la contraseña de la base de datos:");
 		fd.setPss(password);
 		
 		//características del formulario principal

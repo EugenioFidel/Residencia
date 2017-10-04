@@ -84,14 +84,11 @@ public class FuncionesDiversas {
 		elQueOrdena=new TableRowSorter<TableModel>(dtm);
 		JTable tb =new JTable(dtm);
 		
-		tb.setRowSorter(elQueOrdena);
-			
-			return tb;
-			
+		tb.setRowSorter(elQueOrdena);			
+		return tb;			
 	}	
 	
 	public static JTable cargaDatosEnTablaEmpleados(List<Empleado> lista,String[] cabeceras){		
-		
 		
 		DefaultTableModel dtm=new DefaultTableModel();	
 			for (int i = 0; i < cabeceras.length; i++) 
@@ -122,10 +119,10 @@ public class FuncionesDiversas {
 		
 		tb.setRowSorter(elQueOrdena);
 			
-			return tb;			
+		return tb;			
 	}	
 	
-public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabeceras){			
+	public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabeceras){			
 		
 		DefaultTableModel dtm=new DefaultTableModel();	
 			for (int i = 0; i < cabeceras.length; i++) 
@@ -293,179 +290,545 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 			Map<String, Object> params,
 			java.sql.Connection conec,
 			String nomFichero) {
-			JasperPrint print;
+		JasperPrint print;
 					
-			//un Calendar para la fecha del sistema
-			Calendar fechaActual=Calendar.getInstance();			
-			try {
-				print = JasperFillManager.fillReport(reporte,params,conec);
-				nomFichero=nomFichero+
+		//un Calendar para la fecha del sistema
+		Calendar fechaActual=Calendar.getInstance();			
+		try {
+			print = JasperFillManager.fillReport(reporte,params,conec);
+			nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			JasperExportManager.exportReportToPdfFile(print,nomFichero);
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error en la generación del reporte. Consulta el fichero de logs para más información");
+			loggeador.error(e.getMessage());
+		}
+			MostrarEnVisorPDF(nomFichero);		
+	}
+	
+	
+	public static void MostrarEnVisorPDF(String nomFichero){
+		nomFichero=nomFichero.replace("./","");
+		try {
+			File path = new File (nomFichero);
+			Desktop.getDesktop().open(path);
+		}catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+		
+	public static void GenerarListadoPersonas(String pss){
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfPersonas.jrxml");
+			generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoPersonas_");
+			conec.close();
+			con.desconectar();
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del listado, consulta los logs para más información");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}			
+	}
+		
+	public void GenerarListadoTelefonos(String pss){
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfTelefonos.jrxml");
+			generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoTelefonos_");
+			conec.close();
+			con.desconectar();
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del listado, consulta los logs para más información");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}			
+	}
+		
+	public void GenerarListadoInternos(String pss) {
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfResidentes.jrxml");
+			generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoResidentes_");
+			conec.close();
+			con.desconectar();
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del listado, consulta los logs para más información");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}			
+	}
+		
+	public void GenerarListadoEmpleados(String pss) {
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfEmpleados.jrxml");
+			generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoEmpleados_");
+			conec.close();
+			con.desconectar();
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del listado, consulta los logs para más información");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}			
+	}	 
+		
+	public void GenerarInformeCuotas(Date fecha,String pss) {
+		Calendar fechaActual=Calendar.getInstance();
+		String nomFichero="./src/main/resources/informes/cuotas/InformeCuotas_";
+		@SuppressWarnings("unused")
+		int resultado=0;
+		
+		nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			
+		// TODO Auto-generated method stub
+		SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd)");
+		String dia=sdt.format(fecha);
+		//actualizamos en la base la vista obs
+		String cadenaCrearVistaCuotas="create or replace view cuotas "+
+			"AS select distinct `persona`.`letraCif` AS `letraCif`,"+
+			"`persona`.`dni` AS `dni`,`persona`.`letraNif` AS `letraNif`,"+
+			"`persona`.`nombre` AS `nombre`,`persona`.`primerApe` AS `primerApe`,"+
+			"`persona`.`segundoApe` AS `segundoApe`,`interno`.`cc` AS `cc`,"+
+			"`observacion`.`gradoDependencia` AS `gradoDependencia`,"+
+			"`importes`.`importe` AS `importe`,`observacion`."+
+			"`fechaObservacion` AS `fechaObservacion` from "+
+			"((((((`persona` join `interno`) join `observacion`) join "+
+			"`interno_observacion`) join `importes`) join `estancia`) join "+
+			"`interno_estancia`) where ((`persona`.`idPersona` = `interno`.`idPersona`)"+
+			" and (`interno`.`idPersona` = `interno_estancia`.`idPersona`)"+
+			" and (`interno_estancia`.`idEstancia` = `estancia`.`idEstancia`)"+
+			" and (`estancia`.`motivoBaja` = 0)"+
+			" and (`interno`.`idPersona` = `interno_observacion`.`idPersona`)"+
+			" and (`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`)"+
+			" and (`observacion`.`gradoDependencia` = `importes`.`gradoDependencia`)"+
+			" and (`observacion`.`fechaObservacion` <= \""+dia+"\"))"+
+			" order by `persona`.`primerApe`,`persona`.`segundoApe`,`persona`.`nombre`";
+		Updatear(cadenaCrearVistaCuotas,pss);
+		//vaciamos los parametros
+		parametros.clear();
+		//metemos en parametros la fecha
+		parametros.put("fechaInforme", fecha);
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfCuotas.jrxml");
+			generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/cuotas/InformeCuotas_");
+			conec.close();
+			con.desconectar();
+			if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el informe?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+				resultado=FuncionesDiversas.EnviarMail(nomFichero,"Informe de cuotas",pss);			
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del informe, consulta logs para más información");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}	
+	}
+		
+	public static void GenerarInformeNuevoContrato(int idContrato,String pss) {
+		// TODO Auto-generated method stub
+		//vaciamos los parametros
+		parametros.clear();
+		//metemos en parametros la fecha
+		parametros.put("idContrato", idContrato);
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
+			generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeNuevoContrato_");
+			conec.close();
+			con.desconectar();
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del listado");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}	
+	}			
+
+	public void GenerarInformeDependencias(Date fecha,String pss) {			
+		Calendar fechaActual=Calendar.getInstance();
+		String nomFichero="./src/main/resources/informes/dependencias/InformeDependencias_";
+		@SuppressWarnings("unused")
+		int resultado=0;
+		
+		nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";			
+		// TODO Auto-generated method stub
+		SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd");
+		String dia=sdt.format(fecha);
+		//actualizamos en la base la vista obs
+		String cadenaCrearVistaDep="create or replace VIEW `dependencias` "+
+				"AS select distinct `persona`.`letraCif` AS `letraCif`,`persona`.`dni` "+
+				"AS `dni`,`persona`.`letraNif` AS `letraNif`,`persona`.`nombre` AS `nombre`,"+
+				"`persona`.`primerApe` AS `primerApe`,`persona`.`segundoApe` AS `segundoApe`,"+
+				"`observacion`.`fechaObservacion` AS `fechaObservacion`,"+
+				"`observacion`.`alimentacion` AS `alimentacion`,`observacion`."+
+				"`movilidad` AS `movilidad`,`observacion`.`aseo` AS `aseo`,`observacion`."+
+				"`vestido` AS `vestido`,`observacion`.`inodoro` AS `inodoro`,"+
+				"`observacion`.`esfinteres` AS `esfinteres`,"+
+				"`observacion`.`gradoDependencia` AS `gradoDependencia` "+
+				"from (((`persona` join `interno`) join `observacion`) join `interno_observacion`) "+
+				"where ((`persona`.`idPersona` = `interno`.`idPersona`) and "+
+				"(`interno`.`idPersona` = `interno_observacion`.`idPersona`) and "+
+				"(`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`) "+
+				"and (`observacion`.`fechaObservacion` <= \""+dia+"\") and "+
+				"`interno`.`idPersona` in (select `interno`.`idPersona` "+
+				"from ((`interno` join `interno_estancia`) join `estancia`) "+
+				"where ((`interno`.`idPersona` = `interno_estancia`.`idPersona`) "+
+				"and (`interno_estancia`.`idEstancia` = `estancia`.`idEstancia`) "+
+				"and (`estancia`.`motivoBaja` = 0)))) order by `persona`.`primerApe`,"+
+				"`persona`.`segundoApe`,`persona`.`nombre`";
+		Updatear(cadenaCrearVistaDep,pss);			
+		//vaciamos los parametros
+		parametros.clear();
+		//metemos en parametros la fecha
+		parametros.put("fechaInforme", fecha);
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfDependencias.jrxml");
+			generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/dependencias/InformeDependencias_");
+			conec.close();
+			con.desconectar();
+			if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el informe?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+				resultado=FuncionesDiversas.EnviarMail(nomFichero,"Informe de dependencias",pss);			
+		} catch (JRException e1) {
+			System.out.println("Error en la generación de listado");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}	
+	}
+
+	public void GenerarListadoNumClientes(Date fecha,String pss) {
+		Calendar fechaActual=Calendar.getInstance();
+		String nomFichero="./src/main/resources/informes/numClientes/InformeNumClientes_";
+		@SuppressWarnings("unused")
+		int resultado=0;
+		
+		nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+		
+		//vaciamos los parametros
+		parametros.clear();
+		//metemos en parametros la fecha
+		parametros.put("fechaInforme", fecha);
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNumClientes.jrxml");
+			generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/numClientes/InformeNumClientes_");
+			conec.close();
+			con.desconectar();
+			//generamos el mail
+			if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el informe?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+				resultado=FuncionesDiversas.EnviarMail(nomFichero,"Informe de número de residentes",pss);
+		} catch (JRException e1) {
+			System.out.println("Error en la generación de listado");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}
+	}
+
+	public static int GenerarInformeContratoSustitucion(Map<String, Object> parametros,String pss) {
+		// TODO Auto-generated method stub
+		Calendar fechaActual=Calendar.getInstance();
+		String nomFichero="./src/main/resources/informes/contratos/InformeContrato_";
+		int resultado=0;
+		
+		nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
+			generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeContrato_");
+			conec.close();
+			con.desconectar();
+			//generamos el mail
+			if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+				resultado=FuncionesDiversas.EnviarMail(nomFichero,"propuesta de contratación",pss);				
+		} catch (JRException e1) {
+			System.out.println("Error en la generación de listado");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error en la generación de listado");
+			loggeador.error(e.getMessage());
+		}
+		return resultado;			
+	}
+	
+	public static void GenerarAltaResidente(Map<String, Object> parametros,String pss){
+		Calendar fechaActual=Calendar.getInstance();
+		String nomFichero="./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_";
+				
+		nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";			
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionAltaResidente.jrxml");
+			generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_");
+			conec.close();
+			con.desconectar();
+			if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el alta del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+				FuncionesDiversas.EnviarMail(nomFichero, "alta de residente",pss);				
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del informe");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}			
+	}
+	
+	public static void GenerarBajaResidente(Map<String, Object> parametros, String pss) {
+		Calendar fechaActual=Calendar.getInstance();
+		String nomFichero="./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_";
+				
+		nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";			
+		try {
+			//conexion para el reporte
+			dbConexion con=new dbConexion(pss);
+			java.sql.Connection conec=con.getConexion();
+			JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionBajaResidente.jrxml");
+			generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_");
+			conec.close();
+			con.desconectar();
+			if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión la baja del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
+				FuncionesDiversas.EnviarMail(nomFichero, "baja de residente",pss);			
+		} catch (JRException e1) {
+			System.out.println("Error en la generación del informe");
+			loggeador.error(e1.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			loggeador.error(e.getMessage());
+		}			
+	}
+	
+	public static int EnviarMail(String adj, String documento, String pssw) {
+		String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
+		String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
+		String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros",pssw);
+		if(!password.equals(FuncionesDiversas.getCifrado(pss, "MD5"))){
+			JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Atención", JOptionPane.ERROR_MESSAGE);
+			loggeador.error("error de contraseña");
+		}else{
+			Calendar fechaActual=Calendar.getInstance();
+			String nomFichero="InformeNewContrato";
+			
+			if(documento.equals("baja de residente")){
+				nomFichero="bajaResidente";
+			}else{
+				if(documento.equals("alta de residente")){
+					nomFichero="altaResidente";
+				}else{
+					if(documento.equals("Informe de número de residentes")){
+						nomFichero="InformeNumClientes";
+					}else{
+						if(documento.equals("Informe de dependencias")){
+							nomFichero="informeDependencias";
+						}else{
+							if(documento.equals("Informe de cuotas"))
+								nomFichero="informeCuotas";
+						}							
+					}
+				}
+			}
+				
+			nomFichero=nomFichero+
 					Integer.toString(fechaActual.get(Calendar.DATE))
 					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
 					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
 					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
 					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
-				JasperExportManager.exportReportToPdfFile(print,nomFichero);
-			} catch (JRException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			MostrarEnVisorPDF(nomFichero);		
-		}
-	
-	
-		public static void MostrarEnVisorPDF(String nomFichero){
-			nomFichero=nomFichero.replace("./","");
-			try {
-				File path = new File (nomFichero);
-				Desktop.getDesktop().open(path);
-			}catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-		
-		public static void GenerarListadoPersonas(String pss){
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfPersonas.jrxml");
-				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoPersonas_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		}
-		
-		public void GenerarListadoTelefonos(String pss){
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfTelefonos.jrxml");
-				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoTelefonos_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		}
-		
-		public void GenerarListadoInternos(String pss) {
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfResidentes.jrxml");
-				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoResidentes_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		}
-		
-		public void GenerarListadoEmpleados(String pss) {
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfEmpleados.jrxml");
-				generarReporte(reportListado,null,conec,"./src/main/resources/informes/ListadoEmpleados_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		}	 
-		
-		public void GenerarInformeCuotas(Date fecha,String pss) {
+			
+			String originMail=FuncionesDiversas.obtenerStringBase("select mailDir from parametros",pssw);
+			
+			Properties props = new Properties();
+			props.setProperty("mail.smtp.host", "smtp.gmail.com");
+			props.setProperty("mail.smtp.starttls.enable", "true");
+			props.setProperty("mail.smtp.port","587");
+			props.setProperty("mail.smtp.user", originMail);
+			props.setProperty("mail.smtp.auth", "true");
+
+			Session session = Session.getDefaultInstance(props, null);
+			session.setDebug(true);
 			// TODO Auto-generated method stub
-						SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd)");
-						String dia=sdt.format(fecha);
-						//actualizamos en la base la vista obs
-						String cadenaCrearVistaCuotas="create or replace view cuotas "+
-								"AS select distinct `persona`.`letraCif` AS `letraCif`,"+
-								"`persona`.`dni` AS `dni`,`persona`.`letraNif` AS `letraNif`,"+
-								"`persona`.`nombre` AS `nombre`,`persona`.`primerApe` AS `primerApe`,"+
-								"`persona`.`segundoApe` AS `segundoApe`,`interno`.`cc` AS `cc`,"+
-								"`observacion`.`gradoDependencia` AS `gradoDependencia`,"+
-								"`importes`.`importe` AS `importe`,`observacion`."+
-								"`fechaObservacion` AS `fechaObservacion` from "+
-								"((((((`persona` join `interno`) join `observacion`) join "+
-								"`interno_observacion`) join `importes`) join `estancia`) join "+
-								"`interno_estancia`) where ((`persona`.`idPersona` = `interno`.`idPersona`)"+
-								" and (`interno`.`idPersona` = `interno_estancia`.`idPersona`)"+
-								" and (`interno_estancia`.`idEstancia` = `estancia`.`idEstancia`)"+
-								" and (`estancia`.`motivoBaja` = 0)"+
-								" and (`interno`.`idPersona` = `interno_observacion`.`idPersona`)"+
-								" and (`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`)"+
-								" and (`observacion`.`gradoDependencia` = `importes`.`gradoDependencia`)"+
-								" and (`observacion`.`fechaObservacion` <= \""+dia+"\"))"+
-								" order by `persona`.`primerApe`,`persona`.`segundoApe`,`persona`.`nombre`";
-						Updatear(cadenaCrearVistaCuotas,pss);
-			//vaciamos los parametros
-			parametros.clear();
-			//metemos en parametros la fecha
-			parametros.put("fechaInforme", fecha);
+			BodyPart texto = new MimeBodyPart();
 			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfCuotas.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/cuotas/InformeCuotas_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
+				texto.setText("Adjunto a la presente te remito "+documento+"\n"+
+								"cualquier cosa, ya sabes.\n"+
+								"\t\tUn saludo\n\t\t\tRaquel"+
+								"\n\n Ruego me hagas acuse de recibo de este mail para tener certeza de su recepción. Gracias.");
+			} catch (MessagingException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				loggeador.error(e.getMessage());
+			}
+			BodyPart adjunto = new MimeBodyPart();
+			try {
+				adjunto.setDataHandler(new DataHandler(new FileDataSource(adj)));
+				adjunto.setFileName(nomFichero);
+				MimeMultipart multiParte = new MimeMultipart();
+				multiParte.addBodyPart(texto);
+				multiParte.addBodyPart(adjunto);
+				MimeMessage message = new MimeMessage(session);
+				// Se rellena el From
+				message.setFrom(new InternetAddress(originMail));
+				// Se rellenan los destinatarios
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(direccion));
+				// Se rellena el subject
+				message.setSubject(documento+ " Hoyo de Pinares");
+				// Se mete el texto y la foto adjunta.
+				message.setContent(multiParte);
+				Transport t = session.getTransport("smtp");
+				t.connect(originMail,pss);
+				t.sendMessage(message,message.getAllRecipients());
+				t.close();
+				JOptionPane.showMessageDialog(null, "Mensaje enviado", "Atención", JOptionPane.OK_OPTION);
+				return 1;
+			} catch (MessagingException e1) {
+				// TODO Auto-generated catch block
+				loggeador.error(e1.getMessage());
+				return 0;
 			}	
 		}
-		
-		public static void GenerarInformeNuevoContrato(int idContrato,String pss) {
-			// TODO Auto-generated method stub
-			//vaciamos los parametros
-			parametros.clear();
-			//metemos en parametros la fecha
-			parametros.put("idContrato", idContrato);
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeNuevoContrato_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
+		return 0;			
+	}
+	
+	public static String getCifrado(String texto, String hashType) {
+	      try {
+	         java.security.MessageDigest md = java.security.MessageDigest.getInstance(hashType);
+	         byte[] array = md.digest(texto.getBytes());
+	         StringBuilder sb = new StringBuilder();
+	         
+	         for (int i = 0; i < array.length; ++i) {
+	            sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+	         }
+	         return sb.toString();
+	      } catch (java.security.NoSuchAlgorithmException e) {
+	         loggeador.error("Error "+e.getMessage());
+	      }
+	      return "";
+	}	
+	
+	public static String obtenerStringBase(String consulta,String pss){
+		String valor="";	
+		try{
+			dbConexion con=new dbConexion(pss);
+			Connection conec=(Connection) con.getConexion();
+			java.sql.Statement st=conec.createStatement();
+			
+			java.sql.ResultSet rs=st.executeQuery(consulta);
+			rs.next();
+			valor=rs.getString(1);				
+				
+			rs.close();
+			st.close();
+			conec.close();
+			
+		} catch (SQLException e) {
+			loggeador.error(e.getMessage());				
 		}
-		
-		public static void LimpiarDtm(DefaultTableModel modelo){
+		return valor;
+	}
+	
+	public static void Updatear(String cadenaUpdate, String pss){
+		try{
+			dbConexion con=new dbConexion(pss);
+			Connection conec=(Connection) con.getConexion();
+			java.sql.Statement st=conec.createStatement();
+			
+			st.executeUpdate(cadenaUpdate);
+			st.close();
+			conec.close();
+			con.desconectar();			
+		} catch (SQLException e) {
+			loggeador.error(e.getMessage());
+		}		
+	}
+	
+	public static Calendar DateToCalendar(Date date ){ 
+		Calendar cal = null;
+		try {   
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			date = (Date)formatter.parse(date.toString()); 
+			cal=Calendar.getInstance();
+			cal.setTime(date);
+		}catch(ParseException e){
+		 	loggeador.error(e.getMessage());
+		}  
+		return cal;
+	}
+	 
+	public static boolean ComprobarFormFecha(String fecha){
+		String regexp = "\\d{1,2}/\\d{1,2}/\\d{4}";
+		boolean result = (Pattern.matches(regexp, fecha))?true:false;
+		return result;		 
+	}
+	 
+	 public static void LimpiarDtm(DefaultTableModel modelo){
 	        int filas = modelo.getRowCount();
 	        if (filas > 0) {
 	            for (int i = 0; i < filas; i++) {
@@ -474,357 +837,33 @@ public static JTable cargaDatosEnTablaInternos(List<Interno> lista,String[] cabe
 	        }
 	    }		
 		
-		public static void evaluarGradoDependencia(Observacion o) {
-			if(o.getAlimentacion().equals("INDEPENDIENTE") && 
-				o.getMovilidad().equals("INDEPENDIENTE") && 
-				o.getAseo().equals("INDEPENDIENTE") &&
-				o.getVestido().equals("INDEPENDIENTE") && 
-				o.getInodoro().equals("INDEPENDIENTE") && 
+	public static void evaluarGradoDependencia(Observacion o) {
+		if(o.getAlimentacion().equals("INDEPENDIENTE") && 
+			o.getMovilidad().equals("INDEPENDIENTE") && 
+			o.getAseo().equals("INDEPENDIENTE") &&
+			o.getVestido().equals("INDEPENDIENTE") && 
+			o.getInodoro().equals("INDEPENDIENTE") && 
+			o.getEsfinteres().equals("INDEPENDIENTE")){
+			o.setGradoDependencia("VALIDO");
+		}else if(o.getAlimentacion().equals("INDEPENDIENTE") || 
+				o.getMovilidad().equals("INDEPENDIENTE")||
+				o.getAseo().equals("INDEPENDIENTE") || 
+				o.getVestido().equals("INDEPENDIENTE") || 
+				o.getInodoro().equals("INDEPENDIENTE") || 
 				o.getEsfinteres().equals("INDEPENDIENTE")){
-				o.setGradoDependencia("VALIDO");
-			}else if(o.getAlimentacion().equals("INDEPENDIENTE") || 
-					o.getMovilidad().equals("INDEPENDIENTE")||
-					o.getAseo().equals("INDEPENDIENTE") || 
-					o.getVestido().equals("INDEPENDIENTE") || 
-					o.getInodoro().equals("INDEPENDIENTE") || 
-					o.getEsfinteres().equals("INDEPENDIENTE")){
-					o.setGradoDependencia("AG1");
-				}else{
-					o.setGradoDependencia("AG2");	
-				}			
-			}
-
-		public void GenerarInformeDependencias(Date fecha,String pss) {
-			// TODO Auto-generated method stub
-			SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd");
-			String dia=sdt.format(fecha);
-			//actualizamos en la base la vista obs
-			String cadenaCrearVistaDep="create or replace VIEW `dependencias` "+
-					"AS select distinct `persona`.`letraCif` AS `letraCif`,`persona`.`dni` "+
-					"AS `dni`,`persona`.`letraNif` AS `letraNif`,`persona`.`nombre` AS `nombre`,"+
-					"`persona`.`primerApe` AS `primerApe`,`persona`.`segundoApe` AS `segundoApe`,"+
-					"`observacion`.`fechaObservacion` AS `fechaObservacion`,"+
-					"`observacion`.`alimentacion` AS `alimentacion`,`observacion`."+
-					"`movilidad` AS `movilidad`,`observacion`.`aseo` AS `aseo`,`observacion`."+
-					"`vestido` AS `vestido`,`observacion`.`inodoro` AS `inodoro`,"+
-					"`observacion`.`esfinteres` AS `esfinteres`,"+
-					"`observacion`.`gradoDependencia` AS `gradoDependencia` "+
-					"from (((`persona` join `interno`) join `observacion`) join `interno_observacion`) "+
-					"where ((`persona`.`idPersona` = `interno`.`idPersona`) and "+
-					"(`interno`.`idPersona` = `interno_observacion`.`idPersona`) and "+
-					"(`interno_observacion`.`idObservacion` = `observacion`.`idObservacion`) "+
-					"and (`observacion`.`fechaObservacion` <= \""+dia+"\") and "+
-					"`interno`.`idPersona` in (select `interno`.`idPersona` "+
-					"from ((`interno` join `interno_estancia`) join `estancia`) "+
-					"where ((`interno`.`idPersona` = `interno_estancia`.`idPersona`) "+
-					"and (`interno_estancia`.`idEstancia` = `estancia`.`idEstancia`) "+
-					"and (`estancia`.`motivoBaja` = 0)))) order by `persona`.`primerApe`,"+
-					"`persona`.`segundoApe`,`persona`.`nombre`";
-			Updatear(cadenaCrearVistaDep,pss);
-			
-			//vaciamos los parametros
-			parametros.clear();
-			//metemos en parametros la fecha
-			parametros.put("fechaInforme", fecha);
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfDependencias.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/dependencias/InformeDependencias_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación de listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		}
-
-		public void GenerarListadoNumClientes(Date fecha,String pss) {
-			// TODO Auto-generated method stub
-			//vaciamos los parametros
-			parametros.clear();
-			//metemos en parametros la fecha
-			parametros.put("fechaInforme", fecha);
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNumClientes.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/numClientes/InformeNumClientes_");
-				conec.close();
-				con.desconectar();
-			} catch (JRException e1) {
-				System.out.println("Error en la generación de listado");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		public static int GenerarInformeContratoSustitucion(Map<String, Object> parametros,String pss) {
-			// TODO Auto-generated method stub
-			Calendar fechaActual=Calendar.getInstance();
-			String nomFichero="./src/main/resources/informes/contratos/InformeContrato_";
-			int resultado=0;
-			
-			nomFichero=nomFichero+
-					Integer.toString(fechaActual.get(Calendar.DATE))
-					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/InfNewContrato.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/contratos/InformeContrato_");
-				conec.close();
-				con.desconectar();
-				//generamos el mail
-				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el contrato?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					resultado=FuncionesDiversas.EnviarMail(nomFichero,"propuesta de contratación",pss);
-				
-			} catch (JRException e1) {
-				System.out.println("Error en la generación de listado");
-				loggeador.debug(e1);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Error en la generación de listado");
-				loggeador.debug(e);
-			}
-			return resultado;			
-			
-		}
-		
-		public static void GenerarAltaResidente(Map<String, Object> parametros,String pss){
-			Calendar fechaActual=Calendar.getInstance();
-			String nomFichero="./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_";
-					
-			nomFichero=nomFichero+
-					Integer.toString(fechaActual.get(Calendar.DATE))
-					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
-			
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionAltaResidente.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_");
-				conec.close();
-				con.desconectar();
-				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión el alta del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					FuncionesDiversas.EnviarMail(nomFichero, "alta de residente",pss);
-				
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del informe");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		}
-		
-		public static void GenerarBajaResidente(Map<String, Object> parametros, String pss) {
-			Calendar fechaActual=Calendar.getInstance();
-			String nomFichero="./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_";
-					
-			nomFichero=nomFichero+
-					Integer.toString(fechaActual.get(Calendar.DATE))
-					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
-			
-			try {
-				//conexion para el reporte
-				dbConexion con=new dbConexion(pss);
-				java.sql.Connection conec=con.getConexion();
-				JasperReport reportListado = JasperCompileManager.compileReport("./src/main/resources/ComunicacionBajaResidente.jrxml");
-				generarReporte(reportListado,parametros,conec,"./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_");
-				conec.close();
-				con.desconectar();
-				if(JOptionPane.showConfirmDialog(null, "¿Deseas enviar a gestión la baja del residente?", "Atención", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)
-					FuncionesDiversas.EnviarMail(nomFichero, "baja de residente",pss);
-				
-			} catch (JRException e1) {
-				System.out.println("Error en la generación del informe");
-				e1.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-		}
-		
-		public static int EnviarMail(String adj, String documento, String pssw) {
-			String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
-			String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
-			String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros",pss);
-			if(!password.equals(FuncionesDiversas.getCifrado(pss, "MD5"))){
-				JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Atención", JOptionPane.ERROR_MESSAGE);
-				loggeador.debug("error de contraseña");
+				o.setGradoDependencia("AG1");
 			}else{
-				Calendar fechaActual=Calendar.getInstance();
-				String nomFichero="InformeNewContrato";
-				
-				if(documento.equals("baja de residente")){
-					nomFichero="bajaResidente";
-				}else{
-					if(documento.equals("alta de residente"));
-						nomFichero="altaResidente";
-				}
-				nomFichero=nomFichero+
-						Integer.toString(fechaActual.get(Calendar.DATE))
-						+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-						+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-						" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-						"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
-				
-				String originMail=FuncionesDiversas.obtenerStringBase("select mailDir from parametros",pssw);
-				
-				Properties props = new Properties();
-				props.setProperty("mail.smtp.host", "smtp.gmail.com");
-				props.setProperty("mail.smtp.starttls.enable", "true");
-				props.setProperty("mail.smtp.port","587");
-				props.setProperty("mail.smtp.user", originMail);
-				props.setProperty("mail.smtp.auth", "true");
-
-				Session session = Session.getDefaultInstance(props, null);
-				session.setDebug(true);
-				// TODO Auto-generated method stub
-				BodyPart texto = new MimeBodyPart();
-				try {
-					texto.setText("Adjunto a la presente te remito "+documento+"\n"+
-									"cualquier cosa, ya sabes.\n"+
-									"\t\tUn saludo\n\t\t\tRaquel"+
-									"\n\n Ruego me hagas acuse de recibo de este mail para tener certeza de su recepción. Gracias.");
-				} catch (MessagingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				BodyPart adjunto = new MimeBodyPart();
-				try {
-					adjunto.setDataHandler(new DataHandler(new FileDataSource(adj)));
-					adjunto.setFileName(nomFichero);
-					MimeMultipart multiParte = new MimeMultipart();
-					multiParte.addBodyPart(texto);
-					multiParte.addBodyPart(adjunto);
-					MimeMessage message = new MimeMessage(session);
-					// Se rellena el From
-					message.setFrom(new InternetAddress(originMail));
-					// Se rellenan los destinatarios
-					message.addRecipient(Message.RecipientType.TO, new InternetAddress(direccion));
-					// Se rellena el subject
-					message.setSubject(documento+ " Hoyo de Pinares");
-					// Se mete el texto y la foto adjunta.
-					message.setContent(multiParte);
-					Transport t = session.getTransport("smtp");
-					t.connect(originMail,pss);
-					t.sendMessage(message,message.getAllRecipients());
-					t.close();
-					JOptionPane.showMessageDialog(null, "Mensaje enviado", "Atención", JOptionPane.OK_OPTION);
-//					loggeador.debug("error de contraseña");
-					return 1;
-				} catch (MessagingException e1) {
-					// TODO Auto-generated catch block
-					loggeador.debug(e1);
-					return 0;
-				}	
-			}
-			return 0;
-			
-			
-		}
-		
-		public static String getCifrado(String texto, String hashType) {
-		      try {
-		         java.security.MessageDigest md = java.security.MessageDigest.getInstance(hashType);
-		         byte[] array = md.digest(texto.getBytes());
-		         StringBuilder sb = new StringBuilder();
-		         
-		         for (int i = 0; i < array.length; ++i) {
-		            sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
-		         }
-		         return sb.toString();
-		      } catch (java.security.NoSuchAlgorithmException e) {
-		         System.err.println("Error "+e.getMessage());
-		      }
-		      return "";
-		}	
-		
-		public static String obtenerStringBase(String consulta,String pss){
-			String valor="";	
-			try{
-					dbConexion con=new dbConexion(pss);
-					Connection conec=(Connection) con.getConexion();
-					java.sql.Statement st=conec.createStatement();
-					
-					java.sql.ResultSet rs=st.executeQuery(consulta);
-					rs.next();
-					valor=rs.getString(1);				
-					
-					rs.close();
-					st.close();
-					conec.close();
-				
-				} catch (SQLException e) {
-					e.printStackTrace();				
-				}
-				return valor;
-		}
-		
-		public static void Updatear(String cadenaUpdate, String pss){
-			try{
-				dbConexion con=new dbConexion(pss);
-				Connection conec=(Connection) con.getConexion();
-				java.sql.Statement st=conec.createStatement();
-				
-				st.executeUpdate(cadenaUpdate);
-				st.close();
-				conec.close();
-				con.desconectar();				
-			
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}		
-		}
-		
-		 public static Calendar DateToCalendar(Date date ){ 
-			 Calendar cal = null;
-			 try {   
-				 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				 date = (Date)formatter.parse(date.toString()); 
-				 cal=Calendar.getInstance();
-				 cal.setTime(date);
-			 }
-			 	catch (ParseException e){
-			 		loggeador.error(e);
-			 	}  
-		   return cal;
-		  }
-		 
-		 public static boolean ComprobarFormFecha(String fecha){
-			 String regexp = "\\d{1,2}/\\d{1,2}/\\d{4}";
-			 boolean result = (Pattern.matches(regexp, fecha))?true:false;
-			 return result;
-			 
-		 }
-
-		public String getPss() {
-			return pss;
+				o.setGradoDependencia("AG2");	
+			}			
 		}
 
-		public void setPss(String pss) {
-			this.pss = pss;
-		}		
+	public String getPss() {
+		return pss;
+	}
+
+	public void setPss(String pss) {
+		this.pss = pss;
+	}		
 }
 	
 	
