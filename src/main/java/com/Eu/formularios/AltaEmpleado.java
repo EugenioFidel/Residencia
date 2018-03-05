@@ -1,4 +1,5 @@
 package com.Eu.formularios;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -52,6 +53,9 @@ public class AltaEmpleado extends JDialog implements ActionListener{
 	//un JTable para manejar las personas
 	JTable t=new JTable();
 	
+	Font fuente=new Font("Ubuntu",0,16);
+	Font fuenteN=new Font("Ubuntu",1,16);
+	
 	
 	public AltaEmpleado(){
 		
@@ -64,7 +68,9 @@ public class AltaEmpleado extends JDialog implements ActionListener{
 		
 		//Añadimos el ActionListener a los botones
 		jbGrabar.addActionListener(this);
+		jbGrabar.setFont(fuenteN);
 		jbCancelar.addActionListener(this);
+		jbCancelar.setFont(fuenteN);
 		
 		jlAyuda.setText("Seleccione en la tabla la persona que se integrará en el sistema como empleado.");
 		
@@ -142,9 +148,7 @@ public class AltaEmpleado extends JDialog implements ActionListener{
 				break;
 			default:
 				JOptionPane.showMessageDialog(this,"De uno en uno mejor","Error",JOptionPane.ERROR_MESSAGE);
-		}	
-			
-			
+		}				
 			this.dispose();
 		}			
 	}

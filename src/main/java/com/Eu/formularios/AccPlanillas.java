@@ -1,6 +1,7 @@
 package com.Eu.formularios;
 
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -27,7 +28,7 @@ public class AccPlanillas extends JDialog implements ActionListener{
 	JLabel jlAnho=new JLabel("Año");
 	String[] meses=new String[]{"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
 	JComboBox<String> jcbMeses=new JComboBox<String>(meses);
-	String[] anhos=new String[]{"2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
+	String[] anhos=new String[]{"2018","2019","2020","2017"};
 	JComboBox<String> jcbAnho=new JComboBox<String>(anhos);
 	JPanel jpBotonero=new JPanel();
 	JButton jbCancelar=new JButton("Cancelar");
@@ -35,9 +36,12 @@ public class AccPlanillas extends JDialog implements ActionListener{
 	
 	String ps;
 	
+	Font fuente=new Font("Ubuntu",0,16);
+	
 	
 	public AccPlanillas(String pss){
 		this.setPs(pss);
+		this.setFont(fuente);
 		//propiedades del formulario
 		setModal(true);
 		setBounds(300, 400, 400,150);
@@ -48,6 +52,9 @@ public class AccPlanillas extends JDialog implements ActionListener{
 		GridBagLayout gbl=new GridBagLayout();
 		GridBagConstraints col=new GridBagConstraints();
 		setLayout(gbl);
+		
+		jcbAnho.setSelectedIndex(0);
+		jcbMeses.setSelectedIndex(0);
 		
 		col.gridx=0;
 		col.gridy=0;

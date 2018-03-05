@@ -11,6 +11,7 @@ public class CategoriaDao {
         Session sesion = null;
         try{
 	        sesion = HibernateUtil.getSessionfactory().openSession();
+	        
 	        sesion.beginTransaction();
 	        sesion.saveOrUpdate(c);
 	        sesion.getTransaction().commit();

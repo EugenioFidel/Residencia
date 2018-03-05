@@ -198,7 +198,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 					e1.printStackTrace();
 				}
 			}else{
-				fechaF = JOptionPane.showInputDialog(this,"Fecha prevista de fin de contrato", JOptionPane.QUESTION_MESSAGE); 
+				fechaF = JOptionPane.showInputDialog(this,"<html><font size=+1>Fecha prevista de fin de contrato: </font size></html>", JOptionPane.QUESTION_MESSAGE); 
 				try {				
 					fechaF=sdf.format(sdf.parse(fechaF));
 				} catch (ParseException e1) {

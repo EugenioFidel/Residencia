@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Residencia</groupId>
 	<artifactId>Residencia</artifactId>
-	<version>1.0.3.CI-SNAPSHOT</version>
+	<version>1.0.4.CI-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Spring Hibernate Utility</name>
 	<url>http://www.springframework.org</url>
@@ -17,12 +17,27 @@
 		<spring.framework.version>3.0.6.RELEASE</spring.framework.version>
 	</properties>
 
-	<dependencies>
+	<dependencies>	
+	
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-core</artifactId>
 		    <version>4.3.6.Final</version>
 		</dependency>
+		
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.jasypt</groupId> -->
+<!-- 		    <artifactId>jasypt</artifactId> -->
+<!-- 		    <version>1.9.2</version> -->
+<!-- 		</dependency>	 -->
+		
+<!-- 		<dependency> -->
+<!-- 		      <groupId>net.lizalab.util</groupId> -->
+<!-- 		      <artifactId>jasypt-hibernate4-ext-43x</artifactId> -->
+<!-- 		      <version>1.0.0</version> -->
+<!-- 		      <scope>compile</scope> -->
+<!-- 	    </dependency> -->
+	    
 		<dependency>
 		  <groupId>mysql</groupId>
 		  <artifactId>mysql-connector-java</artifactId>
@@ -146,7 +161,5 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-
 	</repositories>
-
 </project>

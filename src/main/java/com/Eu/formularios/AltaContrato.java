@@ -1,5 +1,6 @@
 package com.Eu.formularios;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -62,10 +63,13 @@ public class AltaContrato extends JDialog implements ActionListener{
 	JButton jbCancelar=new JButton("Cancelar");
 	JButton jbGrabar=new JButton("Grabar");
 	
+	Font fuente=new Font("Ubuntu",0,16);
+	Font fuenteN=new Font("Ubuntu",1,16);
+	
 	Empleado en;
 	DefaultTableModel dtm;
 	
-	public AltaContrato(Empleado e, DefaultTableModel dtm){
+	public AltaContrato(Empleado e, DefaultTableModel dtm, String pss){
 		
 		this.setEn(e);
 		this.setDtm(dtm);
@@ -87,6 +91,7 @@ public class AltaContrato extends JDialog implements ActionListener{
 		jlNombreEdit.setText(this.getEn().getNombre()+" "+
 				this.getEn().getPrimerApe()+" "+
 				this.getEn().getSegundoApe());
+		jlNombreEdit.setFont(fuenteN);
 		col.gridx=0;
 		col.gridy=0;
 		col.gridwidth=2;
@@ -99,67 +104,76 @@ public class AltaContrato extends JDialog implements ActionListener{
 		col.gridx=0;
 		col.gridy=1;
 		col.anchor=GridBagConstraints.EAST;
+		jlFechaInicio.setFont(fuenteN);
 		this.getContentPane().add(jlFechaInicio,col);
 		col.anchor=GridBagConstraints.CENTER;
 		
 		//colocamos los controles
 		col.gridx=1;
 		col.gridy=1;
+		jdcFecha.setFont(fuenteN);
 		jdcFecha.setToolTipText("Introducir fecha de alta");
 		this.getContentPane().add(jdcFechaInicio,col);
 		
 		col.gridx=0;
 		col.gridy=2;
 		col.anchor=GridBagConstraints.EAST;
+		jlHoras.setFont(fuenteN);
 		this.getContentPane().add(jlHoras,col);
 		col.anchor=GridBagConstraints.CENTER;
 		
 		col.gridx=1;
 		col.gridy=2;
+		jdcFecha.setFont(fuente);
 		jdcFecha.setToolTipText("Introducir horas por semana");
 		this.getContentPane().add(jcbHoras,col);
 		
 		col.gridx=0;
 		col.gridy=3;
 		col.anchor=GridBagConstraints.EAST;
+		jlTipoContrato.setFont(fuenteN);
 		this.getContentPane().add(jlTipoContrato,col);
 		col.anchor=GridBagConstraints.CENTER;
 		
 		col.gridx=1;
 		col.gridy=3;
-		jdcFecha.setToolTipText("Introducir tipo de contratación");
+		jtTipoContrato.setFont(fuente);
 		this.getContentPane().add(jtTipoContrato,col);
 		
 		col.gridx=0;
 		col.gridy=4;
 		col.anchor=GridBagConstraints.EAST;
+		jlCategoria.setFont(fuenteN);
 		this.getContentPane().add(jlCategoria,col);
 		col.anchor=GridBagConstraints.CENTER;
 		
 		col.gridx=1;
 		col.gridy=4;
-		jdcFecha.setToolTipText("Introducir categoría profesional");
+		jtCategoria.setFont(fuente);
 		this.getContentPane().add(jtCategoria,col);
 		
 		col.gridx=0;
 		col.gridy=5;
 		col.anchor=GridBagConstraints.EAST;
+		jlEmpleadoSustituido.setFont(fuenteN);
 		this.getContentPane().add(jlEmpleadoSustituido,col);
 		col.anchor=GridBagConstraints.CENTER;
 		
 		col.gridx=1;
 		col.gridy=5;
-		jdcFecha.setToolTipText("Introducir el empleado sustituido");
+		jcbEmpleados.setFont(fuente);
 		this.getContentPane().add(jcbEmpleados,col);
 		
 		//jbCancelar, configuraci�n y colocaci�n
 		jbCancelar.addActionListener(this);
+		jbCancelar.setFont(fuenteN);
 		col.gridx=0;
 		col.gridy=6;
 		this.getContentPane().add(jbCancelar,col);
 				
 		//jbAceptar, configuraci�n y colocaci�n
 		jbGrabar.addActionListener(this);
+		jbGrabar.setFont(fuenteN);
 		col.gridx=1;
 		col.gridy=6;
 		this.getContentPane().add(jbGrabar,col);

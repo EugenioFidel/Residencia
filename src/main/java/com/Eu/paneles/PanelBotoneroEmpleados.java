@@ -21,9 +21,11 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 
 import com.Eu.dao.ContratoDao;
+import com.Eu.dao.Empleado_contratoDao;
 import com.Eu.formularios.AltaContrato;
 import com.Eu.formularios.FrmPrincipal;
 import com.Eu.model.Contrato;
+import com.Eu.model.Empleado_contrato;
 
 public class PanelBotoneroEmpleados extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -41,10 +43,13 @@ public class PanelBotoneroEmpleados extends JPanel implements ActionListener {
 	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
 	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
 	
+	String pss;
 	
-	public PanelBotoneroEmpleados() {
+	public PanelBotoneroEmpleados(String password) {
 		// TODO Auto-generated constructor stub
 		this.setLayout(new GridLayout(1,32,10,10));
+		
+		this.setPss(password);
 		
 		jbAnhadir=new JButton("Añadir");
 		jbAnhadir.setFont(fuenteN);
@@ -123,16 +128,18 @@ public class PanelBotoneroEmpleados extends JPanel implements ActionListener {
 		DefaultTableModel dtm=(DefaultTableModel)jt.getModel();
 		
 		ContratoDao cd=new ContratoDao();
+		Empleado_contratoDao ecd=new Empleado_contratoDao();		
 		Contrato c=cd.getContratoById(Integer.parseInt(dtm.getValueAt(jt.getSelectedRow(), 0).toString()));
-		cd.deleteContrato(c);
-		dtm.removeRow(jt.getSelectedRow());
-		
+		Empleado_contrato ec=ecd.getEmpleado_contratoById(c.getIdContrato());
+		ecd.deleteEmpleado_contrato(ec);
+		cd.deleteContrato(c);		
+		dtm.removeRow(jt.getSelectedRow());		
 	}
 
 	private void AnhadirContrato(){
 		// TODO Auto-generated method stub
 		DefaultTableModel dtm=(DefaultTableModel)pc.getJtContratos().getModel();
-		AltaContrato ac=new AltaContrato(pc.getE(),dtm);
+		AltaContrato ac=new AltaContrato(pc.getE(),dtm,pss);
 		ac.setVisible(true);	
 	}
 
@@ -168,5 +175,11 @@ public class PanelBotoneroEmpleados extends JPanel implements ActionListener {
 		this.jrbJornadas = jrbJornadas;
 	}
 
-	
+	public String getPss() {
+		return pss;
+	}
+
+	public void setPss(String pss) {
+		this.pss = pss;
+	}	
 }

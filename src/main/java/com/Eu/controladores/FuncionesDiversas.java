@@ -1,6 +1,7 @@
 package com.Eu.controladores;
 
 import java.awt.Desktop;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -27,7 +28,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -292,19 +296,11 @@ public class FuncionesDiversas {
 			String nomFichero) {
 		JasperPrint print;
 					
-		//un Calendar para la fecha del sistema
-		Calendar fechaActual=Calendar.getInstance();			
 		try {
 			print = JasperFillManager.fillReport(reporte,params,conec);
-			nomFichero=nomFichero+
-				Integer.toString(fechaActual.get(Calendar.DATE))
-				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			nomFichero=DatarFichero(nomFichero);
 			JasperExportManager.exportReportToPdfFile(print,nomFichero);
 		} catch (JRException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error en la generación del reporte. Consulta el fichero de logs para más información");
 			loggeador.error(e.getMessage());
 		}
@@ -335,7 +331,6 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del listado, consulta los logs para más información");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			loggeador.error(e.getMessage());
 		}			
 	}
@@ -353,7 +348,7 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del listado, consulta los logs para más información");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			loggeador.error(e.getMessage());
 		}			
 	}
@@ -371,7 +366,6 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del listado, consulta los logs para más información");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			loggeador.error(e.getMessage());
 		}			
 	}
@@ -389,25 +383,17 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del listado, consulta los logs para más información");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			loggeador.error(e.getMessage());
 		}			
 	}	 
 		
 	public void GenerarInformeCuotas(Date fecha,String pss) {
-		Calendar fechaActual=Calendar.getInstance();
 		String nomFichero="./src/main/resources/informes/cuotas/InformeCuotas_";
 		@SuppressWarnings("unused")
 		int resultado=0;
 		
-		nomFichero=nomFichero+
-				Integer.toString(fechaActual.get(Calendar.DATE))
-				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+		nomFichero=DatarFichero(nomFichero);
 			
-		// TODO Auto-generated method stub
 		SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd)");
 		String dia=sdt.format(fecha);
 		//actualizamos en la base la vista obs
@@ -449,13 +435,13 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del informe, consulta logs para más información");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			loggeador.error(e.getMessage());
 		}	
 	}
 		
 	public static void GenerarInformeNuevoContrato(int idContrato,String pss) {
-		// TODO Auto-generated method stub
+		
 		//vaciamos los parametros
 		parametros.clear();
 		//metemos en parametros la fecha
@@ -472,24 +458,18 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del listado");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			loggeador.error(e.getMessage());
 		}	
 	}			
 
 	public void GenerarInformeDependencias(Date fecha,String pss) {			
-		Calendar fechaActual=Calendar.getInstance();
 		String nomFichero="./src/main/resources/informes/dependencias/InformeDependencias_";
 		@SuppressWarnings("unused")
 		int resultado=0;
 		
-		nomFichero=nomFichero+
-				Integer.toString(fechaActual.get(Calendar.DATE))
-				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";			
-		// TODO Auto-generated method stub
+		nomFichero=DatarFichero(nomFichero);
+		
 		SimpleDateFormat sdt=new SimpleDateFormat("yyyy-MM-dd");
 		String dia=sdt.format(fecha);
 		//actualizamos en la base la vista obs
@@ -533,23 +513,17 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación de listado");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			loggeador.error(e.getMessage());
 		}	
 	}
 
 	public void GenerarListadoNumClientes(Date fecha,String pss) {
-		Calendar fechaActual=Calendar.getInstance();
 		String nomFichero="./src/main/resources/informes/numClientes/InformeNumClientes_";
 		@SuppressWarnings("unused")
 		int resultado=0;
 		
-		nomFichero=nomFichero+
-				Integer.toString(fechaActual.get(Calendar.DATE))
-				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+		nomFichero=DatarFichero(nomFichero);
 		
 		//vaciamos los parametros
 		parametros.clear();
@@ -570,23 +544,16 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación de listado");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			loggeador.error(e.getMessage());
 		}
 	}
 
 	public static int GenerarInformeContratoSustitucion(Map<String, Object> parametros,String pss) {
-		// TODO Auto-generated method stub
-		Calendar fechaActual=Calendar.getInstance();
 		String nomFichero="./src/main/resources/informes/contratos/InformeContrato_";
+		nomFichero=DatarFichero(nomFichero);
 		int resultado=0;
 		
-		nomFichero=nomFichero+
-				Integer.toString(fechaActual.get(Calendar.DATE))
-				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
 		try {
 			//conexion para el reporte
 			dbConexion con=new dbConexion(pss);
@@ -602,23 +569,17 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación de listado");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			System.out.println("Error en la generación de listado");
 			loggeador.error(e.getMessage());
 		}
 		return resultado;			
 	}
 	
-	public static void GenerarAltaResidente(Map<String, Object> parametros,String pss){
-		Calendar fechaActual=Calendar.getInstance();
-		String nomFichero="./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_";
-				
-		nomFichero=nomFichero+
-				Integer.toString(fechaActual.get(Calendar.DATE))
-				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";			
+	public static void GenerarAltaResidente(Map<String, Object> parametros,String pss){		
+		String nomFichero="./src/main/resources/informes/Informes_A_B/Altas/ComAltaResidente_";				
+		nomFichero=DatarFichero(nomFichero);
+		
 		try {
 			//conexion para el reporte
 			dbConexion con=new dbConexion(pss);
@@ -633,21 +594,14 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del informe");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			loggeador.error(e.getMessage());
 		}			
 	}
 	
 	public static void GenerarBajaResidente(Map<String, Object> parametros, String pss) {
-		Calendar fechaActual=Calendar.getInstance();
-		String nomFichero="./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_";
-				
-		nomFichero=nomFichero+
-				Integer.toString(fechaActual.get(Calendar.DATE))
-				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";			
+		String nomFichero="./src/main/resources/informes/Informes_A_B/Bajas/ComBajaResidente_";				
+		nomFichero=DatarFichero(nomFichero);		
 		try {
 			//conexion para el reporte
 			dbConexion con=new dbConexion(pss);
@@ -662,20 +616,23 @@ public class FuncionesDiversas {
 			System.out.println("Error en la generación del informe");
 			loggeador.error(e1.getMessage());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			loggeador.error(e.getMessage());
 		}			
 	}
 	
 	public static int EnviarMail(String adj, String documento, String pssw) {
+		
+
 		String direccion=JOptionPane.showInputDialog("Introduce la dirección para el mensaje");
-		String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
+//		String pss=JOptionPane.showInputDialog("Introduce el password de la cuenta de correo");
+		String pss=IntroduccionPassword();
 		String password=FuncionesDiversas.obtenerStringBase("select passMail from parametros",pssw);
 		if(!password.equals(FuncionesDiversas.getCifrado(pss, "MD5"))){
 			JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Atención", JOptionPane.ERROR_MESSAGE);
 			loggeador.error("error de contraseña");
 		}else{
-			Calendar fechaActual=Calendar.getInstance();
+			
 			String nomFichero="InformeNewContrato";
 			
 			if(documento.equals("baja de residente")){
@@ -697,12 +654,8 @@ public class FuncionesDiversas {
 				}
 			}
 				
-			nomFichero=nomFichero+
-					Integer.toString(fechaActual.get(Calendar.DATE))
-					+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
-					+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
-					" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
-					"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+			nomFichero=DatarFichero(nomFichero);
+			
 			
 			String originMail=FuncionesDiversas.obtenerStringBase("select mailDir from parametros",pssw);
 			
@@ -715,7 +668,7 @@ public class FuncionesDiversas {
 
 			Session session = Session.getDefaultInstance(props, null);
 			session.setDebug(true);
-			// TODO Auto-generated method stub
+			
 			BodyPart texto = new MimeBodyPart();
 			try {
 				texto.setText("Adjunto a la presente te remito "+documento+"\n"+
@@ -723,7 +676,6 @@ public class FuncionesDiversas {
 								"\t\tUn saludo\n\t\t\tRaquel"+
 								"\n\n Ruego me hagas acuse de recibo de este mail para tener certeza de su recepción. Gracias.");
 			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
 				loggeador.error(e.getMessage());
 			}
 			BodyPart adjunto = new MimeBodyPart();
@@ -749,7 +701,6 @@ public class FuncionesDiversas {
 				JOptionPane.showMessageDialog(null, "Mensaje enviado", "Atención", JOptionPane.OK_OPTION);
 				return 1;
 			} catch (MessagingException e1) {
-				// TODO Auto-generated catch block
 				loggeador.error(e1.getMessage());
 				return 0;
 			}	
@@ -757,6 +708,24 @@ public class FuncionesDiversas {
 		return 0;			
 	}
 	
+	private static String IntroduccionPassword() {
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("Introduce la contraseña:");
+		JPasswordField pass = new JPasswordField(10);
+		panel.add(label);
+		panel.add(pass);
+		String[] options = new String[]{"OK", "Cancelar"};
+		int option = JOptionPane.showOptionDialog(null, panel, "Contraseña",
+		                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+		                         null, options, options[1]);
+		if(option == 0) // pressing OK button
+		{
+		    char[] password = pass.getPassword();
+		    return new String(password);
+		}
+		return null;
+	}
+
 	public static String getCifrado(String texto, String hashType) {
 	      try {
 	         java.security.MessageDigest md = java.security.MessageDigest.getInstance(hashType);
@@ -856,6 +825,19 @@ public class FuncionesDiversas {
 				o.setGradoDependencia("AG2");	
 			}			
 		}
+	
+	public static String DatarFichero(String nomF){
+		String nomFichero=nomF;
+		Calendar fechaActual=Calendar.getInstance();
+		
+		nomFichero=nomFichero+
+				Integer.toString(fechaActual.get(Calendar.DATE))
+				+"_"+Integer.toString(fechaActual.get(Calendar.MONTH)+1)
+				+"_"+Integer.toString(fechaActual.get(Calendar.YEAR))+
+				" time "+Integer.toString(fechaActual.get(Calendar.HOUR))+
+				"h"+Integer.toString(fechaActual.get(Calendar.MINUTE))+"''.pdf";
+		return nomFichero;
+	}
 
 	public String getPss() {
 		return pss;

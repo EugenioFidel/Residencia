@@ -92,7 +92,7 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 	public JPanel jpTelon=new JPanel();
 	
 	public PanelBotoneroInternos jpBotoneroInternos=new PanelBotoneroInternos();
-	public PanelBotoneroEmpleados jpBotoneroEmpleados=new PanelBotoneroEmpleados();
+	public PanelBotoneroEmpleados jpBotoneroEmpleados;
 
 	Font fuente=new Font("Ubuntu",0,16);
 	Font fuenteN=new Font("Ubuntu",1,16);
@@ -101,10 +101,11 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 			
 	public FrmPrincipal() throws SQLException{
 		
-		
 		//password para la BD
-		String password=(String)JOptionPane.showInputDialog("Introduce la contraseña de la base de datos:");
-		fd.setPss(password);
+		String ps=System.getenv().get("PSS_RES");
+		fd.setPss(ps);
+		
+		jpBotoneroEmpleados=new PanelBotoneroEmpleados(fd.getPss());
 		
 		//características del formulario principal
 		
@@ -238,21 +239,23 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 		this.pack();
 	}
 	
-	public void actionPerformed(ActionEvent e) {		
+	public void actionPerformed(ActionEvent e) {	
+		JDateChooser jd = new JDateChooser();
+		jd.setFont(fuente);
+		Date fecha;
 		//comprobamos el objeto que ha producido el evento
 		if(e.getSource().equals(jmiPlanillas)){
 			System.out.println("planillas");
 			AccPlanillas ap=new AccPlanillas(fd.getPss());
 			ap.setVisible(true);
 		}else if(e.getSource().equals(jmiInformeCuotas)){
-				JDateChooser jd = new JDateChooser();
 				String message ="Introduce la fecha del informe:\n";
 				Object[] params = {message,jd};
 				JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
 				String s="";
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-				Date fecha;
+
 				try {
 					fecha = sdf.parse(s);
 					fd.GenerarInformeCuotas(fecha,fd.getPss());
@@ -261,14 +264,14 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 				}
 									
 			}else if(e.getSource().equals(jmiInformeDependencias)){
-						JDateChooser jd = new JDateChooser();
+
 						String message ="Introduce la fecha del informe:\n";
 						Object[] params = {message,jd};
 						JOptionPane.showConfirmDialog(null,params,"Día de inicio", JOptionPane.PLAIN_MESSAGE);
 						String s="";
 						SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 						s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
-						Date fecha;
+
 						try {
 							fecha = sdf.parse(s);
 							fd.GenerarInformeDependencias(fecha,fd.getPss());
@@ -277,7 +280,7 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 							e1.printStackTrace();
 						}
 					}else if(e.getSource().equals(jmiNumClientes)){
-								JDateChooser jd = new JDateChooser();
+
 								String message ="Introduce la fecha del informe:\n";
 								Object[] params = {message,jd};
 								JOptionPane.showConfirmDialog(null,params,"Día del informe", JOptionPane.PLAIN_MESSAGE);
@@ -287,7 +290,7 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 								SimpleDateFormat sdfMysql=new SimpleDateFormat("yyyy-MM-dd");
 								s=sdf.format(((JDateChooser)params[1]).getDate());//Casting params[1] makes me able to get its information
 								sMySQL=sdfMysql.format(((JDateChooser)params[1]).getDate());
-								Date fecha;
+
 								try {
 									fecha = sdf.parse(s);
 									//llamamos al procedure que crea la tabla
