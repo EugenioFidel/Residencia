@@ -67,12 +67,12 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 	static final int A_DOMICILIO=2;
 	static final int A_OTRA_RESIDENCIA=3;
 	
-	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
-	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
+	Font fuente=new Font("Ubuntu",Font.PLAIN,20);
+	Font fuenteN=new Font("Ubuntu",Font.BOLD,20);
 	
 	String ps;
 
-	public PanelEstancias(int id,String ps){
+	public PanelEstancias(int id, String ps){
 		this.setPs(ps);
 		InternoDao i=new InternoDao();
 		this.setI(i.getInternoById(id));		
@@ -256,7 +256,7 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 		parametros.put("segundoApellido", i.getSegundoApe());
 		parametros.put("dni", i.getLetraCif()+"-"+i.getDni()+"-"+i.getLetraNif());		
 		parametros.put("sSocial", i.getSs());
-		String resi=FuncionesDiversas.obtenerStringBase("select nombreRes from parametros",this.getPs());
+		String resi=FuncionesDiversas.obtenerStringBase("select nombreRes from parametros",System.getenv().get("PSS_RES"));
 		parametros.put("residencia", resi);
 		if(e.getSource().equals(jmiInformeAltaResidente)){
 			loggeador.debug("Emisión informe Alta Residente");
@@ -271,7 +271,7 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 			System.out.println("Informe baja");			
 			parametros.put("causaBaja", dtm.getValueAt(jtEstancias.getSelectedRow(), 4).toString());
 			parametros.put("fechaBaja", dtm.getValueAt(jtEstancias.getSelectedRow(), 3).toString());
-			FuncionesDiversas.GenerarBajaResidente(parametros,this.getPs());
+			FuncionesDiversas.GenerarBajaResidente(parametros,System.getenv().get("PSS_RES"));
 		}		
 	}	
 

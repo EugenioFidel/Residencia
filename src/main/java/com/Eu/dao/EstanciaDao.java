@@ -16,13 +16,13 @@ public class EstanciaDao {
 	        sesion = HibernateUtil.getSessionfactory().openSession();
 	        sesion.beginTransaction();
 	        String sqlQuery="select estancia.idEstancia,estancia.fechaAlta,"+
-	        				"tipoEstancia.tipoEstancia,estancia.fechaBaja,motivoBaja.motivoBaja "+
-	        				"from interno,interno_estancia,estancia,tipoEstancia,motivoBaja "+
+	        				"tipoestancia.tipoEstancia,estancia.fechaBaja,motivobaja.motivoBaja "+
+	        				"from interno,interno_estancia,estancia,tipoestancia,motivobaja "+
 	        				"where interno.idPersona='"+idPersona+"' "+
 	        				"and interno.idPersona=interno_estancia.idPersona "+
 	        				"and interno_estancia.idEstancia=estancia.idEstancia "+
-	        				"and estancia.tipoEstancia=tipoEstancia.idTipoEstancia "+
-	        				"and estancia.motivoBaja=motivoBaja.idMotivoBaja "+
+	        				"and estancia.tipoEstancia=tipoestancia.idTipoEstancia "+
+	        				"and estancia.motivoBaja=motivobaja.idMotivoBaja "+
 	        				"order by estancia.fechaAlta desc";
 	        SQLQuery query = sesion.createSQLQuery(sqlQuery);
 	        @SuppressWarnings("unchecked")

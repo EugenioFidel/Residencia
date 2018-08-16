@@ -67,8 +67,8 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 	
 	String ps;
 
-	public PanelContratos (int id,String ps){
-		this.setPs(ps);
+	public PanelContratos (int id, String pass){
+		this.setPs(pass);
 		EmpleadoDao ed=new EmpleadoDao();
 		this.setE(ed.getEmpleadoById(id));		
 		

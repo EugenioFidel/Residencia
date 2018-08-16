@@ -1,4 +1,7 @@
 package com.Eu.formularios;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -57,6 +60,9 @@ public class AltaInterno extends JDialog implements ActionListener{
 	
 	//un JTable para manejar las personas
 	JTable t=new JTable();
+	
+	Font fuente = new Font("Verdana", 0, 20);
+	Font fuenteN = new Font("Verdana", 1,20);
 	
 	
 	public AltaInterno(){
@@ -123,6 +129,18 @@ public class AltaInterno extends JDialog implements ActionListener{
 		col.gridy=3;
 		col.fill=GridBagConstraints.NONE;
 		add(jpBotonero,col);
+		
+		Component[] c=this.getContentPane().getComponents();
+		for ( Component component : c) {
+			Component[] co=((Container) component).getComponents();
+			for (Component comp : co) {
+				if (comp instanceof JLabel || comp instanceof JTextField) {
+					comp.setFont(fuenteN);
+				}
+			}
+			
+		}
+		
 	}
 
 	private void RellenarComboPersonas() {
@@ -134,7 +152,8 @@ public class AltaInterno extends JDialog implements ActionListener{
 		while (it.hasNext()){
 			Persona p=(Persona) it.next();
 			jcbPersonaResponsable.addItem(p.getDni()+"//"+p.getPrimerApe()+", "+p.getNombre());			
-		}		
+		}	
+		jcbPersonaResponsable.setFont(fuenteN);
 		
 	}
 

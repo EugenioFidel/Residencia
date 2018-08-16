@@ -55,8 +55,8 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 	private JRadioButton jrbBajas;
 	private int tipoPanel;	
 	
-	Font fuente=new Font("Ubuntu",Font.PLAIN,16);
-	Font fuenteN=new Font("Ubuntu",Font.BOLD,16);
+	Font fuente=new Font("Verdana",Font.PLAIN,16);
+	Font fuenteN=new Font("Verdana",Font.BOLD,16);
 
 	public PanelFiltros(int tipo){		
 		setLayout(new BorderLayout());	
@@ -244,7 +244,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		}
 				
 		TableColumn columna=jt.getColumn("D.N.I/N.I.E");
-		columna.setPreferredWidth(100);
+		columna.setPreferredWidth(150);
 		columna=jt.getColumn("Apellidos y nombre");
 		columna.setPreferredWidth(300);
 		columna=jt.getColumn("Dirección");			
@@ -254,9 +254,9 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		columna=jt.getColumn("Municipio");
 		columna.setPreferredWidth(150);
 		columna=jt.getColumn("C.P.");
-		columna.setPreferredWidth(50);
+		columna.setPreferredWidth(70);
 		columna=jt.getColumn("Teléfono");
-		columna.setPreferredWidth(170);
+		columna.setPreferredWidth(200);
 		columna=jt.getColumn("e-mail");
 		columna.setPreferredWidth(200);
 		columna=jt.getColumn("IBAN");
@@ -321,7 +321,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		}
 				
 		TableColumn columna=jt.getColumn("D.N.I/N.I.E");
-		columna.setPreferredWidth(100);
+		columna.setPreferredWidth(150);
 		columna=jt.getColumn("Apellidos y nombre");
 		columna.setPreferredWidth(300);
 		columna=jt.getColumn("Dirección");			
@@ -331,9 +331,9 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		columna=jt.getColumn("Municipio");
 		columna.setPreferredWidth(150);
 		columna=jt.getColumn("C.P.");
-		columna.setPreferredWidth(50);
+		columna.setPreferredWidth(100);
 		columna=jt.getColumn("Teléfono");
-		columna.setPreferredWidth(170);
+		columna.setPreferredWidth(200);
 		columna=jt.getColumn("e-mail");
 		columna.setPreferredWidth(200);
 		columna=jt.getColumn("IBAN");
@@ -390,7 +390,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		}
 		
 		TableColumn columna=jt.getColumn("D.N.I/N.I.E");
-		columna.setPreferredWidth(100);
+		columna.setPreferredWidth(150);
 		columna=jt.getColumn("Apellidos y nombre");
 		columna.setPreferredWidth(300);
 		columna=jt.getColumn("Dirección");			
@@ -400,11 +400,11 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		columna=jt.getColumn("Municipio");
 		columna.setPreferredWidth(150);
 		columna=jt.getColumn("C.P.");
-		columna.setPreferredWidth(50);
+		columna.setPreferredWidth(100);
 		columna=jt.getColumn("Teléfono");
-		columna.setPreferredWidth(170);
-		columna=jt.getColumn("e-mail");
 		columna.setPreferredWidth(200);
+		columna=jt.getColumn("e-mail");
+		columna.setPreferredWidth(250);
 		
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jt.doLayout();
@@ -449,7 +449,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		}		
 
 		TableColumn columna=jt.getColumn("D.N.I/N.I.E");
-		columna.setPreferredWidth(100);
+		columna.setPreferredWidth(150);
 		columna=jt.getColumn("Apellidos y nombre");
 		columna.setPreferredWidth(300);
 		columna=jt.getColumn("Dirección");			
@@ -459,9 +459,9 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		columna=jt.getColumn("Municipio");
 		columna.setPreferredWidth(150);
 		columna=jt.getColumn("C.P.");
-		columna.setPreferredWidth(50);
+		columna.setPreferredWidth(100);
 		columna=jt.getColumn("Teléfono");
-		columna.setPreferredWidth(170);
+		columna.setPreferredWidth(200);
 		columna=jt.getColumn("e-mail");
 		columna.setPreferredWidth(200);
 		

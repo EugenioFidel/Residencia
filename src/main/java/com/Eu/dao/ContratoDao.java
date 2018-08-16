@@ -48,11 +48,11 @@ public class ContratoDao {
 			String query="SELECT DISTINCT "
 					+ "contrato.idContrato, "
 					+ "contrato.fechaInicio, contrato.fechaFin, contrato.horas, "
-					+ "tipoContrato.tipoContrato, categoria.categoria, contrato.fechaComunicacion, empleado_contrato.idSustituido "
-					+ "FROM empleado_contrato, contrato, categoria, tipoContrato "
+					+ "tipocontrato.tipoContrato, categoria.categoria, contrato.fechaComunicacion, empleado_contrato.idSustituido "
+					+ "FROM empleado_contrato, contrato, categoria, tipocontrato "
 					+ "WHERE empleado_contrato.idEmpleado ="+id+" "
 					+ "AND empleado_contrato.idContrato = contrato.idContrato "
-					+ "AND contrato.idTipoContrato = tipoContrato.idTipoContrato "
+					+ "AND contrato.idTipoContrato = tipocontrato.idTipoContrato "
 					+ "AND contrato.idCategoria = categoria.idCategoria";
 	        SQLQuery q = sesion.createSQLQuery(query);
 	        @SuppressWarnings("unchecked")

@@ -79,12 +79,12 @@ residentor.persona.telefono2 ,
 residentor.persona.email ,
 residentor.empleado.cc,  
 residentor.empleado.ss,
-residentor.`tipoContrato`.`tipoContrato`, 
+residentor.tipocontrato.tipoContrato, 
 residentor.categoria.categoria,
 residentor.contrato.fechaInicio,
 residentor.contrato.horas 
 FROM 
-residentor.persona,residentor.empleado, residentor.empleado_contrato, residentor.contrato,tipoContrato,categoria
+residentor.persona,residentor.empleado, residentor.empleado_contrato, residentor.contrato,tipocontrato,categoria
 WHERE
 residentor.empleado_contrato.idContrato =$P{idContrato}
 and 
@@ -94,7 +94,7 @@ residentor.empleado_contrato.idEmpleado=residentor.empleado.idPersona
 and 
 residentor.empleado.idPersona=residentor.persona.idPersona
 and
-residentor.contrato.idTipoContrato=residentor.tipoContrato.idTipoContrato
+residentor.contrato.idTipoContrato=residentor.tipocontrato.idTipoContrato
 and 
 residentor.contrato.idCategoria=residentor.categoria.idCategoria]]>
 	</queryString>

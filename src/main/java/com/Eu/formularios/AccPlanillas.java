@@ -36,7 +36,8 @@ public class AccPlanillas extends JDialog implements ActionListener{
 	
 	String ps;
 	
-	Font fuente=new Font("Ubuntu",0,16);
+	Font fuente=new Font("Verdana",0,20);
+	Font fuenteN=new Font("Verdana",1,20);
 	
 	
 	public AccPlanillas(String pss){
@@ -44,9 +45,16 @@ public class AccPlanillas extends JDialog implements ActionListener{
 		this.setFont(fuente);
 		//propiedades del formulario
 		setModal(true);
-		setBounds(300, 400, 400,150);
+		setBounds(300, 400, 500,250);
 		isDefaultLookAndFeelDecorated();
 		setTitle("Residenciator - Abrir planillas de trabajo");
+		jlMes.setFont(fuenteN);
+		jlAnho.setFont(fuenteN);
+		jbAbrir.setFont(fuenteN);
+		jbCancelar.setFont(fuenteN);
+		jcbAnho.setFont(fuenteN);
+		jcbMeses.setFont(fuenteN);
+		
 		
 		//Declaramos el layout, GridBagLayout
 		GridBagLayout gbl=new GridBagLayout();

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-13T19:31:09 -->
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f8e959-b404-434a-bf95-820da17f99f4">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="fechaInforme" class="java.util.Date">
 		<parameterDescription><![CDATA[FechaReferenciaInforme]]></parameterDescription>
@@ -145,7 +144,7 @@ WHERE c1.dni = c2.dni )]]>
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="21">
+		<band height="17">
 			<textField>
 				<reportElement mode="Opaque" x="0" y="4" width="630" height="13" backcolor="#E6E6E6" uuid="171a4671-ec07-426c-9f21-9edcaf63bc1a"/>
 				<textElement textAlignment="Right">
