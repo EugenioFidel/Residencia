@@ -43,6 +43,8 @@ import com.Eu.model.Tipo_contrato;
 
 public class PanelContratos extends JPanel implements ActionListener,TableModelListener { 		
 
+	private final int ALTOFILA=20;
+	
 	public JTable jtContratos =new JTable();
 	public DefaultTableModel dtm=new DefaultTableModel();
 	
@@ -136,6 +138,7 @@ public class PanelContratos extends JPanel implements ActionListener,TableModelL
 		jtContratos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jtContratos.doLayout();
 		jtContratos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jtContratos.setRowHeight(ALTOFILA);
 		this.setJtContratos(jtContratos);
 					
 		TableModel dtm=jtContratos.getModel();

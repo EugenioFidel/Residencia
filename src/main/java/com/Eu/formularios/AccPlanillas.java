@@ -28,7 +28,7 @@ public class AccPlanillas extends JDialog implements ActionListener{
 	JLabel jlAnho=new JLabel("Año");
 	String[] meses=new String[]{"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
 	JComboBox<String> jcbMeses=new JComboBox<String>(meses);
-	String[] anhos=new String[]{"2018","2019","2020","2017"};
+	String[] anhos=new String[]{"2019","2020","2021","2017","2018"};
 	JComboBox<String> jcbAnho=new JComboBox<String>(anhos);
 	JPanel jpBotonero=new JPanel();
 	JButton jbCancelar=new JButton("Cancelar");

@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
@@ -738,12 +739,25 @@ public class FuncionesDiversas {
 		String direccion = FuncionesDiversas.obtenerStringBase("select mailGestPersonal from parametros", pssw);
 		int o = JOptionPane.showConfirmDialog(null, "El mail se enviará a " + direccion + " ¿Es correcto?");
 		if (o != 0) {
-			direccion = JOptionPane.showInputDialog(null,
-					"<html><font face='Ubuntu' size='10' color='black'>Introduce la direccón de envío: ", "Atención",
-					JOptionPane.OK_CANCEL_OPTION);
+			JTextField tf = new JTextField(30);
+            tf.setFont(tf.getFont().deriveFont(20f));
+            int result = JOptionPane.showConfirmDialog(
+                    null, 
+                    tf, 
+                    "Introduce la dirección de envío: ",
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (result==JOptionPane.OK_OPTION) {
+                direccion=tf.getText();
+            } else {
+                System.out.println("No se introdujo una dirección de correo electrónico");
+            }
+//			direccion = JOptionPane.showInputDialog(null,
+//					"<html><font face='Ubuntu' size='10' color='black'>Introduce la dirección de envío: ", "Atención",
+//					JOptionPane.OK_CANCEL_OPTION);
 		}
 		String pss = IntroduccionPassword();
 		String password = FuncionesDiversas.obtenerStringBase("select passMail from parametros", pssw);
+		String p =FuncionesDiversas.getCifrado(pss, "MD5");
 		if (!password.equals(FuncionesDiversas.getCifrado(pss, "MD5"))) {
 			JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Atención", JOptionPane.ERROR_MESSAGE);
 			loggeador.error("error de contraseña");
@@ -788,7 +802,15 @@ public class FuncionesDiversas {
 			try {
 				texto.setText("Adjunto a la presente te remito " + documento + "\n" + "cualquier cosa, ya sabes.\n"
 						+ "\t\tUn saludo\n\t\t\tRaquel"
-						+ "\n\n Ruego me hagas acuse de recibo de este mail para tener certeza de su recepción. Gracias.");
+						+ "\n\n Ruego me hagas acuse de recibo de este mail para tener certeza de su recepción. Gracias."
+						+ "\n\n\n**************************************************************************************"
+						+ "\nEste mensaje y los adjuntos pueden contener información confidencial, no estando permitida su comunicación,"
+						+ " reproducción o distribución. Si usted no es el destinatario final, le rogamos nos lo comunique y borre el mismo. "
+						+ "De conformidad con el que dispone la normativa vigente en protección de datos RGPD y LOPDGDD, le informamos que "
+						+ "los datos personales serán tratados bajo la responsabilidad de GABINETE TÉCNICO DE TRABAJO SOCIAL S.L.. "
+						+ "Puede ejercer los derechos de acceso, rectificación, portabilidad, supresión, limitación y oposición mandando un "
+						+ "mensaje a infodocumentacioncentral@gmail.com. Si considera que el tratamiento no se ajusta a la normativa vigente, "
+						+ "podrá presentar una reclamación ante la autoridad de control en agpd.es.");
 			} catch (MessagingException e) {
 				loggeador.error(e.getMessage());
 			}
@@ -829,13 +851,11 @@ public class FuncionesDiversas {
 		JLabel label = new JLabel("Introduce la contraseña:");
 		label.setFont(fuenteN);
 		JPasswordField pass = new JPasswordField(10);
-		pass.setFont(fuente);
+		pass.setFont(pass.getFont().deriveFont(20f));
 		panel.add(label);
 		panel.add(pass);
 		String[] options = new String[] { "OK", "Cancelar" };
-		// int option = JOptionPane.showOptionDialog(null, panel, "Contraseña",
-		// JOptionPane.NO_OPTION,
-		// JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+
 		int option = JOptionPane.showOptionDialog(null, panel, "Identificación", JOptionPane.NO_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
 		if (option == 0) // pressing OK button

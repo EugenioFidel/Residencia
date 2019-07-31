@@ -45,6 +45,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 	final static Logger loggeador = Logger.getLogger(PanelFiltros.class);
 	private final int PERSONAS=9;
 	private final int INTERNOS=13;
+	private final int ALTOFILA=20;
 	
 	private JTable jt= new JTable();
 	//Un JScrollPane para alojar la tabla 
@@ -238,6 +239,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		
 		jt=FuncionesDiversas.cargaDatosEnTablaEmpleados(empleados, cabecerasTablaEmpleados);
 		jt.setFont(fuente);
+		jt.setRowHeight(ALTOFILA);
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
 			conjuntoColumnas.getColumn(i).setCellRenderer(miRender);
@@ -347,6 +349,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jt.doLayout();
+		jt.setRowHeight(ALTOFILA);
 		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setJt(jt);
 				
@@ -382,6 +385,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		List<Object> personas = pd.listaPersonas();			
 		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);		
 		jt.setFont(fuente);
+		jt.setRowHeight(ALTOFILA);
 		
 		jrbTodos.setFont(fuenteN);
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
@@ -442,6 +446,7 @@ public class PanelFiltros extends JPanel implements TableModelListener, ActionLi
 		PersonaDao pd=new PersonaDao();		
 		List<Object> personas = pd.listaPersonasSinEmpleados();
 		jt=FuncionesDiversas.cargaDatosEnTablaPersonas(personas, cabecerasTablaPersonas);		
+		jt.setRowHeight(ALTOFILA);
 		
 		TableColumnModel conjuntoColumnas=jt.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){

@@ -29,6 +29,7 @@ import com.Eu.model.Persona;
 public class AltaInterno extends JDialog implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;	
+	private final int ALTOFILA=20;
 	
 	JLabel jlAyuda=new JLabel();
 	//Jpanels para distribución
@@ -92,6 +93,8 @@ public class AltaInterno extends JDialog implements ActionListener{
 		PanelFiltros e=new PanelFiltros(3);
 		
 		t=e.getJt();
+		t.setRowHeight(ALTOFILA);
+		
 		dtmPersona=(DefaultTableModel) t.getModel();
 		
 		jpPersonas.add(e);

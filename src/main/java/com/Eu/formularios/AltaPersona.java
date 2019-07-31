@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.Eu.dao.PersonaDao;
 import com.Eu.model.Persona;
@@ -40,7 +42,7 @@ public class AltaPersona extends JDialog implements ActionListener {
 	JTextField jtfApellidos = new JTextField(20);
 	JLabel jlSegundoApellido = new JLabel("2o apellido");
 	JTextField jtfSegundoApellido = new JTextField(20);
-	JLabel jlFechaNacimiento = new JLabel("Fecha nacimiento");
+	JLabel jlFechaNacimiento = new JLabel("Fecha nacimiento - FORMATO DD/MM/AAAA");
 	JTextField jtfFechaNacimiento = new JTextField(10);
 	JLabel jlSexo = new JLabel("Sexo");
 	JTextField jtfSexo = new JTextField(2);
@@ -87,7 +89,7 @@ public class AltaPersona extends JDialog implements ActionListener {
 
 	public AltaPersona(JTable t) {
 		dtmPersona = (DefaultTableModel) t.getModel();
-		setSize(750, 550);
+		setSize(800, 600);
 		setLocation(200, 200);
 		setFont(fuente);
 		setTitle("Alta de persona en el sistema");

@@ -12,6 +12,7 @@ import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JFrame;
@@ -255,6 +256,7 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 		JDateChooser jd = new JDateChooser();
 		jd.setFont(fuente);
 		Date fecha;
+		Calendar c=Calendar.getInstance();
 		// comprobamos el objeto que ha producido el evento
 		if (e.getSource().equals(jmiPlanillas)) {
 			System.out.println("planillas");
@@ -269,8 +271,10 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 			s = sdf.format(((JDateChooser) params[1]).getDate());// Casting params[1] makes me able to get its
 																	// information
 
-			try {
-				fecha = sdf.parse(s);
+			try {				
+				c.setTime(sdf.parse(s));
+				c.add(Calendar.MONTH, 1);
+				fecha=c.getTime();
 				fd.GenerarInformeCuotas(fecha, fd.getPss());
 			} catch (ParseException e1) {
 				e1.printStackTrace();
@@ -286,7 +290,9 @@ public class FrmPrincipal extends JFrame implements ActionListener {
 																	// information
 
 			try {
-				fecha = sdf.parse(s);
+				c.setTime(sdf.parse(s));
+				c.add(Calendar.MONTH, 1);
+				fecha=c.getTime();
 				fd.GenerarInformeCuotasCd(fecha, fd.getPss());
 			} catch (ParseException e1) {
 				e1.printStackTrace();

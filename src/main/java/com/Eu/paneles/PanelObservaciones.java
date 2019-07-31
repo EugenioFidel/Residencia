@@ -32,6 +32,8 @@ import com.Eu.model.Observacion;
 
 public class PanelObservaciones extends JPanel implements TableModelListener { 
 	
+	private final int ALTOFILA=20;
+	
 	public JTable jtObservaciones =new JTable();
 	public DefaultTableModel dtm=new DefaultTableModel();	
 
@@ -78,6 +80,7 @@ public class PanelObservaciones extends JPanel implements TableModelListener {
 		List<Observacion> observaciones = od.listaObservaciones(id);
 		jtObservaciones=FuncionesDiversas.cargaDatosEnTablaObservaciones(observaciones, cabecerasTablaObservaciones);
 		jtObservaciones.setFont(fuente);
+		jtObservaciones.setRowHeight(ALTOFILA);
 
 		
 		TableColumnModel conjuntoColumnas=jtObservaciones.getColumnModel();

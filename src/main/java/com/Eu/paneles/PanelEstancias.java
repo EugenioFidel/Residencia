@@ -42,6 +42,8 @@ import com.Eu.model.Interno_estancia;
 
 public class PanelEstancias extends JPanel implements TableModelListener,ActionListener { 		
 
+	private final int ALTOFILA=20;
+	
 	public JTable jtEstancias =new JTable();
 	public DefaultTableModel dtm=new DefaultTableModel();
 	
@@ -111,6 +113,7 @@ public class PanelEstancias extends JPanel implements TableModelListener,ActionL
 		List<Estancia> estancias = ed.listaEstancias(id);
 		jtEstancias=FuncionesDiversas.cargaDatosEnTablaEstancias(estancias, cabecerasTablaEstancias);
 		jtEstancias.setFont(fuente);
+		jtEstancias.setRowHeight(ALTOFILA);
 		
 		TableColumnModel conjuntoColumnas=jtEstancias.getColumnModel();
 		for (int i=0;i<conjuntoColumnas.getColumnCount();i++){
